@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ionozond · практикум</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="#home">
+      <span class="eyebrow" data-i18n="app.eyebrow"></span>
+      <b data-i18n="app.title"></b>
+    </a>
+    <div class="lang" role="group" aria-label="Язык / Language">
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+  <nav class="rail"></nav>
+  <main id="main"></main>
+  <footer class="foot">
+    <p data-i18n="foot.1"></p>
+    <p data-i18n="foot.2"></p>
+  </footer>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/modules/gdd.js"></script>
+<script src="js/modules/measure.js"></script>
+<script src="js/modules/timing.js"></script>
+<script src="js/modules/cells.js"></script>
+<script src="js/modules/schedule.js"></script>
+<script src="js/modules/daily.js"></script>
+<script src="js/modules/vi.js"></script>
+<script>PG.start();</script>
+</body>
+</html>
