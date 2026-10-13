@@ -7,7 +7,7 @@ ionozond. Интерфейс на русском, переключатель EN 
 
 ## Как открыть
 
-Онлайн: https://nikita-konkin.github.io/ionozond-playground/ (публикуется из ветки `main` через GitHub Actions,
+Онлайн: http://konkin-nikita.ru/ionozond-playground/ (публикуется из ветки `main` через GitHub Actions,
 `.github/workflows/pages.yml`).
 
 Локально достаточно дважды щёлкнуть по `index.html`. Ни сборка, ни сервер не нужны:
@@ -102,7 +102,7 @@ Interactive models for “Oblique Chirp Ionograms”
 Yoshkar-Ola path and the ionozond console. Russian by default, with an EN switch
 in the header.
 
-**Online:** https://nikita-konkin.github.io/ionozond-playground/ (deployed from `main` by GitHub Actions,
+**Online:** http://konkin-nikita.ru/ionozond-playground/ (deployed from `main` by GitHub Actions,
 `.github/workflows/pages.yml`).
 
 **Locally,** open `index.html` by double-clicking. There is no build step and no server:
