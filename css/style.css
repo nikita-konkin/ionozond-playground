@@ -4,6 +4,7 @@
   --ground: #eff3f4; --surface: #ffffff; --raised: #f7fafb; --ink: #0f171b; --muted: #54666e;
   --faint: #7d8f97; --rule: #d2dee2; --accent: #0b6b7c; --accent-soft: #e0eff1;
   --warn: #9d5407; --warn-soft: #f6ebdd;
+  --comp: #7a4fc9;
   --seq-1: #e0eff1; --seq-2: #b3dbe1; --seq-3: #7cc0cb; --seq-4: #3e9aab; --seq-5: #0b6b7c; --seq-6: #07434e;
 }
 @media (prefers-color-scheme: dark) {
@@ -11,6 +12,7 @@
     --ground: #091013; --surface: #0f1a1f; --raised: #14242a; --ink: #dfe9ec; --muted: #8ba2ab;
     --faint: #6b838c; --rule: #1d2d34; --accent: #4ac0d3; --accent-soft: #0d2a31;
     --warn: #dfa059; --warn-soft: #2a2015;
+    --comp: #9085e9;
     --seq-1: #10272d; --seq-2: #14404a; --seq-3: #1a5f6c; --seq-4: #248494; --seq-5: #3fb0c2; --seq-6: #9fe0ea;
   }
 }
@@ -18,6 +20,7 @@
   --ground: #091013; --surface: #0f1a1f; --raised: #14242a; --ink: #dfe9ec; --muted: #8ba2ab;
   --faint: #6b838c; --rule: #1d2d34; --accent: #4ac0d3; --accent-soft: #0d2a31;
   --warn: #dfa059; --warn-soft: #2a2015;
+  --comp: #9085e9;
   --seq-1: #10272d; --seq-2: #14404a; --seq-3: #1a5f6c; --seq-4: #248494; --seq-5: #3fb0c2; --seq-6: #9fe0ea;
 }
 
@@ -98,6 +101,7 @@ input[type=number] { width: 7.5em; }
 input[type=text] { width: 9em; }
 .check { font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
 .check input { accent-color: var(--accent); }
+.off { opacity: .45; pointer-events: none; }
 
 svg.fig { display: block; width: 100%; height: auto; color: var(--ink); overflow: visible; }
 

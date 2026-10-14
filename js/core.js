@@ -310,19 +310,23 @@
   };
   // Draws PG.pulse output. The reference goes on top, thin and dashed, so it stays visible when the
   // two envelopes coincide; drawn underneath, the thick curve would hide it whenever GDD is small.
-  PG.drawPulse = (svg, Pp, peakKey = 'gdd.p.peak') => {
+  // o.comp adds a second envelope (after a compensator); o.labels = false leaves the legend and the
+  // peak/width figures to the page, for when it shows them in HTML below the plot.
+  PG.drawPulse = (svg, Pp, o = {}) => {
     svg.replaceChildren();
     const lab = v => Math.abs(v) >= 10 ? PG.num(Math.abs(v), 0) : PG.num(Math.abs(v), 1);
     const P = PG.plot(svg, { x0: 40, x1: 344, y0: 14, y1: 212, xd: [-Pp.H, Pp.H], yd: [0, 1.08], xt: [-Pp.H, 0, Pp.H], yt: [0, 0.5, 1],
       xf: v => (v > 0 ? '+' : v < 0 ? '−' : '') + lab(v), yf: v => PG.num(v, v % 1 ? 1 : 0), xl: PG.t('gdd.x.t') });
-    const { fx, fy, g } = P, line = a => PG.path(Pp.t.map((v, i) => [fx(v), fy(a[i])]));
-    PG.el(g, 'path', { d: line(Pp.h), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
-    // A halo in the panel colour under each dash keeps it readable against the accent in either theme.
-    PG.el(g, 'path', { d: line(Pp.r), fill: 'none', style: 'stroke:var(--surface)', 'stroke-width': 3.6, 'stroke-dasharray': '5 4' });
-    PG.el(g, 'path', { d: line(Pp.r), fill: 'none', style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
+    const { fx, fy, g } = P, line = (Q, a) => PG.path(Q.t.map((v, i) => [fx(v), fy(a[i])]));
+    PG.el(g, 'path', { d: line(Pp, Pp.h), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
+    if (o.comp) PG.el(g, 'path', { d: line(o.comp, o.comp.h), fill: 'none', style: 'stroke:var(--comp)', 'stroke-width': 2.4 });
+    // A halo in the panel colour under each dash keeps it readable against the curves in either theme.
+    PG.el(g, 'path', { d: line(Pp, Pp.r), fill: 'none', style: 'stroke:var(--surface)', 'stroke-width': 3.6, 'stroke-dasharray': '5 4' });
+    PG.el(g, 'path', { d: line(Pp, Pp.r), fill: 'none', style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
+    if (o.labels === false) return;
     PG.el(svg, 'line', { x1: 46, x2: 66, y1: 24, y2: 24, style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
     PG.text(svg, 71, 28, PG.t('gdd.p.ref'));
-    PG.text(svg, 338, 28, PG.t(peakKey, { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
+    PG.text(svg, 338, 28, PG.t(o.peakKey || 'gdd.p.peak', { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
     PG.text(svg, 338, 42, PG.t('gdd.p.w', { v: PG.num(Pp.grow, 2) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
   };
   // Pulse damage against the dispersion number GDD·B². Simulated for a Hann band: at 1 the peak drops

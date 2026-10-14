@@ -181,7 +181,7 @@
     svg.replaceChildren();
     const S = state;
     if (!isFinite(V.hv(S.fc, P))) return;
-    PG.drawPulse(svg, PG.pulse(tauUs(P), S.fc, S.B, P.fmax), 'vi.p.peak');
+    PG.drawPulse(svg, PG.pulse(tauUs(P), S.fc, S.B, P.fmax), { peakKey: 'vi.p.peak' });
   }
 
   // Oblique image: the main lower-ray branch below the nose, and the upper ray above it. Near the nose

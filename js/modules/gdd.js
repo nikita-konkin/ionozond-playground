@@ -35,7 +35,18 @@
       'gdd.aria.pulse': 'Огибающая импульса заданной полосы после прохождения трассы в сравнении с тем же импульсом без дисперсии.',
       'gdd.x.t': 'время относительно центральной задержки, мкс', 'gdd.p.ref': 'без дисперсии', 'gdd.p.peak': 'после трассы: пик {v} дБ',
       'gdd.p.w': 'ширина ×{v}',
-      'gdd.model': 'Модель. Нижний луч 1F: τ(f) = 8,95 мс + b·МНЧ·(2(1 − √(1 − x)) − x), где x = f/МНЧ. Это интеграл медианного закона GDD = b·(1/√(1 − x) − 1) с b = 7,5 мкс/МГц, подобранного по 583 сеансам на трассе Кипр — Йошкар-Ола в феврале 2026 г. Реальные ДЧХ разбросаны вокруг него в пределах межквартильного размаха из таблицы части 11, а оценка по одному сеансу добавляет ещё ±4 мкс/МГц. Закон измерен при МНЧ 18–32 МГц; ниже он продолжен пропорционально 1/МНЧ. Тот же закон независимо следует из параболического профиля через закон секанса (см. раздел о вертикальном зондировании): днём расхождение не превышает 20 % в интервале от 0,8 до 0,96 МНЧ. Верхний луч и мода 2F нарисованы для ориентира и в расчётах не участвуют; 2F начинается на 9,40 мс и обрывается на 0,70 МНЧ — так получается при зеркальном отражении с h′ = 250–300 км. Импульс — участок спектра шириной B с окном Ханна вокруг курсора, прошедший через фазовую характеристику φ(f) = −2π∫(τ − τc) df, которую задаёт ДЧХ. Замирания, магнитоионное расщепление и поглощение не учитываются. Столбец ионограммы ionozond — 41 кГц, отсчёт задержки — 24,4 мкс (БПФ на 16 384 точки, 100 кГц/с).',
+      'gdd.c.h': 'Компенсация дисперсии',
+      'gdd.c.p': 'Корректор — это фильтр, задержка которого падает с частотой с той же крутизной, с какой на трассе она растёт: частоты, пришедшие раньше, он придерживает, и вся полоса выходит одновременно. Крутизну берут прямо с ионограммы — это наклон ДЧХ на рабочей частоте. По одному сеансу её удаётся оценить с точностью около ±5 мкс/МГц, по среднему нескольких сеансов — около ±2. Прямой корректор убирает только наклон; изгиб ДЧХ внутри полосы, заметный вблизи МНЧ, остаётся.',
+      'gdd.c.on': 'Включить корректор в приёмнике', 'gdd.c.err': 'Ошибка оценки GDD',
+      'gdd.c.p0': 'точно', 'gdd.c.p2': 'среднее сеансов, +2', 'gdd.c.p5': 'один сеанс, +5',
+      'gdd.c.k.s': 'Наклон корректора', 'gdd.c.k.ss': 'оценка GDD с обратным знаком',
+      'gdd.c.k.r': 'Остаточный разброс', 'gdd.c.k.b': 'B<sub>max</sub> с корректором',
+      'gdd.c.k.was': 'без корректора — {v}', 'gdd.c.k.cap': 'упирается в МНЧ',
+      'gdd.c.v': 'С корректором остаточный разброс задержки в полосе — {s}: пик импульса {p} дБ, ширина ×{w}.',
+      'gdd.c.curv': 'Остаток определяется уже не ошибкой оценки, а изгибом ДЧХ внутри полосы: вблизи МНЧ наклон заметно меняется от одного края полосы к другому, и прямой корректор за ним не успевает.',
+      'gdd.l.path': 'после трассы: пик {p} дБ, ширина ×{w}', 'gdd.l.comp': 'с корректором: пик {p} дБ, ширина ×{w}',
+      'gdd.l.tr': 'ДЧХ в полосе', 'gdd.l.tan': 'касательная, наклон GDD', 'gdd.l.res': 'остаток после корректора',
+      'gdd.model': 'Модель. Нижний луч 1F: τ(f) = 8,95 мс + b·МНЧ·(2(1 − √(1 − x)) − x), где x = f/МНЧ. Это интеграл медианного закона GDD = b·(1/√(1 − x) − 1) с b = 7,5 мкс/МГц, подобранного по 583 сеансам на трассе Кипр — Йошкар-Ола в феврале 2026 г. Реальные ДЧХ разбросаны вокруг него в пределах межквартильного размаха из таблицы части 11, а оценка по одному сеансу добавляет ещё ±4 мкс/МГц. Закон измерен при МНЧ 18–32 МГц; ниже он продолжен пропорционально 1/МНЧ. Тот же закон независимо следует из параболического профиля через закон секанса (см. раздел о вертикальном зондировании): днём расхождение не превышает 20 % в интервале от 0,8 до 0,96 МНЧ. Верхний луч и мода 2F нарисованы для ориентира и в расчётах не участвуют; 2F начинается на 9,40 мс и обрывается на 0,70 МНЧ — так получается при зеркальном отражении с h′ = 250–300 км. Импульс — участок спектра шириной B с окном Ханна вокруг курсора, прошедший через фазовую характеристику φ(f) = −2π∫(τ − τc) df, которую задаёт ДЧХ. Корректор — всепропускающий фильтр с групповой задержкой −GDD_оц·(f − fc), где GDD_оц — наклон ДЧХ в центре полосы плюс заданная ошибка оценки; B_max с корректором — полоса, в которой остаточный разброс задержки равен 1/B. Замирания, магнитоионное расщепление и поглощение не учитываются. Столбец ионограммы ionozond — 41 кГц, отсчёт задержки — 24,4 мкс (БПФ на 16 384 точки, 100 кГц/с).',
     },
     en: {
       'gdd.nav': 'GDD on the ionogram',
@@ -66,14 +77,47 @@
       'gdd.cap.pulse': 'A pulse through it: envelope, path against no dispersion',
       'gdd.aria.pulse': 'Envelope of a pulse occupying the band after the path, compared with the same pulse without dispersion.',
       'gdd.x.t': 'time from the centre delay, µs', 'gdd.p.ref': 'no dispersion', 'gdd.p.peak': 'path: peak {v} dB', 'gdd.p.w': 'width ×{v}',
-      'gdd.model': 'The model. The lower 1F ray is τ(f) = 8.95 ms + b·MUF·(2(1 − √(1 − x)) − x), with x = f/MUF: the integral of the median law GDD = b·(1/√(1 − x) − 1), b = 7.5 µs/MHz, fitted to 583 Cyprus sweeps of February 2026. Real traces scatter about it by the interquartile range in Part 11’s table, and a single sweep’s measurement by about ±4 µs/MHz more. The law was measured with MUF 18–32 MHz; below that it is continued as ∝ 1/MUF. The same law follows independently from a parabolic profile through the secant law (see the vertical-sounding section): by day the two agree within 20 % from 0.8 to 0.96 MUF. The upper ray and 2F are drawn for orientation and enter no number; 2F starts at 9.40 ms and ends at 0.70 MUF, as mirror geometry gives for h′ = 250–300 km. The pulse is a Hann-shaped band of width B centred on the cursor, sent through the phase φ(f) = −2π∫(τ − τc) df that the trace implies. Fading, O/X splitting and absorption are left out. The console column is 41 kHz and its delay bin 24.4 µs (FFT 16 384, 100 kHz/s).',
+      'gdd.c.h': 'Compensating the dispersion',
+      'gdd.c.p': 'A compensator is a filter whose delay falls with frequency as steeply as the path’s delay rises: it holds back the frequencies that arrive early, so the whole band leaves at once. Its slope is read straight off the ionogram — it is the trace’s slope at the working frequency. One session gives it to about ±5 µs/MHz, an average of several to about ±2. A straight-line compensator removes only the slope; the bend of the trace within the band, noticeable near the MUF, remains.',
+      'gdd.c.on': 'Turn on the receiver’s compensator', 'gdd.c.err': 'Error in the GDD estimate',
+      'gdd.c.p0': 'exact', 'gdd.c.p2': 'session average, +2', 'gdd.c.p5': 'one session, +5',
+      'gdd.c.k.s': 'Compensator slope', 'gdd.c.k.ss': 'the GDD estimate, sign flipped',
+      'gdd.c.k.r': 'Residual spread', 'gdd.c.k.b': 'B<sub>max</sub> compensated',
+      'gdd.c.k.was': 'without it: {v}', 'gdd.c.k.cap': 'reaches the MUF',
+      'gdd.c.v': 'With the compensator the residual delay spread across the band is {s}: pulse peak {p} dB, width ×{w}.',
+      'gdd.c.curv': 'The residue now comes from the trace’s bend inside the band, not from the estimate’s error: near the MUF the slope changes noticeably from one band edge to the other, and a straight-line compensator cannot follow it.',
+      'gdd.l.path': 'after the path: peak {p} dB, width ×{w}', 'gdd.l.comp': 'compensated: peak {p} dB, width ×{w}',
+      'gdd.l.tr': 'the trace across the band', 'gdd.l.tan': 'tangent, slope GDD', 'gdd.l.res': 'residual after the compensator',
+      'gdd.model': 'The model. The lower 1F ray is τ(f) = 8.95 ms + b·MUF·(2(1 − √(1 − x)) − x), with x = f/MUF: the integral of the median law GDD = b·(1/√(1 − x) − 1), b = 7.5 µs/MHz, fitted to 583 Cyprus sweeps of February 2026. Real traces scatter about it by the interquartile range in Part 11’s table, and a single sweep’s measurement by about ±4 µs/MHz more. The law was measured with MUF 18–32 MHz; below that it is continued as ∝ 1/MUF. The same law follows independently from a parabolic profile through the secant law (see the vertical-sounding section): by day the two agree within 20 % from 0.8 to 0.96 MUF. The upper ray and 2F are drawn for orientation and enter no number; 2F starts at 9.40 ms and ends at 0.70 MUF, as mirror geometry gives for h′ = 250–300 km. The pulse is a Hann-shaped band of width B centred on the cursor, sent through the phase φ(f) = −2π∫(τ − τc) df that the trace implies. The compensator is an all-pass filter with group delay −GDD_est·(f − fc), where GDD_est is the trace’s slope at the band centre plus the chosen estimate error; B_max with it is the band whose residual delay spread equals 1/B. Fading, O/X splitting and absorption are left out. The console column is 41 kHz and its delay bin 24.4 µs (FFT 16 384, 100 kHz/s).',
     },
   });
 
-  const state = { M: 26, fc: 22, B: 250, more: true };
+  const state = { M: 26, fc: 22, B: 250, more: true, comp: false, err: 0 };
   const BWMIN = 3, BWMAX = 1000;
   const bwFrom = v => BWMIN * Math.pow(BWMAX / BWMIN, v / 1000);
   const sliderOf = b => Math.round(1000 * Math.log(b / BWMIN) / Math.log(BWMAX / BWMIN));
+
+  // Delay across a band of B kHz after a straight-line compensator of slope est (µs/MHz), relative to
+  // the centre, as [f, µs] pairs. Only frequencies up to the MUF count: nothing above it propagates.
+  function resid(est, B) {
+    const S = state, t0 = M_.tauL(S.fc, S.M), out = [];
+    for (let i = 0; i <= 120; i++) {
+      const f = S.fc + (i / 120 - 0.5) * B / 1000;
+      if (f <= S.M) out.push([f, M_.tauL(f, S.M) - t0 - est * (f - S.fc)]);
+    }
+    return out;
+  }
+  const spreadOf = r => r.length ? Math.max(...r.map(p => p[1])) - Math.min(...r.map(p => p[1])) : 0;
+
+  // The widest band whose spread after the compensator still equals 1/B: the same rule that gives
+  // B_max = 1/√GDD without one. No band reaches past the MUF, so 2·(MUF − fc) caps it.
+  function bmaxComp(est) {
+    const cap = 2 * (state.M - state.fc) * 1000, n = B => B / 1000 * spreadOf(resid(est, B));
+    if (n(cap) <= 1) return { b: cap, capped: true };
+    let lo = 1, hi = cap;
+    for (let i = 0; i < 40; i++) { const m = Math.sqrt(lo * hi); if (n(m) > 1) hi = m; else lo = m; }
+    return { b: lo, capped: false };
+  }
 
   function drawIono(svg) {
     svg.replaceChildren();
@@ -113,7 +157,7 @@
     PG.text(g, fx(S.fc) + (lr ? -9 : 9), 32, PG.t('gdd.lbl.band', { b: PG.fmtBW(S.B), f: PG.num(S.fc, 2) }), { 'text-anchor': lr ? 'end' : 'start', style: 'fill:var(--accent)' });
   }
 
-  function drawZoom(svg) {
+  function drawZoom(svg, rc) {
     svg.replaceChildren();
     const S = state, half = S.B / 2, t0 = M_.tauL(S.fc, S.M), g0 = M_.gdd(S.fc, S.M), pts = [];
     for (let i = 0; i <= 200; i++) {
@@ -131,6 +175,7 @@
     PG.text(g, 60, fy(yb) + 13, PG.t('gdd.bin'), { style: 'fill:var(--warn)' });
     PG.el(g, 'line', { x1: fx(-half), y1: fy(-g0 * half / 1000), x2: fx(half), y2: fy(g0 * half / 1000), stroke: 'currentColor', 'stroke-width': 1.3, 'stroke-dasharray': '5 4', opacity: .85 });
     if (pts.length > 1) PG.el(g, 'path', { d: PG.path(pts.map(p => [fx(p[0]), fy(p[1])])), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.6 });
+    if (rc && rc.length > 1) PG.el(g, 'path', { d: PG.path(rc.map(p => [fx((p[0] - S.fc) * 1000), fy(p[1])])), fill: 'none', style: 'stroke:var(--comp)', 'stroke-width': 2.4 });
     const mo = (S.M - S.fc) * 1000;
     if (mo < half) {
       PG.el(g, 'rect', { x: fx(mo), y: 14, width: 344 - fx(mo), height: 198, fill: 'currentColor', opacity: .07 });
@@ -138,10 +183,6 @@
     }
   }
 
-  function drawPulse(svg) {
-    const S = state;
-    PG.drawPulse(svg, PG.pulse(f => M_.tauL(f, S.M), S.fc, S.B, S.M));
-  }
 
   PG.register({
     id: 'gdd',
@@ -154,6 +195,8 @@
         { key: 's', label: PG.t('gdd.k.s') }, { key: 'b', label: PG.t('gdd.k.b'), sub: PG.t('gdd.k.bs') },
         { key: 'c', label: PG.t('gdd.k.c') }]);
       const note = PG.note();
+      const cc = PG.cards([{ key: 's', label: PG.t('gdd.c.k.s'), sub: PG.t('gdd.c.k.ss') }, { key: 'r', label: PG.t('gdd.c.k.r') }, { key: 'b', label: PG.t('gdd.c.k.b') }]);
+      const zoomLeg = PG.h('div'), pulLeg = PG.h('div');
 
       const update = () => {
         const S = state;
@@ -172,7 +215,29 @@
         note.set(kind === 'bad' || cut ? 'caution' : '', PG.t('gdd.v.' + kind),
           [PG.t('gdd.v.' + kind + 'T'), PG.t('gdd.v.num', { v: PG.num(Pn, Pn < 0.01 ? 4 : 2) }), cut ? PG.t('gdd.v.cut') : '', spread < M_.BIN_US ? PG.t('gdd.v.bin') : ''].filter(Boolean).join(' '),
           sc > 1 ? PG.t('gdd.v.ext', { v: PG.num(sc, 2) }) : null, x > 0.96 ? PG.t('gdd.v.nose') : null);
-        drawIono(iono); drawZoom(zoom); drawPulse(pul);
+        drawIono(iono);
+
+        const est = g0 + S.err, rc = S.comp ? resid(est, S.B) : null;
+        const Pp = PG.pulse(f => M_.tauL(f, S.M), S.fc, S.B, S.M);
+        const Pc = S.comp ? PG.pulse(f => M_.tauL(f, S.M) - est * (f - S.fc), S.fc, S.B, S.M) : null;
+        const dB = Q => PG.num(20 * Math.log10(Q.peak), 1), wd = Q => PG.num(Q.grow, 2);
+        drawZoom(zoom, rc);
+        PG.drawPulse(pul, Pp, { comp: Pc, labels: false });
+        zoomLeg.replaceChildren(PG.legend([['line', 'border-color:var(--accent)', PG.t('gdd.l.tr')], ['dash', 'border-color:var(--ink)', PG.t('gdd.l.tan')],
+          ...(S.comp ? [['line', 'border-color:var(--comp)', PG.t('gdd.l.res')]] : [])]));
+        pulLeg.replaceChildren(PG.legend([['dash', 'border-color:var(--ink)', PG.t('gdd.p.ref')], ['line', 'border-color:var(--accent)', PG.t('gdd.l.path', { p: dB(Pp), w: wd(Pp) })],
+          ...(S.comp ? [['line', 'border-color:var(--comp)', PG.t('gdd.l.comp', { p: dB(Pc), w: wd(Pc) })]] : [])]));
+
+        cc.root.hidden = !S.comp;
+        errBox.classList.toggle('off', !S.comp);
+        if (S.comp) {
+          const spC = spreadOf(rc), bc = bmaxComp(est), curv = spreadOf(resid(g0, S.B));
+          cc.set('s', (est > 0 ? '−' : est < 0 ? '+' : '') + PG.num(Math.abs(est), 1) + ' ' + PG.U('usMHz'));
+          cc.set('r', PG.fmtUs(spC), PG.t('gdd.c.k.was', { v: PG.fmtUs(spread) }));
+          cc.set('b', PG.fmtBW(bc.b), bc.capped ? PG.t('gdd.c.k.cap') : PG.t('gdd.c.k.was', { v: PG.fmtBW(M_.bmax(g0)) }));
+          compNote.replaceChildren(PG.h('p', null, PG.t('gdd.c.v', { s: PG.fmtUs(spC), p: dB(Pc), w: wd(Pc) }) +
+            (curv > Math.abs(S.err) * S.B / 1000 && spC * S.B / 1000 > 0.5 ? ' ' + PG.t('gdd.c.curv') : '')));
+        } else compNote.replaceChildren();
       };
 
       const muf = PG.slider({ label: PG.t('gdd.muf'), min: 12, max: 32.5, step: 0.1, value: state.M, fmt: v => PG.num(v, 1) + ' ' + PG.U('MHz'), onInput: v => { state.M = v; update(); } });
@@ -181,15 +246,26 @@
         [3, 48, 250, 1000].map(b => PG.h('button', { type: 'button', onclick: () => { state.B = b; bw.set(sliderOf(b)); bw.refresh(); update(); } }, PG.fmtBW(b))),
         PG.h('button', { type: 'button', onclick: () => { state.fc = +(0.85 * state.M).toFixed(2); fc.set(state.fc); update(); } }, PG.t('gdd.ow')));
       const bw = PG.slider({ label: PG.t('gdd.bw'), min: 0, max: 1000, step: 1, value: sliderOf(state.B), fmt: () => PG.fmtBW(state.B), onInput: v => { state.B = bwFrom(v); bw.refresh(); update(); }, extra: presets });
+      const errS = PG.slider({ label: PG.t('gdd.c.err'), min: -10, max: 10, step: 0.5, value: state.err,
+        fmt: v => (v > 0 ? '+' : v < 0 ? '−' : '') + PG.num(Math.abs(v), 1) + ' ' + PG.U('usMHz'), onInput: v => { state.err = v; update(); },
+        extra: PG.h('div', { class: 'seg' }, [[0, 'gdd.c.p0'], [2, 'gdd.c.p2'], [5, 'gdd.c.p5']].map(([v, k]) =>
+          PG.h('button', { type: 'button', onclick: () => { state.err = v; errS.set(v); update(); } }, PG.t(k)))) });
+      const errBox = PG.h('div', { class: 'ctl' }, errS.root);
+      const compOn = PG.h('label', { class: 'check' }, PG.h('input', { type: 'checkbox', checked: state.comp, onchange: e => { state.comp = e.target.checked; update(); } }), PG.t('gdd.c.on'));
+      const compNote = PG.h('div', { class: 'lede', style: 'font-size:13.5px;margin:10px 0 0' });
       const more = PG.h('label', { class: 'check' }, PG.h('input', { type: 'checkbox', checked: state.more, onchange: e => { state.more = e.target.checked; update(); } }), PG.t('gdd.more'));
 
       root.append(
         PG.h('div', { class: 'panel' }, PG.h('div', { class: 'ctl' }, muf.root, fc.root, bw.root), PG.h('div', { class: 'row' }, more)),
         PG.h('div', { class: 'panel' }, PG.h('p', { class: 'cap' }, PG.t('gdd.cap.iono')), iono),
         cards.root, note.root,
+        PG.h('h2', null, PG.t('gdd.c.h')),
+        PG.h('p', { class: 'lede', style: 'font-size:14.5px;margin-bottom:12px' }, PG.t('gdd.c.p')),
+        PG.h('div', { class: 'panel' }, PG.h('div', { class: 'row', style: 'margin-bottom:12px' }, compOn), errBox, compNote),
+        cc.root,
         PG.h('div', { class: 'two' },
-          PG.h('div', { class: 'panel' }, PG.h('p', { class: 'cap' }, PG.t('gdd.cap.zoom')), zoom),
-          PG.h('div', { class: 'panel' }, PG.h('p', { class: 'cap' }, PG.t('gdd.cap.pulse')), pul)),
+          PG.h('div', { class: 'panel' }, PG.h('p', { class: 'cap' }, PG.t('gdd.cap.zoom')), zoom, zoomLeg),
+          PG.h('div', { class: 'panel' }, PG.h('p', { class: 'cap' }, PG.t('gdd.cap.pulse')), pul, pulLeg)),
         PG.h('p', { class: 'lede', style: 'font-size:13.5px;margin-top:18px' }, PG.t('gdd.model')));
       update();
     },
