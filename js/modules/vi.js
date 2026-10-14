@@ -23,7 +23,7 @@
       'vi.aria.gdd': 'Модуль дисперсии групповой задержки в зависимости от частоты, логарифмическая шкала, со шкалой наибольшей неискажённой полосы.',
       'vi.y.g': '|GDD|, мкс/МГц', 'vi.y.b': 'B_max', 'vi.cap.zoom': 'В пределах полосы: задержка относительно центральной',
       'vi.bin': 'один отсчёт задержки, {v} мкс', 'vi.above': 'выше foF2',
-      'vi.cap.pulse': 'Импульс после отражения от ионосферы: огибающая с дисперсией и без неё',
+      'vi.cap.pulse': 'Импульс после отражения от ионосферы: огибающая с дисперсией и без неё', 'vi.p.peak': 'после отражения: пик {v} дБ',
       'vi.aria.zoom': 'Задержка в пределах полосы сигнала относительно центральной в сравнении с одним отсчётом задержки.',
       'vi.aria.pulse': 'Огибающая импульса после отражения от ионосферы в сравнении с тем же импульсом без дисперсии.',
       'vi.v.neg': 'Здесь задержка убывает с ростом частоты: это участок сразу за foE, где след после резкого подъёма идёт вниз. GDD отрицательна, но искажения определяются её модулем.',
@@ -64,7 +64,7 @@
       'vi.aria.gdd': 'Magnitude of the group-delay dispersion against frequency, logarithmic, with a largest-undistorted-bandwidth axis.',
       'vi.y.g': '|GDD|, µs/MHz', 'vi.y.b': 'B_max',
       'vi.cap.zoom': 'Inside the band: delay against offset from the centre', 'vi.bin': 'one console bin, {v} µs', 'vi.above': 'above foF2',
-      'vi.cap.pulse': 'A pulse through the ionosphere: envelope with and without dispersion',
+      'vi.cap.pulse': 'A pulse through the ionosphere: envelope with and without dispersion', 'vi.p.peak': 'reflected: peak {v} dB',
       'vi.aria.zoom': 'Delay across the signal band relative to the centre, against one console bin.',
       'vi.aria.pulse': 'Envelope of a pulse after the ionosphere, compared with the same pulse without dispersion.',
       'vi.v.neg': 'Here the delay falls with frequency: this is the descent after the foE cusp. GDD is negative, but distortion depends on its size.',
@@ -181,16 +181,7 @@
     svg.replaceChildren();
     const S = state;
     if (!isFinite(V.hv(S.fc, P))) return;
-    const Pp = PG.pulse(tauUs(P), S.fc, S.B, P.fmax);
-    const lab = v => Math.abs(v) >= 10 ? PG.num(Math.abs(v), 0) : PG.num(Math.abs(v), 1);
-    const Pl = PG.plot(svg, { x0: 40, x1: 344, y0: 14, y1: 212, xd: [-Pp.H, Pp.H], yd: [0, 1.08], xt: [-Pp.H, 0, Pp.H], yt: [0, 0.5, 1],
-      xf: v => (v > 0 ? '+' : v < 0 ? '−' : '') + lab(v), yf: v => PG.num(v, v % 1 ? 1 : 0), xl: PG.t('gdd.x.t') });
-    const { fx, fy, g } = Pl;
-    PG.el(g, 'path', { d: PG.path(Pp.t.map((v, i) => [fx(v), fy(Pp.r[i])])), fill: 'none', stroke: 'currentColor', 'stroke-width': 1.4, 'stroke-dasharray': '5 4', opacity: .65 });
-    PG.el(g, 'path', { d: PG.path(Pp.t.map((v, i) => [fx(v), fy(Pp.h[i])])), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
-    PG.text(svg, 338, 28, PG.t('gdd.p.peak', { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-    PG.text(svg, 338, 42, PG.t('gdd.p.w', { v: PG.num(Pp.grow, 2) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-    PG.text(svg, 46, 28, PG.t('gdd.p.ref'), { opacity: .75 });
+    PG.drawPulse(svg, PG.pulse(tauUs(P), S.fc, S.B, P.fmax), 'vi.p.peak');
   }
 
   // Oblique image: the main lower-ray branch below the nose, and the upper ray above it. Near the nose

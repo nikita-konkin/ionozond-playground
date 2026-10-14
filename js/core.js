@@ -33,6 +33,7 @@
       'u.MHz': 'МГц', 'u.kHz': 'кГц', 'u.Hz': 'Гц', 'u.us': 'мкс', 'u.ms': 'мс', 'u.s': 'с', 'u.km': 'км', 'u.dB': 'дБ', 'u.usMHz': 'мкс/МГц',
       'u.kHzs': 'кГц/с', 'u.bin': 'отсчёта', 'u.h': 'ч', 'app.eyebrow': 'Ionozond · практикум',
       'app.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели', 'nav.home': 'Обзор', 'nav.label': 'Разделы',
+      'theme.label': 'Оформление', 'theme.auto': 'Как в системе', 'theme.light': 'Светлая тема', 'theme.dark': 'Тёмная тема',
       'foot.1': 'Практикум к документу «Oblique Chirp Ionograms» (ionozond/docs/ionogram-physics.html). Численные значения взяты оттуда и из обработки архива трассы Кипр — Йошкар-Ола за 4–9 февраля 2026 г. Там, где на странице модель, а не измерение, это оговорено.',
       'foot.2': 'Ни сервер, ни интернет не нужны: достаточно открыть index.html. Шрифты загружаются из Google Fonts, а без сети браузер возьмёт системные.',
       'home.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели',
@@ -44,6 +45,7 @@
       'u.usMHz': 'µs/MHz', 'u.kHzs': 'kHz/s', 'u.bin': 'bin', 'u.h': 'h',
       'app.eyebrow': 'Ionozond · playground', 'app.title': 'Oblique chirp sounding: interactive models',
       'nav.home': 'Overview', 'nav.label': 'Sections',
+      'theme.label': 'Theme', 'theme.auto': 'Match the system', 'theme.light': 'Light theme', 'theme.dark': 'Dark theme',
       'foot.1': 'A companion to “Oblique Chirp Ionograms” (ionozond/docs/ionogram-physics.html). Numbers come from it and from the Cyprus → Yoshkar-Ola archive of 4–9 February 2026; where a page shows a model rather than a measurement, it says so.',
       'foot.2': 'Runs without a server or a network: open index.html. Fonts come from Google Fonts and fall back to system fonts offline.',
       'home.title': 'Oblique chirp sounding: interactive models',
@@ -306,6 +308,23 @@
     const width = a => { let s = 0, s1 = 0, s2 = 0; a.forEach((v, i) => { const p = v * v; s += p; s1 += p * t[i]; s2 += p * t[i] * t[i]; }); return Math.sqrt(Math.max(s2 / s - (s1 / s) ** 2, 0)); };
     return { t, h: h.map(v => v / rm), r: r.map(v => v / rm), H, peak: Math.max(...h) / rm, grow: width(h) / width(r) };
   };
+  // Draws PG.pulse output. The reference goes on top, thin and dashed, so it stays visible when the
+  // two envelopes coincide; drawn underneath, the thick curve would hide it whenever GDD is small.
+  PG.drawPulse = (svg, Pp, peakKey = 'gdd.p.peak') => {
+    svg.replaceChildren();
+    const lab = v => Math.abs(v) >= 10 ? PG.num(Math.abs(v), 0) : PG.num(Math.abs(v), 1);
+    const P = PG.plot(svg, { x0: 40, x1: 344, y0: 14, y1: 212, xd: [-Pp.H, Pp.H], yd: [0, 1.08], xt: [-Pp.H, 0, Pp.H], yt: [0, 0.5, 1],
+      xf: v => (v > 0 ? '+' : v < 0 ? '−' : '') + lab(v), yf: v => PG.num(v, v % 1 ? 1 : 0), xl: PG.t('gdd.x.t') });
+    const { fx, fy, g } = P, line = a => PG.path(Pp.t.map((v, i) => [fx(v), fy(a[i])]));
+    PG.el(g, 'path', { d: line(Pp.h), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
+    // A halo in the panel colour under each dash keeps it readable against the accent in either theme.
+    PG.el(g, 'path', { d: line(Pp.r), fill: 'none', style: 'stroke:var(--surface)', 'stroke-width': 3.6, 'stroke-dasharray': '5 4' });
+    PG.el(g, 'path', { d: line(Pp.r), fill: 'none', style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
+    PG.el(svg, 'line', { x1: 46, x2: 66, y1: 24, y2: 24, style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
+    PG.text(svg, 71, 28, PG.t('gdd.p.ref'));
+    PG.text(svg, 338, 28, PG.t(peakKey, { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
+    PG.text(svg, 338, 42, PG.t('gdd.p.w', { v: PG.num(Pp.grow, 2) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
+  };
   // Pulse damage against the dispersion number GDD·B². Simulated for a Hann band: at 1 the peak drops
   // 0.06 dB and the pulse widens 3 %, at 5 it drops 1.5 dB and widens 1.6×.
   PG.dispKind = n => n < 1 ? 'flat' : n < 5 ? 'mild' : 'bad';
@@ -358,7 +377,24 @@
       PG.h('a', { href: '#home', 'data-id': 'home' }, PG.t('nav.home')),
       ...PG.modules.map(m => PG.h('a', { href: '#' + m.id, 'data-id': m.id }, PG.t(m.id + '.nav'))));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === PG.lang)));
+    document.querySelector('.theme').setAttribute('aria-label', PG.t('theme.label'));
+    document.querySelectorAll('.theme button').forEach(b => {
+      const l = PG.t('theme.' + b.dataset.themeSet);
+      b.setAttribute('aria-label', l); b.title = l;
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === PG.theme));
+    });
   }
+
+  // 'auto' follows prefers-color-scheme; 'light' and 'dark' set data-theme, which the stylesheet
+  // checks before the media query. Charts use CSS variables only, so nothing needs redrawing.
+  PG.theme = 'auto';
+  PG.setTheme = t => {
+    PG.theme = t === 'light' || t === 'dark' ? t : 'auto';
+    if (PG.theme === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', PG.theme);
+    try { localStorage.setItem('pg-theme', PG.theme); } catch (e) { /* private mode */ }
+    document.querySelectorAll('.theme button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === PG.theme)));
+  };
 
   PG.setLang = l => {
     PG.lang = l === 'en' ? 'en' : 'ru';
@@ -373,6 +409,10 @@
     const q = new URLSearchParams(location.search).get('lang');
     PG.lang = q === 'en' || q === 'ru' ? q : saved === 'en' ? 'en' : 'ru';
     document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => PG.setLang(b.dataset.lang)));
+    let th = null;
+    try { th = localStorage.getItem('pg-theme'); } catch (e) { /* private mode */ }
+    PG.setTheme(new URLSearchParams(location.search).get('theme') || th);
+    document.querySelectorAll('.theme button').forEach(b => b.addEventListener('click', () => PG.setTheme(b.dataset.themeSet)));
     window.addEventListener('hashchange', route);
     shell();
     route();

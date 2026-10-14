@@ -33,7 +33,7 @@
       'gdd.y.rel': 'задержка − центральная, мкс',
       'gdd.cap.pulse': 'Импульс после прохождения трассы: огибающая с дисперсией и без неё',
       'gdd.aria.pulse': 'Огибающая импульса заданной полосы после прохождения трассы в сравнении с тем же импульсом без дисперсии.',
-      'gdd.x.t': 'время относительно центральной задержки, мкс', 'gdd.p.ref': '- - без дисперсии', 'gdd.p.peak': 'после трассы: пик {v} дБ',
+      'gdd.x.t': 'время относительно центральной задержки, мкс', 'gdd.p.ref': 'без дисперсии', 'gdd.p.peak': 'после трассы: пик {v} дБ',
       'gdd.p.w': 'ширина ×{v}',
       'gdd.model': 'Модель. Нижний луч 1F: τ(f) = 8,95 мс + b·МНЧ·(2(1 − √(1 − x)) − x), где x = f/МНЧ. Это интеграл медианного закона GDD = b·(1/√(1 − x) − 1) с b = 7,5 мкс/МГц, подобранного по 583 сеансам на трассе Кипр — Йошкар-Ола в феврале 2026 г. Реальные ДЧХ разбросаны вокруг него в пределах межквартильного размаха из таблицы части 11, а оценка по одному сеансу добавляет ещё ±4 мкс/МГц. Закон измерен при МНЧ 18–32 МГц; ниже он продолжен пропорционально 1/МНЧ. Тот же закон независимо следует из параболического профиля через закон секанса (см. раздел о вертикальном зондировании): днём расхождение не превышает 20 % в интервале от 0,8 до 0,96 МНЧ. Верхний луч и мода 2F нарисованы для ориентира и в расчётах не участвуют; 2F начинается на 9,40 мс и обрывается на 0,70 МНЧ — так получается при зеркальном отражении с h′ = 250–300 км. Импульс — участок спектра шириной B с окном Ханна вокруг курсора, прошедший через фазовую характеристику φ(f) = −2π∫(τ − τc) df, которую задаёт ДЧХ. Замирания, магнитоионное расщепление и поглощение не учитываются. Столбец ионограммы ionozond — 41 кГц, отсчёт задержки — 24,4 мкс (БПФ на 16 384 точки, 100 кГц/с).',
     },
@@ -65,7 +65,7 @@
       'gdd.x.off': 'offset from centre, kHz', 'gdd.y.rel': 'delay − centre, µs',
       'gdd.cap.pulse': 'A pulse through it: envelope, path against no dispersion',
       'gdd.aria.pulse': 'Envelope of a pulse occupying the band after the path, compared with the same pulse without dispersion.',
-      'gdd.x.t': 'time from the centre delay, µs', 'gdd.p.ref': '- - no dispersion', 'gdd.p.peak': 'path: peak {v} dB', 'gdd.p.w': 'width ×{v}',
+      'gdd.x.t': 'time from the centre delay, µs', 'gdd.p.ref': 'no dispersion', 'gdd.p.peak': 'path: peak {v} dB', 'gdd.p.w': 'width ×{v}',
       'gdd.model': 'The model. The lower 1F ray is τ(f) = 8.95 ms + b·MUF·(2(1 − √(1 − x)) − x), with x = f/MUF: the integral of the median law GDD = b·(1/√(1 − x) − 1), b = 7.5 µs/MHz, fitted to 583 Cyprus sweeps of February 2026. Real traces scatter about it by the interquartile range in Part 11’s table, and a single sweep’s measurement by about ±4 µs/MHz more. The law was measured with MUF 18–32 MHz; below that it is continued as ∝ 1/MUF. The same law follows independently from a parabolic profile through the secant law (see the vertical-sounding section): by day the two agree within 20 % from 0.8 to 0.96 MUF. The upper ray and 2F are drawn for orientation and enter no number; 2F starts at 9.40 ms and ends at 0.70 MUF, as mirror geometry gives for h′ = 250–300 km. The pulse is a Hann-shaped band of width B centred on the cursor, sent through the phase φ(f) = −2π∫(τ − τc) df that the trace implies. Fading, O/X splitting and absorption are left out. The console column is 41 kHz and its delay bin 24.4 µs (FFT 16 384, 100 kHz/s).',
     },
   });
@@ -139,17 +139,8 @@
   }
 
   function drawPulse(svg) {
-    svg.replaceChildren();
-    const S = state, Pp = PG.pulse(f => M_.tauL(f, S.M), S.fc, S.B, S.M);
-    const lab = v => Math.abs(v) >= 10 ? PG.num(Math.abs(v), 0) : PG.num(Math.abs(v), 1);
-    const P = PG.plot(svg, { x0: 40, x1: 344, y0: 14, y1: 212, xd: [-Pp.H, Pp.H], yd: [0, 1.08], xt: [-Pp.H, 0, Pp.H], yt: [0, 0.5, 1],
-      xf: v => (v > 0 ? '+' : v < 0 ? '−' : '') + lab(v), yf: v => PG.num(v, v % 1 ? 1 : 0), xl: PG.t('gdd.x.t') });
-    const { fx, fy, g } = P;
-    PG.el(g, 'path', { d: PG.path(Pp.t.map((v, i) => [fx(v), fy(Pp.r[i])])), fill: 'none', stroke: 'currentColor', 'stroke-width': 1.4, 'stroke-dasharray': '5 4', opacity: .65 });
-    PG.el(g, 'path', { d: PG.path(Pp.t.map((v, i) => [fx(v), fy(Pp.h[i])])), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
-    PG.text(svg, 338, 28, PG.t('gdd.p.peak', { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-    PG.text(svg, 338, 42, PG.t('gdd.p.w', { v: PG.num(Pp.grow, 2) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-    PG.text(svg, 46, 28, PG.t('gdd.p.ref'), { opacity: .75 });
+    const S = state;
+    PG.drawPulse(svg, PG.pulse(f => M_.tauL(f, S.M), S.fc, S.B, S.M));
   }
 
   PG.register({
