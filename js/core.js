@@ -353,9 +353,13 @@
     },
   };
 
-  function route() {
-    const id = location.hash.replace('#', '') || 'home';
+  // #page or #page/section; the section is the element with id page-section. Moving between
+  // sections of the page already on screen only scrolls, unless redraw asks for a fresh mount.
+  function route(redraw) {
+    const [id, sub] = location.hash.replace('#', '').split('/');
     const m = PG.modules.find(x => x.id === id) || home;
+    const target = () => sub && document.getElementById(m.id + '-' + sub);
+    if (!redraw && sub && route.last === m.id && target()) { target().scrollIntoView(); route.sub = sub; return; }
     const main = document.getElementById('main');
     main.replaceChildren();
     const isHome = m === home;
@@ -368,8 +372,9 @@
     m.mount(body);
     document.title = (isHome ? '' : PG.t(m.id + '.title') + ' · ') + PG.t('app.eyebrow');
     document.querySelectorAll('nav.rail a').forEach(a => a.setAttribute('aria-current', a.dataset.id === m.id ? 'page' : 'false'));
-    if (route.last !== m.id) window.scrollTo(0, 0);
-    route.last = m.id;
+    if (target()) target().scrollIntoView();
+    else if (route.last !== m.id || route.sub) window.scrollTo(0, 0);
+    route.last = m.id; route.sub = sub;
   }
 
   function shell() {
@@ -404,7 +409,7 @@
     PG.lang = l === 'en' ? 'en' : 'ru';
     try { localStorage.setItem('pg-lang', PG.lang); } catch (e) { /* private mode */ }
     shell();
-    route();
+    route(true);
   };
 
   PG.start = () => {
@@ -417,7 +422,7 @@
     try { th = localStorage.getItem('pg-theme'); } catch (e) { /* private mode */ }
     PG.setTheme(new URLSearchParams(location.search).get('theme') || th);
     document.querySelectorAll('.theme button').forEach(b => b.addEventListener('click', () => PG.setTheme(b.dataset.themeSet)));
-    window.addEventListener('hashchange', route);
+    window.addEventListener('hashchange', () => route());
     shell();
     route();
   };

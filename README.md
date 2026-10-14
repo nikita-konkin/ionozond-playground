@@ -34,12 +34,16 @@ python3 -m http.server 8000
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
+| Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
 
 ## Откуда взяты числа и где модель
 
 - Закон GDD = 7,5·(1/√(1 − f/МНЧ) − 1) мкс/МГц — медиана 19 033 оценок наклона
-  по 583 сеансам за 4–9 февраля 2026 г. (`lfs_tools/dispersion_stats.py`).
-  Межквартильный разброс — около ±50 %.
+  по 583 сеансам за 4–9 февраля 2026 г. (`lfs_tools/dispersion_stats.py` в проекте
+  моделирования канала). Коэффициент b подогнан функцией `curve_fit` к медианам
+  19 интервалов f/МНЧ от 0,5 до 0,975 с весами по числу оценок: b = 7,52, R² = 0,975;
+  без весов или с началом подгонки на 0,6–0,8 МНЧ получается 7,4–7,6. Это параметр
+  модели трассы Кипр — Йошкар-Ола, а не универсальная постоянная. Межквартильный разброс — около ±50 %.
 - Ошибки методов измерения откалиброваны по полной БПФ-обработке синтетических
   записей (доплеровское расширение 0,37 Гц, ОСШ 18 дБ на 0,1 с).
 - Дециматор, окно ионограммы, планировщик и пересчёт rep:offset взяты из
@@ -78,6 +82,22 @@ python3 tools/export_daily.py lfs_feb2026.npz out --date 2026-02-04
 Получится `out/muf_2026-02-04.json`; загрузите его кнопкой «Загрузить сутки
 (JSON)». Нужны Python 3 и numpy.
 
+## Вики
+
+Раздел «Вики» собирается из `ionozond/docs/ionogram-physics.html` (соседний
+репозиторий) скриптом `tools/wiki/build_wiki.py` в `js/wiki/physics.js`. Скрипт делит
+документ на текстовые блоки по позициям в исходнике, поэтому разметка и рисунки
+переносятся без изменений, а в русскую версию подставляется перевод каждого блока из
+`tools/wiki/physics.ru.json` (ключ — английский текст блока).
+
+```bash
+python3 tools/wiki/build_wiki.py
+```
+
+Если документ изменился, изменённые блоки остаются на английском, и скрипт сообщает
+их число; ключ `--missing` выводит их в JSON. Переведите их, добавьте в
+`physics.ru.json` и соберите раздел заново.
+
 ## Устройство
 
 ```
@@ -85,8 +105,10 @@ index.html          каркас: шапка, навигация, подвал
 css/style.css       палитра и типографика документа, тёмная тема
 js/core.js          переводы, элементы управления, SVG-графики, модель, переходы между разделами
 js/modules/*.js     по файлу на раздел, у каждого свои строки RU/EN
+js/wiki/physics.js  текст вики, собирается из документа, вручную не правится
 tools/export_daily.py
 tools/validate/     проверки моделей на Python
+tools/wiki/         сборка вики и русский перевод документа
 ```
 
 Чтобы добавить раздел, создайте файл в `js/modules/`, который вызывает
@@ -116,14 +138,26 @@ phase fit); chirptime error; FFT length and cell shape; the station schedule
 with a rep:offset → chirptime converter; the day, with a B_max map over
 frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
-same ionosphere carried over to the Cyprus path by the secant law.
+same ionosphere carried over to the Cyprus path by the secant law. The wiki holds
+the document itself, in English and in Russian; parts link as `#wiki/gdd` and so on,
+and each part links to the pages that model it.
 
 **Sources.** The GDD law is the median of 19 033 slopes from 583 sweeps,
-4–9 February 2026. The measurement errors are calibrated against full FFT
+4–9 February 2026. Its b is a `curve_fit` to the medians of 19 f/MUF bins from 0.5
+to 0.975, weighted by the number of slopes: 7.52, R² = 0.975, and 7.4–7.6 without
+the weights or starting at 0.6–0.8 MUF. It is a parameter of this path, not a
+universal constant. The measurement errors are calibrated against full FFT
 processing of synthetic captures. The decimator, panel window, scheduler and
 timing conversion follow the document and the ionozond sources. The model day,
 trace shapes and the 8 dB threshold in the cell section are schematic, and each
 page says where it is showing a model.
+
+**The wiki** is built from `ionozond/docs/ionogram-physics.html` by
+`python3 tools/wiki/build_wiki.py`, which writes `js/wiki/physics.js`. It cuts the
+document into text blocks by source position, so markup and figures carry over
+byte for byte, and fills the Russian page from `tools/wiki/physics.ru.json`, keyed
+by each block's English. Blocks the document has changed stay in English and are
+counted; `--missing` lists them as JSON to translate.
 
 **A real day.** `tools/export_daily.py` turns an `lfs_tools/lfs_batch.py` file
 into the JSON the day page loads (needs Python 3 and numpy).

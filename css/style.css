@@ -102,6 +102,7 @@ input[type=text] { width: 9em; }
 .check { font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
 .check input { accent-color: var(--accent); }
 .off { opacity: .45; pointer-events: none; }
+[hidden] { display: none !important; }
 
 svg.fig { display: block; width: 100%; height: auto; color: var(--ink); overflow: visible; }
 
@@ -117,6 +118,22 @@ svg.fig { display: block; width: 100%; height: auto; color: var(--ink); overflow
 .note.caution .lbl { color: var(--warn); }
 .note p { margin: 0; font-size: 14.5px; }
 .note p + p { margin-top: 6px; }
+
+details.calc { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; margin: 0 0 16px; }
+details.calc > summary { cursor: pointer; padding: 10px 18px; font: 12.5px "IBM Plex Mono", monospace; color: var(--accent); }
+details.calc > summary:hover { text-decoration: underline; }
+details.calc[open] > summary { border-bottom: 1px solid var(--rule); }
+ol.calc { list-style: none; counter-reset: step; margin: 0; padding: 14px 18px 2px; }
+ol.calc > li { counter-increment: step; position: relative; padding-left: 32px; margin: 0 0 16px; }
+ol.calc > li::before {
+  content: counter(step); position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); font: 500 11.5px/21px "IBM Plex Mono", monospace; text-align: center;
+}
+ol.calc > li > b { font-weight: 600; font-size: 14.5px; }
+ol.calc > li > p { margin: 2px 0 6px; font-size: 13.5px; color: var(--muted); }
+ol.calc .eq { font: 13px/1.65 "IBM Plex Mono", monospace; background: var(--raised); border-radius: 4px; padding: 6px 10px; overflow-wrap: anywhere; }
+ol.calc .eq b { font-weight: 500; color: var(--accent); }
+@media (max-width: 560px) { ol.calc { padding: 12px 12px 2px; } ol.calc > li { padding-left: 28px; } }
 
 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
 .two > .panel { margin: 0; }
@@ -145,6 +162,62 @@ tr.bad td { background: var(--warn-soft); }
 .home a.tile:hover { border-color: var(--accent); }
 .home a.tile b { display: block; font: 600 1.12rem/1.25 Spectral, Georgia, serif; margin: 4px 0 6px; }
 .home a.tile span.d { font-size: 14px; color: var(--muted); }
+
+/* ------------------------------------------------------------------- wiki */
+/* The reference document (js/wiki/physics.js), styled as ionozond/docs/ionogram-physics.html. */
+
+.wiki .station { display: flex; flex-wrap: wrap; gap: 8px 24px; font: 12.5px "IBM Plex Mono", monospace; color: var(--faint); margin: -8px 0 22px; }
+.wiki .station b { color: var(--ink); font-weight: 500; }
+.wiki-toc { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 44px; }
+.wiki-toc h2 { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin: 0 0 10px; }
+.wiki-toc ol { list-style: none; counter-reset: part -1; margin: 0; padding: 0; columns: 2 230px; column-gap: 32px; font-size: 14px; line-height: 1.4; }
+.wiki-toc li { counter-increment: part; break-inside: avoid; margin-bottom: 6px; display: flex; gap: 10px; }
+.wiki-toc li::before { content: counter(part); flex: none; width: 1.5em; text-align: right; font: 11.5px/1.75 "IBM Plex Mono", monospace; color: var(--faint); }
+.wiki-toc a { text-decoration: none; }
+.wiki-toc a:hover { text-decoration: underline; }
+
+.wiki section { margin: 0 0 60px; scroll-margin-top: 16px; }
+.wiki .part-no { display: block; font: 11.5px "IBM Plex Mono", monospace; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.wiki h2.part { font: 600 clamp(1.45rem, 2.8vw, 1.85rem)/1.15 Spectral, Georgia, serif; letter-spacing: -.012em; text-wrap: balance; margin: 0 0 8px; }
+.wiki .part-lede { color: var(--muted); max-width: 64ch; margin: 0 0 28px; }
+.wiki p.wiki-try { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: -14px 0 28px; }
+.wiki-try span { font: 10.5px "IBM Plex Mono", monospace; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
+.wiki-try a { font-size: 13.5px; text-decoration: none; padding: 3px 10px; border: 1px solid var(--accent); border-radius: 4px; background: var(--accent-soft); }
+.wiki-try a:hover { text-decoration: underline; }
+.wiki h3 { font: 600 1.02rem/1.3 "IBM Plex Sans", sans-serif; margin: 34px 0 10px; text-wrap: balance; }
+.wiki p { max-width: 68ch; margin: 0 0 16px; }
+.wiki ol.plain, .wiki ul.plain { max-width: 68ch; padding-left: 20px; margin: 0 0 16px; }
+.wiki ol.plain li, .wiki ul.plain li { margin-bottom: 8px; }
+.wiki code, .wiki .mono { font-size: .875em; }
+.wiki code { background: var(--raised); border: 1px solid var(--rule); border-radius: 3px; padding: .08em .34em; }
+.wiki var { font-style: italic; font-family: Spectral, Georgia, serif; }
+.wiki sub, .wiki sup { font-size: .68em; font-style: normal; }
+
+.wiki .eq { margin: 20px 0; padding: 16px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; overflow-x: auto; }
+.wiki .eq-line { font-family: Spectral, Georgia, serif; font-size: 1.12rem; line-height: 1.7; white-space: nowrap; }
+.wiki .eq-line + .eq-line { margin-top: 8px; }
+.wiki .eq-where { margin: 12px 0 0; font-size: 13px; color: var(--muted); max-width: 62ch; }
+
+.wiki .tablewrap { margin: 20px 0; }
+.wiki table { font-size: 14px; }
+.wiki caption { caption-side: bottom; text-align: left; font-size: 12.5px; color: var(--faint); padding: 10px 16px 12px; border-top: 1px solid var(--rule); }
+.wiki th, .wiki td { padding: 9px 16px; vertical-align: top; }
+.wiki th.num, .wiki td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
+.wiki tbody tr.hi td { background: var(--accent-soft); }
+.wiki .tag { display: inline-block; font: 10px "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; white-space: nowrap; border: 1px solid; }
+.wiki .tag.phys { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.wiki .tag.inst { color: var(--warn); border-color: var(--warn); background: var(--warn-soft); }
+
+.wiki figure { margin: 26px 0; }
+.wiki figure svg { display: block; width: 100%; height: auto; color: var(--ink); }
+.wiki .figframe { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 18px 12px; overflow-x: auto; }
+.wiki figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; max-width: 66ch; line-height: 1.5; }
+.wiki .note { margin: 22px 0; padding: 14px 18px; }
+.wiki .note p { max-width: 62ch; }
+.wiki .note p + p { margin-top: 10px; }
+.wiki .note .lbl { margin-bottom: 6px; }
+.wiki-foot { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; color: var(--faint); }
+.wiki-foot p { max-width: 90ch; }
 
 .err { color: var(--warn); font-size: 13px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
