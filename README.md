@@ -34,6 +34,7 @@ python3 -m http.server 8000
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
+| Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
 
 ## Откуда взяты числа и где модель
@@ -141,7 +142,9 @@ frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
 same ionosphere carried over to the Cyprus path by the secant law. The wiki holds
 the document itself, in English and in Russian; parts link as `#wiki/gdd` and so on,
-and each part links to the pages that model it.
+and each part links to the pages that model it. A glossary explains the
+abbreviations; in every page's text they are underlined and open the same note on
+hover or tap.
 
 **Sources.** The GDD law is the median of 19 033 slopes from 583 sweeps,
 4–9 February 2026. Its b is a `curve_fit` to the medians of 19 f/MUF bins from 0.5
