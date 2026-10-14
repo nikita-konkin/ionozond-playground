@@ -25,12 +25,16 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
-      # The site is static: no build, only the files the browser needs.
+      # The site is static: no build, only the files the browser needs, plus the commit it
+      # comes from for the footer.
       - name: Assemble site
         run: |
           mkdir _site
           cp -r index.html css js _site/
           touch _site/.nojekyll
+          printf "PG.build = { sha: '%s', date: '%s', url: '%s' };\n" \
+            "$(git rev-parse HEAD)" "$(git log -1 --format=%cI)" \
+            "${{ github.server_url }}/${{ github.repository }}" > _site/js/build.js
 
       - uses: actions/upload-pages-artifact@v3
         with:

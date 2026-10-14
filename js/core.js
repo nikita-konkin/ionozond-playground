@@ -38,7 +38,7 @@
       'foot.2': 'Ни сервер, ни интернет не нужны: достаточно открыть index.html. Шрифты загружаются из Google Fonts, а без сети браузер возьмёт системные.',
       'home.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели',
       'home.lede': 'Семь моделей, связанных с трассой Кипр — Йошкар-Ола и программой ionozond. Каждая разбирает одну тему документа: меняйте параметры и сразу смотрите, что получится. Речь идёт о дисперсии групповой задержки и способах её измерить, об ошибке момента старта (chirptime), о длине БПФ, о расписании станций, о суточном ходе неискажённой полосы и, наконец, о вертикальном зондировании той же ионосферы.',
-      'home.open': 'Открыть',
+      'home.open': 'Открыть', 'foot.build': 'Версия {sha} от {date}',
     },
     en: {
       'u.MHz': 'MHz', 'u.kHz': 'kHz', 'u.Hz': 'Hz', 'u.us': 'µs', 'u.ms': 'ms', 'u.s': 's', 'u.km': 'km', 'u.dB': 'dB',
@@ -50,7 +50,7 @@
       'foot.2': 'Runs without a server or a network: open index.html. Fonts come from Google Fonts and fall back to system fonts offline.',
       'home.title': 'Oblique chirp sounding: interactive models',
       'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere.',
-      'home.open': 'Open',
+      'home.open': 'Open', 'foot.build': 'Version {sha}, {date}',
     },
   });
 
@@ -377,9 +377,21 @@
     route.last = m.id; route.sub = sub;
   }
 
+  // The commit the deployed site was built from (js/build.js, written by the deploy workflow): its
+  // short hash, linked to the commit, and its date. A copy run from the repository has none.
+  function footBuild() {
+    const p = document.querySelector('.foot .build'), b = PG.build;
+    if (!p || !b) return;
+    const date = new Date(b.date).toLocaleDateString(PG.lang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const [pre, post] = PG.t('foot.build', { sha: '{sha}', date }).split('{sha}');
+    p.replaceChildren(pre, PG.h('a', { class: 'mono', href: b.url + '/commit/' + b.sha }, b.sha.slice(0, 7)), post);
+    p.hidden = false;
+  }
+
   function shell() {
     document.documentElement.lang = PG.lang;
     document.querySelectorAll('[data-i18n]').forEach(e => { e.textContent = PG.t(e.dataset.i18n); });
+    footBuild();
     const nav = document.querySelector('nav.rail');
     nav.setAttribute('aria-label', PG.t('nav.label'));
     nav.replaceChildren(
