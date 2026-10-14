@@ -87,7 +87,6 @@
   });
 
   const FIF = 40e3, NFFT = 16384, F0 = 1, F1 = 14, FH = 1.4;
-  const MEDIANS = [[0.61, 2.9, -0.7, 5.7], [0.71, 6.3, 3.2, 9.6], [0.81, 9.2, 5.0, 14.5], [0.86, 13.5, 8.6, 20.1], [0.91, 17.2, 10.2, 27.4], [0.96, 32.7, 16.4, 51.2], [0.99, 36.5, 15.3, 57.4]];
   const state = Object.assign({ pre: 'day', fc: 8, B: 50, k: 50e3, xm: false }, V.PRESETS.day);
   const BWMIN = 3, BWMAX = 1000;
   const bwFrom = v => BWMIN * Math.pow(BWMAX / BWMIN, v / 1000);
@@ -234,7 +233,7 @@
     const law = [];
     for (let x = 0.5; x <= 0.995; x += 0.005) law.push([fx(x), fy(Math.min(PG.model.b * (1 / Math.sqrt(1 - x) - 1), 85))]);
     PG.el(g, 'path', { d: PG.path(law), fill: 'none', stroke: 'currentColor', 'stroke-width': 1.4, 'stroke-dasharray': '5 4', opacity: .75 });
-    MEDIANS.forEach(([x, m, lo, hi]) => {
+    PG.model.MEDIANS.forEach(([x, m, lo, hi]) => {
       PG.el(g, 'line', { x1: fx(x), x2: fx(x), y1: fy(lo), y2: fy(hi), stroke: 'currentColor', 'stroke-width': 1.2, opacity: .55 });
       PG.el(g, 'circle', { cx: fx(x), cy: fy(m), r: 3.5, style: 'fill:var(--surface);stroke:var(--ink)', 'stroke-width': 1.4 });
     });

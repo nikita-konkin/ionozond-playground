@@ -199,6 +199,8 @@
     gddMed(f, M) { return this.gdd(Math.min(f, this.X_MED * M), M); },
     tauU(f, M) { return this.tauL(M, M) + this.scale(M) * 2 * this.b * M * 1.6 * Math.sqrt(Math.max(0, 1 - f / M)); },
     bmax(g) { const a = Math.abs(g); return a > 0.06 ? 1000 / Math.sqrt(a) : Infinity; },   // kHz, for GDD in µs/MHz
+    // Measured lower-ray GDD at f/MUF, µs/MHz, from the same 583 sweeps: [x, median, q25, q75].
+    MEDIANS: [[0.61, 2.9, -0.7, 5.7], [0.71, 6.3, 3.2, 9.6], [0.81, 9.2, 5.0, 14.5], [0.86, 13.5, 8.6, 20.1], [0.91, 17.2, 10.2, 27.4], [0.96, 32.7, 16.4, 51.2], [0.99, 36.5, 15.3, 57.4]],
   };
 
   /* ------------------------------------------------ vertical incidence */

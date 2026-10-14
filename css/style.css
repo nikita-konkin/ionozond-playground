@@ -131,8 +131,9 @@ ol.calc > li::before {
 }
 ol.calc > li > b { font-weight: 600; font-size: 14.5px; }
 ol.calc > li > p { margin: 2px 0 6px; font-size: 13.5px; color: var(--muted); }
-ol.calc .eq { font: 13px/1.65 "IBM Plex Mono", monospace; background: var(--raised); border-radius: 4px; padding: 6px 10px; overflow-wrap: anywhere; }
-ol.calc .eq b { font-weight: 500; color: var(--accent); }
+.panel > .eq { margin-top: 12px; }
+ol.calc .eq, .panel > .eq { font: 13px/1.65 "IBM Plex Mono", monospace; background: var(--raised); border-radius: 4px; padding: 6px 10px; overflow-wrap: anywhere; }
+ol.calc .eq b, .panel > .eq b { font-weight: 500; color: var(--accent); }
 @media (max-width: 560px) { ol.calc { padding: 12px 12px 2px; } ol.calc > li { padding-left: 28px; } }
 
 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }

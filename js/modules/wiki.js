@@ -19,7 +19,7 @@
 
   // The playground pages that model each part, by section id. They are listed under the part's lede.
   const PAGES = {
-    reflection: ['vi'], geometry: ['vi'], edges: ['gdd', 'daily'], dechirp: ['timing'], axes: ['cells'], window: ['schedule'],
+    reflection: ['vi'], geometry: ['vi'], edges: ['gdd', 'daily'], dechirp: ['cells', 'timing'], axes: ['cells'], window: ['schedule'],
     parallel: ['schedule'], timing: ['timing', 'schedule'], gdd: ['gdd', 'measure', 'daily'], budget: ['timing', 'cells'],
   };
 

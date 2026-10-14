@@ -27,10 +27,10 @@ python3 -m http.server 8000
 
 | Раздел | Что показывает | Часть документа |
 |---|---|---|
-| Дисперсия на ионограмме | ДЧХ мод 1F и 2F по медианному закону GDD, полоса сигнала, B_max, импульс после трассы | 11 |
+| Дисперсия на ионограмме | ДЧХ мод 1F и 2F по медианному закону GDD, полоса сигнала, B_max, импульс после трассы, тот же предел через фазу на краях полосы и B_max вдоль всей ДЧХ | 11 |
 | Как измерять GDD | наклон задержки и кривизна фазы в окне 1 МГц, 300 реализаций, усреднение по сеансам | 11 |
 | Ошибка chirptime | куда уходит эхо при ошибках Δt и Δk: окно ионограммы, перескок через край интервала однозначности, нули дециматора | 9 |
-| Длина БПФ и ячейка | форма ячейки k·N/f_ПЧ × f_ПЧ/(k·N), перенос следа на сетку, фильтр мелких объектов 9 × 3 | 6 |
+| Длина БПФ и ячейка | форма ячейки k·N/f_ПЧ × f_ПЧ/(k·N), перенос следа на сетку, фильтр мелких объектов 9 × 3, спектр одного столбца у «носа» ДЧХ: когда нижний и верхний лучи разделяются | 5–6 |
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
@@ -99,6 +99,11 @@ python3 tools/wiki/build_wiki.py
 их число; ключ `--missing` выводит их в JSON. Переведите их, добавьте в
 `physics.ru.json` и соберите раздел заново.
 
+Исправления документа и заметки практикума лежат в `tools/wiki/physics.fix.json`:
+это точные пары «найти — заменить» с указанием причины, которые применяются к документу
+до разбиения. Сам документ не меняется; если искомый текст встречается не ровно один
+раз, сборка останавливается.
+
 ## Устройство
 
 ```
@@ -135,8 +140,8 @@ the network, and system fonts stand in offline. If a browser is strict about
 `file://`, run `python3 -m http.server 8000` and open http://localhost:8000.
 `?lang=en` picks the language.
 
-**Sections:** dispersion on the ionogram; measuring GDD (delay slope against
-phase fit); chirptime error; FFT length and cell shape; the station schedule
+**Sections:** dispersion on the ionogram, with the same limit read as edge phase; measuring GDD (delay slope against
+phase fit); chirptime error; FFT length and cell shape, with the spectrum of one column at the nose; the station schedule
 with a rep:offset → chirptime converter; the day, with a B_max map over
 frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
@@ -161,7 +166,10 @@ page says where it is showing a model.
 document into text blocks by source position, so markup and figures carry over
 byte for byte, and fills the Russian page from `tools/wiki/physics.ru.json`, keyed
 by each block's English. Blocks the document has changed stay in English and are
-counted; `--missing` lists them as JSON to translate.
+counted; `--missing` lists them as JSON to translate. Corrections and the playground's own
+notes are exact find/replace pairs, each with its reason, in `tools/wiki/physics.fix.json`,
+applied before the cut; the source stays untouched, and a pair that no longer matches
+exactly once stops the build.
 
 **A real day.** `tools/export_daily.py` turns an `lfs_tools/lfs_batch.py` file
 into the JSON the day page loads (needs Python 3 and numpy).

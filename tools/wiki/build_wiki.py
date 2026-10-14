@@ -8,6 +8,11 @@ carried over byte for byte. The Russian page swaps each block for its translatio
 tools/wiki/physics.ru.json, keyed by the English block itself, so a block whose English changes
 loses its translation, stays in English and is counted. --missing prints those blocks as JSON,
 ready to translate and merge. Output: js/wiki/physics.js.
+
+Corrections and the playground's own notes live in tools/wiki/physics.fix.json, as exact find/replace
+pairs applied to the document before it is cut, each with the reason. The source stays untouched; a
+pair whose text no longer occurs exactly once stops the build, so a changed source cannot be patched
+silently in the wrong place.
 """
 import html.parser
 import json
@@ -18,6 +23,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SRC = ROOT.parent / 'ionozond' / 'docs' / 'ionogram-physics.html'
 RU = ROOT / 'tools' / 'wiki' / 'physics.ru.json'
+FIX = ROOT / 'tools' / 'wiki' / 'physics.fix.json'
 OUT = ROOT / 'js' / 'wiki' / 'physics.js'
 
 INLINE = {'a', 'b', 'i', 'em', 'strong', 'var', 'sub', 'sup', 'code', 'span', 'br', 'small', 'kbd', 'abbr', 'tspan', 's', 'u', 'q', 'mark', 'wbr'}
@@ -94,6 +100,11 @@ def key(s):
 
 def build(src, ru):
     text = src.read_text(encoding='utf-8')
+    for f in (json.loads(FIX.read_text(encoding='utf-8')) if FIX.exists() else []):
+        n = text.count(f['find'])
+        if n != 1:
+            raise SystemExit(f'physics.fix.json: found {n} times, expected once: {f["find"][:70]}')
+        text = text.replace(f['find'], f['replace'])
     begin = text.index('<header class="masthead">')
     cut = Cut(text, begin)
     cut.feed(text)

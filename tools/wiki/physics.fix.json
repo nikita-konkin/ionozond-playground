@@ -1,0 +1,57 @@
+[
+ {
+  "why": "The table puts neighbouring hop orders 0.46–1.29 ms apart, not 0.6–1.6.",
+  "find": "Traces separated by 0.6–1.6 ms on this path are hop orders. Anything separated by very much more is not.",
+  "replace": "Neighbouring traces 0.5–1.3 ms apart on this path are successive hop orders: the table puts 1F–2F at 0.46–0.86 ms and 2F–3F at 0.71–1.29 ms. Anything separated by very much more is not."
+ },
+ {
+  "why": "Same spacing in the lookup table.",
+  "find": "<td>Several traces 0.6–1.6 ms apart, upper ones ending sooner</td>",
+  "replace": "<td>Several traces 0.5–1.3 ms apart, upper ones ending sooner</td>"
+ },
+ {
+  "why": "Doubling N doubles the column width; the two resolutions always multiply to one, so nothing 'agrees' at 16 384.",
+  "find": "FFT length is a pure trade: doubling it halves the frequency step and halves the delay bin in the other direction. 16 384 is where the two agree — the transmitter moves 41 kHz during the 0.41 s each spectrum integrates, so neither axis is being resolved finer than the other can support.",
+  "replace": "FFT length is a pure trade: doubling it doubles the frequency step and halves the delay bin. The two always multiply to one — 41 kHz × 24.4 µs at 16 384 — so no length sharpens both axes; a longer FFT only moves resolution from frequency to delay. 16 384 is the balance this station uses at 100 kHz/s, and its cell is the reference the next section scales from."
+ },
+ {
+  "why": "A cell is k·N/f_IF by f_IF/(k·N): keeping it needs k·N fixed, N ∝ 1/k (≈ 3 300 at 500 kHz/s). 7 300 would make 8 192 the nearer length, contradicting the 4 096 the text concludes.",
+  "find": "That agreement holds at 100 kHz/s only. A cell",
+  "replace": "That balance was struck at 100 kHz/s. A cell"
+ },
+ {
+  "why": "See above.",
+  "find": "Keeping the original's shape needs <span class=\"mono\">N ∝ 1/√k</span>: about 7 300 at 500 kHz/s,",
+  "replace": "Keeping the original's shape means keeping <span class=\"mono\">k·N</span> fixed, so <span class=\"mono\">N ∝ 1/k</span>: about 3 300 at 500 kHz/s,"
+ },
+ {
+  "why": "Zero-padding interpolates the Hann response; it does not resolve echoes one bin apart.",
+  "find": "so two features a bin or two apart — a nose and the layer below it, an O/X pair — stop merging into one block.",
+  "replace": "so two features two or three bins apart — a nose and the layer below it, an O/X pair — show the dip between them instead of merging into one block. Closer than about two bins they stay merged: padding interpolates the Hann window's response, it does not narrow it."
+ },
+ {
+  "why": "The note after the resolution trade: what one column's spectrum looks like.",
+  "find": "and stay bit-for-bit identical at any setting.</p>\n",
+  "replace": "and stay bit-for-bit identical at any setting.</p>\n\n  <div class=\"note\">\n    <span class=\"lbl\">One column, opened up</span>\n    <p>A column is one spectrum: its bins are f<sub>IF</sub>/N = 1/T apart in beat frequency and Δτ = 1/(k·T) apart in delay, and the column spans Δf = k·T of sweep. So Δf·Δτ = 1 at any length, 41 kHz × 24.4 µs at the standard settings. A Hann window spreads each echo over four bins between nulls, so two echoes in one column show as two peaks only when they are about two bins apart or more, with a dip of about 3 dB between them. Near the nose the lower and upper rays converge, and splitting them takes a longer FFT; but a longer capture also lets a Doppler spread σ cover σ·T bins. The playground's <a href=\"#cells/column\">FFT-length page</a> draws one column's spectrum at the nose.</p>\n  </div>\n"
+ },
+ {
+  "why": "The table gives ±3.6–4.4 µs/MHz for the delay fit and ±5.9–6.7 for the phase fit; 4/√10 is 1.3, not 1.",
+  "find": "So a GDD from a single sweep carries roughly ±4 µs/MHz whichever way it is measured.",
+  "replace": "So a GDD from a single sweep carries roughly ±4 µs/MHz measured from the delays and ±6–7 µs/MHz from the phase."
+ },
+ {
+  "why": "See above.",
+  "find": "Ten captures, fifty minutes, bring it to about ±1 µs/MHz,",
+  "replace": "Ten captures, fifty minutes, bring the delay fit to about ±1.3 µs/MHz,"
+ },
+ {
+  "why": "11.7 ms is shorter than any one-hop F path over 3530 km (≈ 12.1 ms with h′ 250–300 km, curved earth).",
+  "find": "<td>fits Irkutsk, 3530 km</td>",
+  "replace": "<td>possibly Irkutsk, 3530 km, though 1F from there needs ≈ 12.1 ms</td>"
+ },
+ {
+  "why": "The note after the phase conversion: B_max is the π/4 edge-phase condition.",
+  "find": "Say which one you mean.</p>\n  </div>\n",
+  "replace": "Say which one you mean.</p>\n  </div>\n\n  <div class=\"note\">\n    <span class=\"lbl\">The same limit, read as phase</span>\n    <p>Across a band the phase departs from a straight line by φ ≈ −π·GDD·(<var>f</var> − <var>f</var><sub>c</sub>)², so the band's edges at ±<var>B</var>/2 sit π·GDD·<var>B</var>²/4 off it. At <var>B</var><sub>max</sub>, where GDD·<var>B</var>² = 1, that is exactly π/4, or 45°: a spread equal to the resolution and π/4 of quadratic phase at the edges are one condition. A straight-line compensator subtracts this parabola, and its only parameter is the trace's slope. A 3 kHz HF channel or a 48 kHz wideband one lies far below <var>B</var><sub>max</sub> everywhere on the measured trace; dispersion limits only bands of hundreds of kilohertz. The playground's <a href=\"#gdd/phase\">GDD page</a> draws the phase across a band and <var>B</var><sub>max</sub> along the whole trace.</p>\n  </div>\n"
+ }
+]
