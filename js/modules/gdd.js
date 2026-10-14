@@ -8,7 +8,7 @@
       'gdd.nav': 'Дисперсия на ионограмме', 'gdd.part': 'Часть 11 · Дисперсия', 'gdd.title': 'Дисперсия групповой задержки на ионограмме',
       'gdd.short': 'Крутизна ДЧХ в выбранной точке, разброс задержки в полосе сигнала и то, во что этот разброс превращает импульс.',
       'gdd.lede': 'Модельная дистанционно-частотная характеристика (ДЧХ) моды 1F для трассы Кипр — Йошкар-Ола, построенная по дисперсии, измеренной в 583 сеансах. Задайте МНЧ и поместите сигнал нужной полосы в любую точку характеристики. Вы увидите крутизну ДЧХ в этой точке — дисперсию групповой задержки (GDD), — разброс задержки в пределах полосы, искажение импульса и то, насколько всё это заметно на экране ionozond.',
-      'gdd.muf': 'МНЧ 1F', 'gdd.fc': 'Средняя частота сигнала', 'gdd.bw': 'Полоса сигнала', 'gdd.ow': '0,85 МНЧ',
+      'gdd.muf': 'МНЧ 1F', 'gdd.fc': 'Средняя частота сигнала', 'gdd.bw': 'Полоса сигнала', 'gdd.ow': '0,85 МНЧ', 'gdd.ow.t': 'Держать центр на 0,85 МНЧ, пока меняется МНЧ',
       'gdd.more': 'Показать моду 2F и верхний луч 1F',
       'gdd.cap.iono': 'Ионограмма. Заливка — полоса сигнала, штриховая линия — касательная к ДЧХ; её наклон и есть GDD.',
       'gdd.aria.iono': 'Модельная ионограмма наклонного зондирования трассы Кипр — Йошкар-Ола: зависимость задержки от частоты для нижнего луча 1F вплоть до МНЧ, полоса сигнала и касательная в её центре.',
@@ -126,7 +126,7 @@
       'gdd.title': 'Group-delay dispersion on the ionogram',
       'gdd.short': 'The trace’s slope at a chosen point, the delay spread across a signal’s band, and what it does to a pulse.',
       'gdd.lede': 'A model 1F trace for the Cyprus path, built on the dispersion measured over 583 sweeps. Set the MUF, then put a signal of some bandwidth anywhere on the trace. The page shows the trace’s slope there (GDD, the group-delay dispersion), how far it spreads the band in delay, what that does to a pulse, and how much of it the console can resolve.',
-      'gdd.muf': '1F MUF', 'gdd.fc': 'Signal centre', 'gdd.bw': 'Signal bandwidth', 'gdd.ow': '0.85 MUF',
+      'gdd.muf': '1F MUF', 'gdd.fc': 'Signal centre', 'gdd.bw': 'Signal bandwidth', 'gdd.ow': '0.85 MUF', 'gdd.ow.t': 'Keep the centre at 0.85 MUF while the MUF moves',
       'gdd.more': 'Show 2F and the 1F upper ray',
       'gdd.cap.iono': 'The ionogram. Shaded: the signal’s band. Dashed: the trace’s tangent, whose slope is the GDD.',
       'gdd.aria.iono': 'Model oblique ionogram of the Cyprus path: delay against frequency for the 1F lower ray up to the MUF, with the signal’s band shaded and the tangent at its centre.',
@@ -236,7 +236,7 @@
     },
   });
 
-  const state = { M: 26, fc: 22, B: 250, more: true, comp: false, err: 0, calc: false, calcC: false };
+  const state = { M: 26, fc: 22, B: 250, follow: false, more: true, comp: false, err: 0, calc: false, calcC: false };
   const BWMIN = 3, BWMAX = 1000;
   const bwFrom = v => BWMIN * Math.pow(BWMAX / BWMIN, v / 1000);
   const sliderOf = b => Math.round(1000 * Math.log(b / BWMIN) / Math.log(BWMAX / BWMIN));
@@ -499,7 +499,9 @@
         const S = state;
         const fmax = Math.floor(0.995 * S.M * 100) / 100;
         fc.input.max = fmax;
-        if (S.fc > fmax) { S.fc = fmax; fc.set(fmax); }
+        const over = S.fc > fmax;
+        if (over) S.fc = fmax;
+        if (over || +fc.input.value !== S.fc) fc.set(S.fc);
         const g0 = M_.gdd(S.fc, S.M), half = S.B / 2000, cut = S.fc + half > S.M;
         const spread = M_.tauL(Math.min(S.fc + half, S.M), S.M) - M_.tauL(S.fc - half, S.M), Pn = g0 * (S.B / 1000) ** 2;
         const x = S.fc / S.M;
@@ -548,11 +550,16 @@
         } else compNote.replaceChildren();
       };
 
-      const muf = PG.slider({ label: PG.t('gdd.muf'), min: 12, max: 32.5, step: 0.1, value: state.M, fmt: v => PG.num(v, 1) + ' ' + PG.U('MHz'), onInput: v => { state.M = v; update(); } });
-      const fc = PG.slider({ label: PG.t('gdd.fc'), min: 7.5, max: 32.3, step: 0.01, value: state.fc, fmt: v => PG.num(v, 2) + ' ' + PG.U('MHz'), onInput: v => { state.fc = v; update(); } });
+      // While "0.85 MUF" is pressed the centre stays at that fraction as the MUF moves; dragging the
+      // centre, or pressing the button again, lets it go.
+      const toOw = () => { state.fc = +(0.85 * state.M).toFixed(2); };
+      const follow = on => { state.follow = on; ow.setAttribute('aria-pressed', String(on)); };
+      const muf = PG.slider({ label: PG.t('gdd.muf'), min: 12, max: 32.5, step: 0.1, value: state.M, fmt: v => PG.num(v, 1) + ' ' + PG.U('MHz'), onInput: v => { state.M = v; if (state.follow) toOw(); update(); } });
+      const ow = PG.h('button', { type: 'button', 'aria-pressed': String(state.follow), title: PG.t('gdd.ow.t'), onclick: () => { follow(!state.follow); if (state.follow) { toOw(); update(); } } }, PG.t('gdd.ow'));
+      const fc = PG.slider({ label: PG.t('gdd.fc'), min: 7.5, max: 32.3, step: 0.01, value: state.fc, fmt: v => PG.num(v, 2) + ' ' + PG.U('MHz'), onInput: v => { state.fc = v; follow(false); update(); },
+        extra: PG.h('div', { class: 'seg' }, ow) });
       const presets = PG.h('div', { class: 'seg' },
-        [3, 48, 250, 1000].map(b => PG.h('button', { type: 'button', onclick: () => { state.B = b; bw.set(sliderOf(b)); bw.refresh(); update(); } }, PG.fmtBW(b))),
-        PG.h('button', { type: 'button', onclick: () => { state.fc = +(0.85 * state.M).toFixed(2); fc.set(state.fc); update(); } }, PG.t('gdd.ow')));
+        [3, 48, 250, 1000].map(b => PG.h('button', { type: 'button', onclick: () => { state.B = b; bw.set(sliderOf(b)); bw.refresh(); update(); } }, PG.fmtBW(b))));
       const bw = PG.slider({ label: PG.t('gdd.bw'), min: 0, max: 1000, step: 1, value: sliderOf(state.B), fmt: () => PG.fmtBW(state.B), onInput: v => { state.B = bwFrom(v); bw.refresh(); update(); }, extra: presets });
       const errS = PG.slider({ label: PG.t('gdd.c.err'), min: -10, max: 10, step: 0.5, value: state.err,
         fmt: v => (v > 0 ? '+' : v < 0 ? '−' : '') + PG.num(Math.abs(v), 1) + ' ' + PG.U('usMHz'), onInput: v => { state.err = v; update(); },
