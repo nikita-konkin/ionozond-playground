@@ -37,7 +37,7 @@
       'foot.1': 'Практикум к документу «Oblique Chirp Ionograms» (ionozond/docs/ionogram-physics.html). Численные значения взяты оттуда и из обработки архива трассы Кипр — Йошкар-Ола за 4–9 февраля 2026 г. Там, где на странице модель, а не измерение, это оговорено.',
       'foot.2': 'Ни сервер, ни интернет не нужны: достаточно открыть index.html. Шрифты загружаются из Google Fonts, а без сети браузер возьмёт системные.',
       'home.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели',
-      'home.lede': 'Семь моделей, связанных с трассой Кипр — Йошкар-Ола и программой ionozond. Каждая разбирает одну тему документа: меняйте параметры и сразу смотрите, что получится. Речь идёт о дисперсии групповой задержки и способах её измерить, об ошибке момента старта (chirptime), о длине БПФ, о расписании станций, о суточном ходе неискажённой полосы и, наконец, о вертикальном зондировании той же ионосферы.',
+      'home.lede': 'Семь моделей, связанных с трассой Кипр — Йошкар-Ола и программой ionozond. Каждая разбирает одну тему документа: меняйте параметры и сразу смотрите, что получится. Речь идёт о дисперсии групповой задержки и способах её измерить, об ошибке момента старта (chirptime), о длине БПФ, о расписании станций, о суточном ходе неискажённой полосы и, наконец, о вертикальном зондировании той же ионосферы. Отдельная страница показывает имитатор КВ-канала: реальные сеансы рядом с их синтетическими копиями.',
       'home.open': 'Открыть', 'foot.build': 'Версия {sha} от {date}',
     },
     en: {
@@ -49,7 +49,7 @@
       'foot.1': 'A companion to “Oblique Chirp Ionograms” (ionozond/docs/ionogram-physics.html). Numbers come from it and from the Cyprus → Yoshkar-Ola archive of 4–9 February 2026; where a page shows a model rather than a measurement, it says so.',
       'foot.2': 'Runs without a server or a network: open index.html. Fonts come from Google Fonts and fall back to system fonts offline.',
       'home.title': 'Oblique chirp sounding: interactive models',
-      'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere.',
+      'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere. A separate page shows the HF channel simulator: real soundings beside their synthetic copies.',
       'home.open': 'Open', 'foot.build': 'Version {sha}, {date}',
     },
   });

@@ -34,6 +34,7 @@ python3 -m http.server 8000
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime, чем dur отличается от chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
+| Имитатор канала | реальный сеанс, состояние канала по нему, синтетические копии и проверки muf.sim.check: ионограммы рядом, срезы, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
 
@@ -83,6 +84,27 @@ python3 tools/export_daily.py lfs_feb2026.npz out --date 2026-02-04
 Получится `out/muf_2026-02-04.json`; загрузите его кнопкой «Загрузить сутки
 (JSON)». Нужны Python 3 и numpy.
 
+## Данные имитатора
+
+Раздел «Имитатор канала» ничего не считает сам: он рисует то, что вычисляет
+`muf.sim.check` в ionograms-handler. Данные собираются там:
+
+```bash
+python docs/ui/console.py СЕАНС ... --json sim.json
+```
+
+где `СЕАНС` — запись `.lfs` или продукт `.h5` с окном эха. Файл можно загрузить
+кнопкой «Загрузить данные (JSON)» (подходит и собранный там же `console.html`) или
+встроить в практикум:
+
+```bash
+python3 tools/sim_data.py sim.json
+```
+
+Скрипт проверяет данные и пишет `js/data/sim.js`; `index.html` подключает его
+строкой `<script>` после модуля. Это ионограммы реальных сеансов: перед публикацией
+решите, можно ли их выкладывать. Без `js/data/sim.js` страница просит файл.
+
 ## Вики
 
 Раздел «Вики» собирается из `ionozond/docs/ionogram-physics.html` (соседний
@@ -114,6 +136,7 @@ js/build.js         коммит и дата сборки для подвала;
 js/modules/*.js     по файлу на раздел, у каждого свои строки RU/EN
 js/wiki/physics.js  текст вики, собирается из документа, вручную не правится
 tools/export_daily.py
+tools/sim_data.py   данные имитатора в js/data/sim.js
 tools/validate/     проверки моделей на Python
 tools/wiki/         сборка вики и русский перевод документа
 ```
@@ -145,7 +168,9 @@ phase fit); chirptime error; FFT length and cell shape, with the spectrum of one
 with a rep:offset → chirptime converter and how dur differs from chirptime; the day, with a B_max map over
 frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
-same ionosphere carried over to the Cyprus path by the secant law. The wiki holds
+same ionosphere carried over to the Cyprus path by the secant law. A supplement shows
+the HF channel simulator at work: a real sounding, the channel state read off it, its
+synthetic copies, and muf.sim.check's verdicts on them. The wiki holds
 the document itself, in English and in Russian; parts link as `#wiki/gdd` and so on,
 and each part links to the pages that model it. A glossary explains the
 abbreviations; in every page's text they are underlined and open the same note on
@@ -173,6 +198,12 @@ exactly once stops the build.
 
 **A real day.** `tools/export_daily.py` turns an `lfs_tools/lfs_batch.py` file
 into the JSON the day page loads (needs Python 3 and numpy).
+
+**The simulator's data** is built in ionograms-handler,
+`python docs/ui/console.py SOUNDING ... --json sim.json`, and either loaded on the page
+or bundled with `python3 tools/sim_data.py sim.json`, which checks it and writes
+`js/data/sim.js`. These are ionograms of real soundings: decide whether they may be
+published before deploying them. Without `js/data/sim.js` the page asks for a file.
 
 **Validation.** `tools/validate/` holds independent Python checks: the GDD law
 against the measured medians, the decimator simulated at 25 MS/s, what GDD·B²
