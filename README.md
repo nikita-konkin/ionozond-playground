@@ -31,7 +31,7 @@ python3 -m http.server 8000
 | Как измерять GDD | наклон задержки и кривизна фазы в окне 1 МГц, 300 реализаций, усреднение по сеансам | 11 |
 | Ошибка chirptime | куда уходит эхо при ошибках Δt и Δk: окно ионограммы, перескок через край интервала однозначности, нули дециматора | 9 |
 | Длина БПФ и ячейка | форма ячейки k·N/f_ПЧ × f_ПЧ/(k·N), перенос следа на сетку, фильтр мелких объектов 9 × 3, спектр одного столбца у «носа» ДЧХ: когда нижний и верхний лучи разделяются | 5–6 |
-| Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime | 7–9 |
+| Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime, чем dur отличается от chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
@@ -142,7 +142,7 @@ the network, and system fonts stand in offline. If a browser is strict about
 
 **Sections:** dispersion on the ionogram, with the same limit read as edge phase; measuring GDD (delay slope against
 phase fit); chirptime error; FFT length and cell shape, with the spectrum of one column at the nose; the station schedule
-with a rep:offset → chirptime converter; the day, with a B_max map over
+with a rep:offset → chirptime converter and how dur differs from chirptime; the day, with a B_max map over
 frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
 same ionosphere carried over to the Cyprus path by the secant law. The wiki holds

@@ -31,6 +31,11 @@
       'schedule.cv.dur': 'Наибольший dur = fs/k', 'schedule.cv.band': 'Полоса приёмника',
       'schedule.cv.alt': 'Все сеансы передатчика за период станции (rep станции кратен его rep) — можно выбрать тот, что ни с кем не сталкивается:',
       'schedule.cv.use': 'В расписание',
+      'schedule.why.lbl': 'dur и chirptime',
+      'schedule.why.p1': 'dur и chirptime измеряют разное. dur — длительность записи: сколько секунд ЛЧМ идёт по полосе приёмника. 24 МГц при 100 кГц/с — это 240 с, и дольше fs/k ни один сеанс в полосе не пробудет.',
+      'schedule.why.p2': 'chirptime — секунда периода станции, в которую ЛЧМ входит в полосу. Он отстоит от offset на (LO − fs/2)/k: на Кипре (LO 20 МГц, 100 кГц/с) ЛЧМ поднимается от 0 до 7,5 МГц за 75 с. Поэтому NIC2 (300:240) получает chirptime 15 (или 315), а совпадение его offset с dur, 240 с, случайно.',
+      'schedule.why.p3': 'Если rep станции кратен rep передатчика, у одного передатчика несколько chirptime, отстоящих на целое число его rep. NIC1 (300:235) при rep станции 600 с записывается и при 10, и при 310 — введите 600 выше, и появятся обе кнопки.',
+      'schedule.why.p4': 'Сдвиг chirptime сдвигает записываемый сеанс секунда в секунду, а dur при этом не меняется. Поставьте в строке NIC2 chirptime 10 — и она запишет NIC1, по-прежнему 240 с.',
       'schedule.model': 'Модель повторяет алгоритм из части 8: упреждение 3 с, около 1 с на выходные файлы, при одновременных стартах побеждает станция, стоящая в таблице выше. Старты раньше чем через 3 с после запуска ionozond не учитываются. Частота дискретизации fs = 25 МГц, полоса приёмника — LO ± 12,5 МГц.',
     },
     en: {
@@ -62,6 +67,11 @@
       'schedule.cv.win': 'To the window', 'schedule.cv.ct': 'chirptime', 'schedule.cv.dur': 'Longest dur = fs/k', 'schedule.cv.band': 'Receiver window',
       'schedule.cv.alt': 'Every sweep of the transmitter within the station’s period (the station’s rep is a multiple of its rep); pick the one that does not collide:',
       'schedule.cv.use': 'Add to schedule',
+      'schedule.why.lbl': 'dur and chirptime',
+      'schedule.why.p1': 'dur and chirptime measure different things. dur is the recording length: how many seconds the sweep spends in the receiver’s window. 24 MHz at 100 kHz/s takes 240 s, and no sweep stays in the window longer than fs/k.',
+      'schedule.why.p2': 'chirptime is the second of the station’s period at which the sweep enters the window. It lies (LO − fs/2)/k after offset: on Cyprus (LO 20 MHz, 100 kHz/s) the sweep needs 75 s to climb from 0 to 7.5 MHz. So NIC2 at 300:240 gets chirptime 15 (or 315), and that its offset equals its dur of 240 s is a coincidence.',
+      'schedule.why.p3': 'When the station’s rep is a multiple of the transmitter’s, one transmitter has several chirptimes, whole rep cycles apart. NIC1 at 300:235 records at 10 and at 310 alike when the station rep is 600 s; enter 600 above and both buttons appear.',
+      'schedule.why.p4': 'Moving chirptime moves the recorded sweep second for second, and dur does not move with it. Give NIC2’s row a chirptime of 10 and it records NIC1 instead, still for 240 s.',
       'schedule.model': 'The model follows the algorithm in Part 8: 3 s lead, about 1 s for products, and on equal starts the station higher in the table wins. Starts less than 3 s after the console starts are not counted. fs = 25 MHz, receiver window LO ± 12.5 MHz.',
     },
   });
@@ -258,6 +268,8 @@
         out.root,
         PG.h('p', { style: 'font-size:14px;color:var(--muted);margin:0 0 6px' }, PG.t('schedule.cv.alt')),
         alts,
+        PG.h('div', { class: 'note', style: 'margin-top:20px' }, PG.h('span', { class: 'lbl' }, PG.t('schedule.why.lbl')),
+          ...['p1', 'p2', 'p3', 'p4'].map(k => PG.h('p', null, PG.t('schedule.why.' + k)))),
         PG.h('p', { class: 'lede', style: 'font-size:13.5px;margin-top:24px' }, PG.t('schedule.model')));
       rowsTable(); update(); convert();
     },
