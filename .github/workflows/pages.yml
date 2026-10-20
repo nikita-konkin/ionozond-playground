@@ -30,7 +30,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir _site
-          cp -r index.html css js _site/
+          cp -r index.html css js img _site/
           touch _site/.nojekyll
           printf "PG.build = { sha: '%s', date: '%s', url: '%s' };\n" \
             "$(git rev-parse HEAD)" "$(git log -1 --format=%cI)" \
