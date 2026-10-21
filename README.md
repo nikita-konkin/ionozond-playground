@@ -35,7 +35,7 @@ python3 -m http.server 8000
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
 | Имитатор канала | реальный сеанс, состояние канала по нему, синтетические копии и проверки muf.sim.check: ионограммы рядом, срезы, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
-| Имитатор: описание | две схемы — как получается ионограмма и что из неё читается (импульсная характеристика, АЧХ, ФЧХ), что делает с сигналом дисперсия внутри моды; текущая версия muf.sim, модель состояния, синтез, проверки, путеводитель по странице имитатора и итоги сеансов 17 октября; ссылки на части имеют вид `#simdoc/version` | дополнение |
+| Имитатор: описание | три схемы — как получается ионограмма и что из неё читается (импульсная характеристика, АЧХ, ФЧХ), как второй дечирп вдоль следа даёт АЧХ и ФЧХ одной моды, что делает с широкополосным сигналом дисперсия внутри моды; текущая версия muf.sim, модель состояния, синтез, проверки, путеводитель по странице имитатора и итоги сеансов 17 октября; ссылки на части имеют вид `#simdoc/version` | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
 
@@ -108,10 +108,11 @@ python3 tools/sim_data.py sim.json
 
 Описание имитатора (раздел «Имитатор: описание») написано вручную и лежит в
 `js/wiki/simdoc.js`, по тексту на язык. Рисунки к нему — в `img/`: схемы
-`board-*-{ru,en}.png` строятся скриптами `figures/doska_ionogramma.py` и
-`figures/doska_gdd.py` проекта моделирования канала (`--lang en` для английской
-версии), снимки страницы имитатора `sim-*-{ru,en}.jpg` сделаны в светлой теме при
-ширине 1100 пикселей.
+`board-*-{ru,en}.png` строятся скриптами `figures/doska_ionogramma.py`,
+`figures/doska_dechirp.py` и `figures/doska_gdd.py` проекта моделирования канала
+(`--lang en` для английской версии) и уменьшаются до 1800 пикселей по ширине;
+снимки страницы имитатора `sim-*-{ru,en}.jpg` сделаны в светлой теме при ширине
+1100 пикселей.
 
 ## Вики
 
@@ -181,8 +182,9 @@ sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
 same ionosphere carried over to the Cyprus path by the secant law. A supplement shows
 the HF channel simulator at work: a real sounding, the channel state read off it, its
 synthetic copies, and muf.sim.check's verdicts on them. Its notes (`#simdoc`) start
-from two boards, how an ionogram is made and read for the impulse response,
-magnitude and phase, and what dispersion within a mode does to a signal, then
+from three boards: how an ionogram is made and read for the impulse response,
+magnitude and phase; the second dechirp that reads one mode's magnitude and phase;
+and what dispersion within a mode does to a wideband signal. They then
 describe the current muf.sim version, its model and checks, and the page beside it;
 the text is in `js/wiki/simdoc.js`, the figures in `img/`, the boards built by
 `figures/doska_*.py` in the channel-modelling project. The wiki holds

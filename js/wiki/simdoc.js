@@ -1,4 +1,4 @@
-/* The simulator's description, in Russian and English: the two boards it rests on, the current
+/* The simulator's description, in Russian and English: the three boards it rests on, the current
    version of muf.sim, how a state is read, synthesised and checked, and what the October soundings
    showed. Written by hand; the figures are in img/. Section ids are simdoc-<id>, so a link is
    #simdoc/<id>. */
@@ -15,7 +15,7 @@ ru: String.raw`
   <h2>Содержание</h2>
   <ol>
     <li><a href="#simdoc/why">Зачем нужен имитатор</a></li>
-    <li><a href="#simdoc/basics">Основы в двух схемах</a></li>
+    <li><a href="#simdoc/basics">Основы в трёх схемах</a></li>
     <li><a href="#simdoc/version">Текущая версия имитатора</a></li>
     <li><a href="#simdoc/chain">Цепочка: от сеанса к копиям</a></li>
     <li><a href="#simdoc/state">Состояние канала</a></li>
@@ -40,9 +40,9 @@ ru: String.raw`
 
 <section id="simdoc-basics">
   <span class="part-no">2 · Основы</span>
-  <h2 class="part">Основы в двух схемах</h2>
-  <p class="part-lede">Прежде чем строить канал по сеансу, стоит напомнить, что сеанс измеряет. Первая схема ведёт от ЛЧМ-сигнала к ионограмме и от неё — к функциям канала. Вторая показывает, что делает с сигналом дисперсия внутри одной моды.</p>
-  <p>Обе схемы посчитаны, а не нарисованы от руки. Через тракт станции — 100 кГц/с, 40 кГц после децимации, окно Ханна на 16 384 отсчёта — пропущен смоделированный сигнал разностной частоты, и всё, что на схемах, — результат этой обработки. Канал модельный, из четырёх мод; нижний луч 1F проходит через 8,65 мс на 17 МГц и 8,70 мс на 18 МГц.</p>
+  <h2 class="part">Основы в трёх схемах</h2>
+  <p class="part-lede">Прежде чем строить канал по сеансу, стоит напомнить, что сеанс измеряет. Первая схема ведёт от ЛЧМ-сигнала к ионограмме и от неё — к функциям канала. Вторая по шагам разбирает второй дечирп, которым из сеанса читаются АЧХ и ФЧХ одной моды. Третья показывает, что дисперсия внутри моды делает с широкополосным сигналом.</p>
+  <p>Все три схемы посчитаны, а не нарисованы от руки. Через тракт станции — 100 кГц/с, 40 кГц после децимации, окно Ханна на 16 384 отсчёта — пропущен смоделированный сигнал разностной частоты, и всё, что на схемах, — результат этой обработки. Канал модельный, из четырёх мод; нижний луч 1F проходит через 8,65 мс на 17 МГц и 8,70 мс на 18 МГц.</p>
 
   <h3>Схема 1. Ионограмма и функции канала</h3>
   <figure>
@@ -53,20 +53,32 @@ ru: String.raw`
     <li><b>Задержка становится частотой.</b> Эхо, пришедшее на <var>τ</var> позже, идёт параллельно опорному сигналу и на <var>kτ</var> ниже его. После умножения на сопряжённый опорный сигнал оно превращается в постоянный тон разностной частоты <var>f<sub>b</sub></var> = −<var>kτ</var> (<a href="#wiki/dechirp">часть вики о сжатии</a>).</li>
     <li><b>Окно становится столбцом.</b> Сигнал разностной частоты режется на окна по 0,41 с, и каждое окно — это 41 кГц развёртки. Спектр окна — столбец ионограммы с отсчётом задержки 1/(<var>kT</var>) = 24,4 мкс; за сеанс в 250 с таких столбцов 610. Размеры ячейки по двум осям всегда дают в произведении единицу, поэтому длина БПФ только переносит разрешение с одной оси на другую (<a href="#cells">Длина БПФ и ячейка</a>).</li>
     <li><b>Столбец — импульсная характеристика.</b> Один столбец — это |<var>h</var>(<var>τ</var>)|² канала в полосе 41 кГц: на 14,8 МГц в нём видны 1F и оба луча 2F. Пути, разнесённые меньше чем на 24,4 мкс, в одном столбце не разделяются.</li>
-    <li><b>Вдоль следа — АЧХ и ФЧХ.</b> Второе сжатие вдоль траектории следа сводит тон моды к нулевой частоте, а фильтр нижних частот оставляет <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>. Поскольку <var>f</var> = 7,5 МГц + <var>kt</var>, это и есть передаточная функция моды: |<var>a</var>| — её АЧХ, а фаза траектории 2π∫<var>τ</var> d<var>f</var> вместе с остатком <var>ψ</var> — ФЧХ. На 17–18 МГц ФЧХ — парабола глубиной 43 рад, и GDD по её кривизне, 53 мкс/МГц, сходится с наклоном следа, 55 мкс/МГц (<a href="#measure">Как измерять GDD</a>).</li>
+    <li><b>Вдоль следа — АЧХ и ФЧХ.</b> Второе сжатие вдоль траектории следа сводит тон моды к нулевой частоте, а фильтр нижних частот оставляет <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>. Поскольку <var>f</var> = 7,5 МГц + <var>kt</var>, это и есть передаточная функция моды: |<var>a</var>| — её АЧХ, а фаза траектории вместе с остатком <var>ψ</var> — ФЧХ. Как это устроено, разбирает схема 2.</li>
+  </ol>
+
+  <h3>Схема 2. Второй дечирп</h3>
+  <figure>
+    <div class="figframe"><a href="img/board-dechirp-ru.png"><img src="img/board-dechirp-ru.png" alt="Схема: спектрограмма сигнала разностной частоты с дрейфующим тоном моды 1F, траектория по пикам коротких окон, спектр до и после умножения на сопряжённую траекторию, блок-схема второго дечирпа с фильтром, амплитуда и остаток фазы, ФЧХ с параболой" width="1800" height="1395" loading="lazy"></a></div>
+    <figcaption><b>Как из сеанса читаются АЧХ и ФЧХ одной моды.</b> Тот же смоделированный свип и тот же участок нижнего луча 1F, что на схеме 1. Щелчок открывает схему целиком.</figcaption>
+  </figure>
+  <ol class="plain">
+    <li><b>Зачем нужен второй дечирп.</b> После первого дечирпа мода — тон <var>f<sub>b</sub></var> = −<var>kτ</var>. Но <var>τ</var> зависит от частоты, а частота — от времени, поэтому тон дрейфует вдоль следа: на 17–18 МГц за 10 с он уходит с −865 на −870 Гц. В окне ионограммы этого не видно, а за весь участок тон размазан на 5 Гц.</li>
+    <li><b>Траектория.</b> Пики окон по 0,1 с дают частоту тона во времени; через них проводится кубическая кривая без выбросов. Это та же ДЧХ, пересчитанная в частоту биений.</li>
+    <li><b>Сжатие.</b> Умножение на сопряжённую траекторию e<sup>−<var>j</var>2π∫<var>f<sub>b</sub></var>d<var>t</var></sup> снимает дрейф: тон моды встаёт на 0 Гц, и его спектр за 10 с сжимается из полосы в 5 Гц в линию шириной с замирания.</li>
+    <li><b>Фильтр.</b> Усреднение по 400 отсчётам (40 кГц → 100 Гц) оставляет ±50 Гц вокруг нуля, то есть всё, что ближе 0,5 мс к следу, и ослабляет шум на 26 дБ. Вторую волну в 30 мкс от следа фильтр не отсекает: в <var>a</var>(<var>t</var>) она даёт биения <var>k</var>Δ<var>τ</var> = 3 Гц, и так читается расщепление o/x (раздел <a href="#simdoc/observe">6</a>).</li>
+    <li><b>Что остаётся.</b> <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>: |<var>a</var>| — АЧХ моды вместе с замираниями, <var>ψ</var> — то, чего не учла траектория. ФЧХ складывается из фазы траектории 2π∫<var>τ</var> d<var>f</var> и остатка <var>ψ</var>. На 17–18 МГц это парабола глубиной 43 рад, и GDD по её кривизне, 53 мкс/МГц, сходится с наклоном следа, 55 мкс/МГц.</li>
   </ol>
   <div class="note caution"><span class="lbl">Оговорка</span><p>На восходящем свипе частота и время связаны: 1 МГц — это 10 с развёртки. Поэтому измеренные АЧХ и ФЧХ — это <var>H</var>(<var>f</var>, <var>t</var>) вдоль диагонали <var>f</var> = 7,5 МГц + <var>kt</var>, и в них вошли замирания за эти 10 с: на схеме это <var>ψ</var> при доплеровском расширении 0,3 Гц. Отделить частотную избирательность от изменений во времени по одному свипу нельзя. Из-за того же ограничения не измеряется и доплеровский сдвиг (раздел <a href="#simdoc/limits">11</a>).</p></div>
 
-  <h3>Схема 2. Дисперсия внутри моды</h3>
+  <h3>Схема 3. Дисперсия в широкополосном канале</h3>
   <figure>
-    <div class="figframe"><a href="img/board-dispersion-ru.png"><img src="img/board-dispersion-ru.png" alt="Схема: ДЧХ с участком 17–18 МГц, одна ячейка 8 кГц крупно, полоса из 125 ячеек и ступенчатая ЧХ, АЧХ, ЧХ и ФЧХ полосы, сжатый импульс без дисперсии и с ней, формулы задержки и цепочка ЛЧМ — модель" width="1800" height="1290" loading="lazy"></a></div>
-    <figcaption><b>Что делают с сигналом 50 мкс/МГц.</b> Тот же нижний луч 1F на 17–18 МГц. Щелчок открывает схему целиком.</figcaption>
+    <div class="figframe"><a href="img/board-dispersion-ru.png"><img src="img/board-dispersion-ru.png" alt="Схема в три ряда: ДЧХ с участком 17–18 МГц, одна ячейка 8 кГц, полоса из 125 ячеек и ступенчатая задержка; ЧХ полосы с параболической фазой, сжатый импульс без дисперсии и с ней, потери пика в зависимости от полосы; наклон следа и кривизна ФЧХ, модель τ = τ0 + GDD·Ω" width="1800" height="1642" loading="lazy"></a></div>
+    <figcaption><b>Что делают с сигналом 50 мкс/МГц.</b> Восемь шагов в три ряда: задержка зависит от частоты; что видит широкополосный сигнал; как дисперсию измеряют и моделируют. Щелчок открывает схему целиком.</figcaption>
   </figure>
   <ol class="plain">
-    <li><b>Наклон следа — это GDD.</b> На участке 17–18 МГц задержка растёт на 50 мкс: GDD = d<var>τ</var>/d<var>f</var> = 50 мкс/МГц, или 50 пс/Гц.</li>
-    <li><b>Узкая полоса дисперсии не замечает.</b> Если разбить 1 МГц на <var>N</var> = 125 ячеек по 8 кГц, в каждой задержка меняется лишь на GDD·8 кГц ≈ 0,4 мкс. Для сигнала такой ширины канал — постоянная задержка, а ЧХ всей полосы — лестница из 125 ступенек.</li>
-    <li><b>Широкая полоса замечает.</b> По всей полосе квадратичная фаза набирает π·GDD·(<var>B</var>/2)² ≈ 39 рад, и сжатый импульс расплывается на GDD·<var>B</var> = 50 мкс; его огибающая повторяет АЧХ. Насколько импульс испорчен, задаёт произведение GDD·<var>B</var>²: при 1 он почти не меняется, при 5 теряет 1,5 дБ (<a href="#gdd">Дисперсия на ионограмме</a>, <a href="#wiki/gdd">часть вики о наклоне следа</a>).</li>
-    <li><b>Модель.</b> Закон <var>τ</var> = <var>τ</var><sub>0</sub> + GDD·Ω — это режим <code>--dispersion gdd</code> имитатора (раздел <a href="#simdoc/synth">7</a>): ЛЧМ-сигнал проходит через такую модель и выходит из неё изменённым.</li>
+    <li><b>Задержка зависит от частоты (шаги 1–3).</b> На 17–18 МГц задержка растёт на 50 мкс: GDD = d<var>τ</var>/d<var>f</var> = 50 мкс/МГц, или 50 пс/Гц. В ячейке 8 кГц это всего 0,4 мкс, и при разрешении 125 мкс канал для такого сигнала — просто задержка. Но 1 МГц — это 125 ячеек, и задержка по ним поднимается лестницей на все 50 мкс.</li>
+    <li><b>Что видит широкополосный сигнал (шаги 4–6).</b> Линейно растущая задержка — это квадратичная фаза π·GDD·Ω², где Ω — отстройка от середины полосы; на краях 1 МГц она набирает 39 рад. Сжатый импульс расплывается на GDD·<var>B</var> = 50 мкс, и его пик падает втрое. Насколько это важно, говорит GDD·<var>B</var>² — разброс задержки в единицах разрешения 1/<var>B</var>: при 1 пик теряет 0,06 дБ, при 5 — 1,5 дБ (окно Ханна). Для этого участка это полосы около 140 и 320 кГц; сигналы шириной 3 и 48 кГц дисперсии не замечают (<a href="#gdd">Дисперсия на ионограмме</a>, <a href="#wiki/gdd">часть вики о наклоне следа</a>).</li>
+    <li><b>Как её измеряют и моделируют (шаги 7–8).</b> GDD читается с одного свипа двумя способами: по наклону следа — 55 мкс/МГц — и по кривизне ФЧХ после второго дечирпа — 53 мкс/МГц (<a href="#measure">Как измерять GDD</a>). Закон <var>τ</var> = <var>τ</var><sub>0</sub> + GDD·Ω — это режим <code>--dispersion gdd</code> имитатора (раздел <a href="#simdoc/synth">7</a>): ЛЧМ-сигнал с полосой <var>B</var> выходит из такой модели растянутым на GDD·<var>B</var>.</li>
   </ol>
   <p>Имитатор проходит этот путь в обратную сторону. С ионограммы он берёт ДЧХ и уровень каждой моды, добавляет замирания и дисперсию, строит по ним <var>H</var>(<var>f</var>, <var>t</var>) и уже из неё — новый сеанс зондирования или сигнал на одной несущей. Как именно, рассказывают следующие разделы.</p>
 </section>
@@ -192,7 +204,7 @@ ru: String.raw`
   <h3>Чего не видно на ионограмме мощности</h3>
   <p>Доплеровский сдвиг и расширение, закон замираний и расщепление o/x по ионограмме мощности не измерить. Они берутся априори и так и помечаются: по умолчанию — умеренные условия средних широт по F.1487, расширение 0,5 Гц, гауссов спектр, рэлеевские замирания. На странице практикума доплер у всех мод именно такой.</p>
   <h3>Быстрая часть — по фазе</h3>
-  <p>Если запись хранит фазу — <code>.lfs</code>, продукт chirpsounder2 с полем <code>z</code> или окно эха, — команда <code>muf sim fast</code> измеряет быструю часть. После сжатия ЛЧМ-сигнала мода превращается в тон, идущий по своей ДЧХ. Второе сжатие вдоль её собственного следа сводит тон к нулевой частоте, и фильтр нижних частот оставляет коэффициент замираний, умноженный на медленно меняющийся уровень (схема 1, раздел <a href="#simdoc/basics">2</a>). Оценки строятся по мощности этого коэффициента, а не по фазе: след известен с точностью до нескольких микросекунд, а 10 мкс — это уже 1 Гц разностной частоты, так что фаза несёт ошибку следа как частотную модуляцию шириной с само расширение.</p>
+  <p>Если запись хранит фазу — <code>.lfs</code>, продукт chirpsounder2 с полем <code>z</code> или окно эха, — команда <code>muf sim fast</code> измеряет быструю часть. После сжатия ЛЧМ-сигнала мода превращается в тон, идущий по своей ДЧХ. Второе сжатие вдоль её собственного следа сводит тон к нулевой частоте, и фильтр нижних частот оставляет коэффициент замираний, умноженный на медленно меняющийся уровень (схема 2, раздел <a href="#simdoc/basics">2</a>). Оценки строятся по мощности этого коэффициента, а не по фазе: след известен с точностью до нескольких микросекунд, а 10 мкс — это уже 1 Гц разностной частоты, так что фаза несёт ошибку следа как частотную модуляцию шириной с само расширение.</p>
   <p>Так находятся доплеровское расширение и форма спектра, коэффициент Райса и — по биениям двух волн вдоль свипа — расщепление o/x: 30 мкс дают биения 3 Гц при скорости перестройки частоты 100 кГц/с. Этого расщепления не разрешает ни одна ионограмма мощности. На синтетике медиана оценки расширения — 0,96–1,02 истинного значения от 0,25 до 4 Гц для обеих форм спектра (на 0,1 Гц, при девяти замираниях в записи, — на 8–11 % выше); коэффициент Райса от 6 дБ при расширении от 0,5 Гц находится в каждой реализации; расщепление 30 мкс читается как 29,9–31,2 мкс. Доплеровского сдвига не даёт и фаза: на одном восходящем свипе он неотличим от изменения задержки на величину сдвиг/скорость перестройки.</p>
   <div class="note"><span class="lbl">На странице</span><p>Октябрьские окна эха фазу сохраняют, но данные для страницы собраны без быстрой части (<code>check</code> без <code>--fast</code>). Поэтому доплер, форма спектра и замирания в таблице состояния априорные.</p></div>
   <h3>Ширина следа и разброс задержки</h3>
@@ -239,7 +251,7 @@ ru: String.raw`
       <thead><tr><th>--dispersion</th><th>Какая задержка используется</th></tr></thead>
       <tbody>
         <tr><td class="mono">none</td><td>Только <var>τ</var>(<var>f</var><sub>0</sub>).</td></tr>
-        <tr><td class="mono">gdd</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var> — закон со схемы 2.</td></tr>
+        <tr><td class="mono">gdd</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var> — закон со схемы 3.</td></tr>
         <tr><td class="mono">gdd+tod</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var> + TOD·Δ<var>f</var>²/2.</td></tr>
         <tr><td class="mono">full</td><td>Сама кривая и уровень моды по полосе: выше МНЧ моды нет. Значение по умолчанию.</td></tr>
       </tbody>
@@ -453,7 +465,7 @@ python3 tools/sim_data.py sim.json     <span class="c"># проверит дан
 </section>
 
 <footer class="wiki-foot">
-  <p>Составлено 19 октября 2026 г., дополнено 21 октября: две схемы и описание текущей версии. Источники — код <code>muf.sim</code> (ветка <code>feat/channel-sim</code>, 30ef423), его описание <code>docs/simulator.md</code> и данные страницы практикума. Числа февраля — трасса Кипр — Йошкар-Ола, 4 февраля 2026 г. Схемы построены скриптами <code>figures/doska_ionogramma.py</code> и <code>figures/doska_gdd.py</code> проекта моделирования канала.</p>
+  <p>Составлено 19 октября 2026 г., дополнено 21 октября: три схемы и описание текущей версии. Источники — код <code>muf.sim</code> (ветка <code>feat/channel-sim</code>, 30ef423), его описание <code>docs/simulator.md</code> и данные страницы практикума. Числа февраля — трасса Кипр — Йошкар-Ола, 4 февраля 2026 г. Схемы построены скриптами <code>figures/doska_ionogramma.py</code>, <code>figures/doska_dechirp.py</code> и <code>figures/doska_gdd.py</code> проекта моделирования канала.</p>
 </footer>
 `,
 
@@ -469,7 +481,7 @@ en: String.raw`
   <h2>Contents</h2>
   <ol>
     <li><a href="#simdoc/why">Why a simulator</a></li>
-    <li><a href="#simdoc/basics">The basics in two boards</a></li>
+    <li><a href="#simdoc/basics">The basics in three boards</a></li>
     <li><a href="#simdoc/version">The current version</a></li>
     <li><a href="#simdoc/chain">The chain: from a sounding to its copies</a></li>
     <li><a href="#simdoc/state">The channel state</a></li>
@@ -494,9 +506,9 @@ en: String.raw`
 
 <section id="simdoc-basics">
   <span class="part-no">2 · Basics</span>
-  <h2 class="part">The basics in two boards</h2>
-  <p class="part-lede">Before building a channel from a sounding, it helps to recall what a sounding measures. The first board goes from the chirp to the ionogram, and from the ionogram to the channel’s functions. The second shows what dispersion within one mode does to a signal.</p>
-  <p>Both boards are computed, not drawn by hand. A simulated beat signal is run through the station’s processing (100 kHz/s, 40 kHz after decimation, a Hann window of 16 384 samples), and everything on the boards is the result. The channel is a model of four modes; the 1F low ray passes 8.65 ms at 17 MHz and 8.70 ms at 18 MHz.</p>
+  <h2 class="part">The basics in three boards</h2>
+  <p class="part-lede">Before building a channel from a sounding, it helps to recall what a sounding measures. The first board goes from the chirp to the ionogram, and from the ionogram to the channel’s functions. The second takes apart, step by step, the second dechirp that reads one mode’s magnitude and phase off a sounding. The third shows what dispersion within a mode does to a wideband signal.</p>
+  <p>All three boards are computed, not drawn by hand. A simulated beat signal is run through the station’s processing (100 kHz/s, 40 kHz after decimation, a Hann window of 16 384 samples), and everything on the boards is the result. The channel is a model of four modes; the 1F low ray passes 8.65 ms at 17 MHz and 8.70 ms at 18 MHz.</p>
 
   <h3>Board 1. The ionogram and the channel’s functions</h3>
   <figure>
@@ -507,20 +519,32 @@ en: String.raw`
     <li><b>Delay becomes frequency.</b> An echo arriving <var>τ</var> late runs parallel to the replica, <var>kτ</var> below it. Multiplied by the conjugate replica, it becomes a steady beat tone, <var>f<sub>b</sub></var> = −<var>kτ</var> (<a href="#wiki/dechirp">the wiki on the dechirp</a>).</li>
     <li><b>A window becomes a column.</b> The beat is cut into windows of 0.41 s, each of them 41 kHz of sweep. A window’s spectrum is a column of the ionogram, in delay bins of 1/(<var>kT</var>) = 24.4 µs; a 250 s sweep makes 610 of them. The cell’s two sides always multiply to one, so the FFT length only moves resolution from one axis to the other (<a href="#cells">FFT length and cell</a>).</li>
     <li><b>A column is the impulse response.</b> One column is the channel’s |<var>h</var>(<var>τ</var>)|² within 41 kHz: at 14.8 MHz it shows 1F and both rays of 2F. Paths closer than 24.4 µs do not separate in one column.</li>
-    <li><b>Along the trace: magnitude and phase.</b> A second dechirp along the trace’s path brings the mode’s tone down to zero frequency, and a low-pass filter leaves <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>. Since <var>f</var> = 7.5 MHz + <var>kt</var>, this is the mode’s transfer function: |<var>a</var>| is its magnitude response, and the path’s phase 2π∫<var>τ</var> d<var>f</var> together with the remainder <var>ψ</var> is its phase response. At 17–18 MHz the phase is a parabola 43 rad deep, and the GDD from its curvature, 53 µs/MHz, agrees with the trace’s slope, 55 µs/MHz (<a href="#measure">Measuring GDD</a>).</li>
+    <li><b>Along the trace: magnitude and phase.</b> A second dechirp along the trace’s path brings the mode’s tone down to zero frequency, and a low-pass filter leaves <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>. Since <var>f</var> = 7.5 MHz + <var>kt</var>, this is the mode’s transfer function: |<var>a</var>| is its magnitude response, and the path’s phase together with the remainder <var>ψ</var> is its phase response. Board 2 takes this apart.</li>
+  </ol>
+
+  <h3>Board 2. The second dechirp</h3>
+  <figure>
+    <div class="figframe"><a href="img/board-dechirp-en.png"><img src="img/board-dechirp-en.png" alt="Board: a spectrogram of the beat with the 1F tone drifting, the path from the peaks of short windows, the spectrum before and after the product with the conjugate path, a block diagram of the second dechirp and its filter, the amplitude and the phase remainder, and the phase response with its parabola" width="1800" height="1395" loading="lazy"></a></div>
+    <figcaption><b>How one mode’s magnitude and phase are read off a sounding.</b> The same simulated sweep and the same stretch of the 1F low ray as on board 1. Click for the full board.</figcaption>
+  </figure>
+  <ol class="plain">
+    <li><b>Why a second dechirp.</b> After the first dechirp a mode is a tone, <var>f<sub>b</sub></var> = −<var>kτ</var>. But <var>τ</var> depends on frequency and frequency on time, so the tone drifts along the trace: over 17–18 MHz it moves from −865 to −870 Hz in 10 s. An ionogram window does not see this, but over the whole stretch the tone is smeared across 5 Hz.</li>
+    <li><b>The path.</b> The peaks of 0.1 s windows give the tone’s frequency over time, and a cubic is fitted through them, outliers dropped. It is the same trace, converted to beat frequency.</li>
+    <li><b>Compression.</b> Multiplying by the conjugate path, e<sup>−<var>j</var>2π∫<var>f<sub>b</sub></var>d<var>t</var></sup>, removes the drift: the mode’s tone settles at 0 Hz, and its 10 s spectrum shrinks from a 5 Hz band to a line as wide as the fading.</li>
+    <li><b>The filter.</b> Averaging 400 samples (40 kHz → 100 Hz) keeps ±50 Hz around zero, that is, everything within 0.5 ms of the trace, and lowers the noise by 26 dB. A second wave 30 µs off the trace gets through: in <var>a</var>(<var>t</var>) it beats at <var>k</var>Δ<var>τ</var> = 3 Hz, which is how the o/x split is read (section <a href="#simdoc/observe">6</a>).</li>
+    <li><b>What is left.</b> <var>a</var>(<var>t</var>) = |<var>a</var>|·e<sup><var>jψ</var></sup>: |<var>a</var>| is the mode’s magnitude, fading included, and <var>ψ</var> what the path missed. The phase response is the path’s phase 2π∫<var>τ</var> d<var>f</var> plus the remainder <var>ψ</var>. At 17–18 MHz it is a parabola 43 rad deep, and the GDD from its curvature, 53 µs/MHz, agrees with the trace’s slope, 55 µs/MHz.</li>
   </ol>
   <div class="note caution"><span class="lbl">A caveat</span><p>On an up-sweep, frequency and time are tied together: 1 MHz is 10 s of sweep. So the measured magnitude and phase are <var>H</var>(<var>f</var>, <var>t</var>) along the diagonal <var>f</var> = 7.5 MHz + <var>kt</var>, and they hold the fading of those 10 s as well: on the board, that is <var>ψ</var> at a Doppler spread of 0.3 Hz. One sweep cannot tell frequency selectivity from change over time. The same limit is why the Doppler shift is not measured (section <a href="#simdoc/limits">11</a>).</p></div>
 
-  <h3>Board 2. Dispersion within a mode</h3>
+  <h3>Board 3. Dispersion in a wideband channel</h3>
   <figure>
-    <div class="figframe"><a href="img/board-dispersion-en.png"><img src="img/board-dispersion-en.png" alt="Board: the trace with its 17–18 MHz stretch, one 8 kHz cell close up, the band as 125 cells and a staircase response, the band’s magnitude, response and phase, a compressed pulse with and without dispersion, the delay formulas, and the chain chirp to model" width="1800" height="1290" loading="lazy"></a></div>
-    <figcaption><b>What 50 µs/MHz does to a signal.</b> The same 1F low ray at 17–18 MHz. Click for the full board.</figcaption>
+    <div class="figframe"><a href="img/board-dispersion-en.png"><img src="img/board-dispersion-en.png" alt="Board in three rows: the trace with its 17–18 MHz stretch, one 8 kHz cell, the band as 125 cells with a staircase delay; the band’s response with a parabolic phase, a compressed pulse with and without dispersion, the peak’s loss against bandwidth; the trace’s slope and the phase’s curvature, and the model τ = τ0 + GDD·Ω" width="1800" height="1642" loading="lazy"></a></div>
+    <figcaption><b>What 50 µs/MHz does to a signal.</b> Eight steps in three rows: the delay depends on frequency; what a wideband signal sees; how dispersion is measured and modelled. Click for the full board.</figcaption>
   </figure>
   <ol class="plain">
-    <li><b>The trace’s slope is the GDD.</b> Across 17–18 MHz the delay grows by 50 µs: GDD = d<var>τ</var>/d<var>f</var> = 50 µs/MHz, or 50 ps/Hz.</li>
-    <li><b>A narrow band does not notice.</b> Split 1 MHz into <var>N</var> = 125 cells of 8 kHz, and in each the delay changes by only GDD·8 kHz ≈ 0.4 µs. To a signal that wide the channel is a constant delay, and the response of the whole band is a staircase of 125 steps.</li>
-    <li><b>A wide band does.</b> Across the whole band the quadratic phase reaches π·GDD·(<var>B</var>/2)² ≈ 39 rad, and a compressed pulse smears over GDD·<var>B</var> = 50 µs, its envelope repeating the magnitude response. How badly the pulse suffers is set by GDD·<var>B</var>²: at 1 it hardly changes, at 5 it loses 1.5 dB (<a href="#gdd">Dispersion on the ionogram</a>, <a href="#wiki/gdd">the wiki on a trace’s slope</a>).</li>
-    <li><b>The model.</b> The law <var>τ</var> = <var>τ</var><sub>0</sub> + GDD·Ω is the simulator’s <code>--dispersion gdd</code> (section <a href="#simdoc/synth">7</a>): a chirp goes through such a model and comes out changed.</li>
+    <li><b>The delay depends on frequency (steps 1–3).</b> Across 17–18 MHz the delay grows by 50 µs: GDD = d<var>τ</var>/d<var>f</var> = 50 µs/MHz, or 50 ps/Hz. Within an 8 kHz cell that is only 0.4 µs, and at a resolution of 125 µs the channel is just a delay to such a signal. But 1 MHz is 125 cells, and over them the delay climbs a staircase by the full 50 µs.</li>
+    <li><b>What a wideband signal sees (steps 4–6).</b> A delay that grows linearly is a quadratic phase, π·GDD·Ω², with Ω the offset from the band’s middle; at the edges of 1 MHz it reaches 39 rad. A compressed pulse smears over GDD·<var>B</var> = 50 µs, and its peak falls threefold. How much this matters is told by GDD·<var>B</var>², the delay spread in units of the resolution 1/<var>B</var>: at 1 the peak loses 0.06 dB, at 5 it loses 1.5 dB (Hann window). On this stretch those are bands of about 140 and 320 kHz; signals 3 and 48 kHz wide do not notice the dispersion (<a href="#gdd">Dispersion on the ionogram</a>, <a href="#wiki/gdd">the wiki on a trace’s slope</a>).</li>
+    <li><b>How it is measured and modelled (steps 7–8).</b> One sweep gives the GDD two ways: from the trace’s slope, 55 µs/MHz, and from the curvature of the phase after the second dechirp, 53 µs/MHz (<a href="#measure">Measuring GDD</a>). The law <var>τ</var> = <var>τ</var><sub>0</sub> + GDD·Ω is the simulator’s <code>--dispersion gdd</code> (section <a href="#simdoc/synth">7</a>): a chirp of bandwidth <var>B</var> comes out of such a model stretched by GDD·<var>B</var>.</li>
   </ol>
   <p>The simulator travels this road backwards. From the ionogram it takes each mode’s trace and level, adds fading and dispersion, builds <var>H</var>(<var>f</var>, <var>t</var>) from them, and from that a new sounding or a signal at one carrier. The sections that follow say how.</p>
 </section>
@@ -646,7 +670,7 @@ en: String.raw`
   <h3>What a power ionogram does not show</h3>
   <p>Doppler shift and spread, the fading law and the o/x split cannot be measured on a power ionogram. They are taken as priors and tagged so: by default, F.1487’s moderate mid-latitude conditions, a 0.5 Hz spread, a Gaussian spectrum, Rayleigh fading. On the playground page every mode has exactly this Doppler.</p>
   <h3>The fast part, from phase</h3>
-  <p>When a recording keeps its phase (an <code>.lfs</code>, a chirpsounder2 product with <code>z</code>, or an echo window), <code>muf sim fast</code> measures the fast part. After the dechirp a mode becomes a tone that follows its trace. A second dechirp along the mode’s own trace brings the tone down to zero frequency, and a low-pass filter leaves the fading coefficient times a slowly changing level (board 1, section <a href="#simdoc/basics">2</a>). The estimates work on this coefficient’s power, not its phase: the trace is known to a few microseconds, and 10 µs is already 1 Hz of beat, so the phase carries the trace’s error as a frequency modulation as wide as the spread itself.</p>
+  <p>When a recording keeps its phase (an <code>.lfs</code>, a chirpsounder2 product with <code>z</code>, or an echo window), <code>muf sim fast</code> measures the fast part. After the dechirp a mode becomes a tone that follows its trace. A second dechirp along the mode’s own trace brings the tone down to zero frequency, and a low-pass filter leaves the fading coefficient times a slowly changing level (board 2, section <a href="#simdoc/basics">2</a>). The estimates work on this coefficient’s power, not its phase: the trace is known to a few microseconds, and 10 µs is already 1 Hz of beat, so the phase carries the trace’s error as a frequency modulation as wide as the spread itself.</p>
   <p>This gives the Doppler spread and spectral shape, the Rice factor, and, from the beat of two waves along the sweep, the o/x split: 30 µs make a 3 Hz beat at a sweep rate of 100 kHz/s. No power ionogram resolves that split. On synthetics the median spread estimate is 0.96–1.02 of the truth from 0.25 to 4 Hz for both spectral shapes (8–11 % high at 0.1 Hz, with nine fades in the recording); a Rice factor from 6 dB is found in every realisation at spreads from 0.5 Hz; a 30 µs split reads as 29.9–31.2 µs. Phase does not give the Doppler shift either: on one up-sweep it cannot be told from a change of delay by shift over sweep rate.</p>
   <div class="note"><span class="lbl">On the page</span><p>The October echo windows keep their phase, but the page’s data were built without the fast part (<code>check</code> without <code>--fast</code>). So the Doppler, spectral shape and fading in the state table are priors.</p></div>
   <h3>Trace width and delay spread</h3>
@@ -693,7 +717,7 @@ en: String.raw`
       <thead><tr><th>--dispersion</th><th>The delay used</th></tr></thead>
       <tbody>
         <tr><td class="mono">none</td><td><var>τ</var>(<var>f</var><sub>0</sub>) only.</td></tr>
-        <tr><td class="mono">gdd</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var>, the law of board 2.</td></tr>
+        <tr><td class="mono">gdd</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var>, the law of board 3.</td></tr>
         <tr><td class="mono">gdd+tod</td><td><var>τ</var><sub>0</sub> + GDD·Δ<var>f</var> + TOD·Δ<var>f</var>²/2.</td></tr>
         <tr><td class="mono">full</td><td>The mode’s curve and level across the band itself: above the MUF there is no mode. The default.</td></tr>
       </tbody>
@@ -907,7 +931,7 @@ python3 tools/sim_data.py sim.json     <span class="c"># checks the data and wri
 </section>
 
 <footer class="wiki-foot">
-  <p>Written on 19 October 2026, extended on 21 October with the two boards and the current version. Sources: the <code>muf.sim</code> code (branch <code>feat/channel-sim</code>, 30ef423), its description <code>docs/simulator.md</code>, and the playground page’s data. The February numbers are from the Cyprus — Yoshkar-Ola path, 4 February 2026. The boards are built by <code>figures/doska_ionogramma.py</code> and <code>figures/doska_gdd.py</code> in the channel-modelling project.</p>
+  <p>Written on 19 October 2026, extended on 21 October with the three boards and the current version. Sources: the <code>muf.sim</code> code (branch <code>feat/channel-sim</code>, 30ef423), its description <code>docs/simulator.md</code>, and the playground page’s data. The February numbers are from the Cyprus — Yoshkar-Ola path, 4 February 2026. The boards are built by <code>figures/doska_ionogramma.py</code>, <code>figures/doska_dechirp.py</code> and <code>figures/doska_gdd.py</code> in the channel-modelling project.</p>
 </footer>
 `,
 };
