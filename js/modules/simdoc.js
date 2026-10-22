@@ -1,4 +1,4 @@
-/* The simulator's description (js/wiki/simdoc.js): the three boards it rests on, the current version
+/* The simulator's description (js/wiki/simdoc.js): the six boards it rests on, the current version
    of muf.sim, and how the page beside it reads. Written by hand, in Russian and English. */
 (function () {
   'use strict';
@@ -8,13 +8,13 @@
       'simdoc.nav': 'Имитатор: описание', 'simdoc.part': 'Дополнение · Имитатор КВ-канала',
       'simdoc.title': 'Имитатор КВ-канала: как он устроен и что показывает',
       'simdoc.lede': 'Как из ЛЧМ-сигнала получается ионограмма и что из неё читается, как по сеансу строится состояние канала, как по состоянию синтезируются копии и как они проверяются. Здесь же — текущая версия имитатора, путеводитель по странице «Имитатор канала» и итоги сеансов 17 октября.',
-      'simdoc.short': 'Три схемы — ионограмма с функциями канала, второй дечирп и дисперсия внутри моды, — текущая версия имитатора, его модель, проверки и путеводитель по странице с копиями.',
+      'simdoc.short': 'Шесть схем — ионограмма с функциями канала, второй дечирп, дисперсия внутри моды, медленная и быстрая части состояния, канал на одной несущей, — текущая версия имитатора, его модель, проверки и путеводитель по странице с копиями.',
     },
     en: {
       'simdoc.nav': 'Simulator: notes', 'simdoc.part': 'Supplement · HF channel simulator',
       'simdoc.title': 'The HF channel simulator: how it works and what it shows',
       'simdoc.lede': 'How a chirp becomes an ionogram and what is read from it, how a channel state is built from a sounding, how copies are synthesised from the state and how they are checked. Also here: the simulator’s current version, a guide to the Channel simulator page, and what the soundings of 17 October showed.',
-      'simdoc.short': 'Three boards (the ionogram with the channel’s functions, the second dechirp, and dispersion within a mode), the simulator’s current version, its model, its checks, and a guide to the page with the copies.',
+      'simdoc.short': 'Six boards (the ionogram with the channel’s functions, the second dechirp, dispersion within a mode, the slow and fast parts of the state, and the channel at one carrier), the simulator’s current version, its model, its checks, and a guide to the page with the copies.',
     },
   });
 
