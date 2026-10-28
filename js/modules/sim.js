@@ -52,6 +52,8 @@
       'sim.o.measured': 'измерено', 'sim.o.prior': 'априори', 'sim.o.model': 'модель',
       'sim.rec': 'восстановлена с СКО {v} мкс', 'sim.tw': 'ширина следа {v} мкс', 'sim.nil': 'нет',
       'sim.chan.cap': '|H(f, t)| на {fc} МГц — нестационарная передаточная функция, рассчитанная по состоянию канала, а не измеренная: что увидел бы модем в полосе {b} кГц за {s} с. Несущая взята для примера, на 3/4 диапазона самой широкой моды. Частотный рисунок задают ДЧХ, уровни и задержки мод из данных, временной — априорные замирания. Ниже — лучи канала, задержка отсчитана от первого.',
+      'sim.look': 'Как читать.',
+      'sim.chan.look': 'По вертикали — время на одной частоте, по горизонтали — частота в полосе модема. Светлое — лучи складываются, тёмное — гасят друг друга: это замирание. Провалы вдоль частоты повторяются через 1/⁠Δτ, где Δτ — разнос лучей по задержке. Тёмная полоса ровно через все {b} кГц — замирание, общее для всей полосы: эквалайзер его не исправит, помогают перемежение длиннее замирания, адаптация скорости и повтор. Промежуток между замираниями — время когерентности, порядка 1/(доплеровское рассеяние). Рисунок по времени — модель по априорному доплеровскому спектру: ионозонд проходит эти {b} кГц за {sw} с и возвращается к ним только в следующем сеансе.',
       'sim.taps.x': 'задержка от первого пути, мкс',
       'sim.aria.ion': 'Ионограмма: частота по горизонтали, дальность по вертикали, мощность цветом.',
       'sim.aria.chan': 'Передаточная функция канала: смещение частоты по горизонтали, время по вертикали.',
@@ -107,6 +109,8 @@
       'sim.o.measured': 'measured', 'sim.o.prior': 'prior', 'sim.o.model': 'model',
       'sim.rec': 'recovered to {v} µs RMS', 'sim.tw': 'trace width {v} µs', 'sim.nil': 'none',
       'sim.chan.cap': '|H(f, t)| at {fc} MHz is the time-variant transfer function computed from the channel state, not measured: what a modem would see over {b} kHz and {s} s. The carrier is an example, three quarters up the widest mode’s band. The pattern across frequency comes from the modes’ curves, levels and delays in the data, the pattern in time from the prior fading. Below, the channel’s paths, delay counted from the first.',
+      'sim.look': 'How to read it.',
+      'sim.chan.look': 'Vertically, time at one frequency; horizontally, frequency across the modem’s band. Light is paths adding up, dark is paths cancelling: fading. Notches along frequency repeat every 1/⁠Δτ, Δτ being the paths’ spread in delay. A dark band running straight across all {b} kHz is fading common to the whole band: an equaliser cannot undo it, while interleaving longer than a fade, rate adaptation and repeats can. The gap between fades is the coherence time, of the order of 1/(Doppler spread). The pattern in time is a model built on the prior Doppler spectrum: the sounder crosses these {b} kHz in {sw} s and comes back to them only at the next sounding.',
       'sim.taps.x': 'delay after the first path, µs',
       'sim.aria.ion': 'Ionogram: frequency across, range up, power as colour.',
       'sim.aria.chan': 'Channel transfer function: frequency offset across, time up.',
@@ -239,7 +243,7 @@
       g.fillText(PG.num(f, f % 1 ? 1 : 0), x, h - PAD.b + 14);
       g.beginPath(); g.moveTo(x, PAD.t + G.ph); g.lineTo(x, PAD.t + G.ph + 4); g.stroke();
     });
-    g.fillText(T('ax.f'), PAD.l + G.pw / 2, h - 2);
+    g.fillText(T('ax.f'), PAD.l + G.pw / 2, h - 4);
     g.textAlign = 'right';
     PG.ticks(G.bot, G.top, 5).forEach(k => g.fillText(PG.num(k, 0), PAD.l - 6, G.y(k) + 4));
     g.save(); g.translate(12, PAD.t + G.ph / 2); g.rotate(-Math.PI / 2); g.textAlign = 'center'; g.fillText(T('ax.r'), 0, 0); g.restore();
@@ -334,11 +338,11 @@
     const off = document.createElement('canvas');
     off.width = nf; off.height = nt;
     off.getContext('2d').putImageData(img, 0, 0);
-    const P = { l: 44, r: 8, t: 4, b: 30 }, pw = w - P.l - P.r, ph = h - P.t - P.b, half = ch.fs_hz / 2000;
+    const P = { l: 44, r: 8, t: 8, b: 32 }, pw = w - P.l - P.r, ph = h - P.t - P.b, half = ch.fs_hz / 2000;
     g.clearRect(0, 0, w, h); g.imageSmoothingEnabled = true; g.drawImage(off, P.l, P.t, pw, ph);
     g.fillStyle = css('--muted'); g.font = FONT; g.textAlign = 'center';
     PG.ticks(-half, half, 5).forEach(k => g.fillText(PG.num(k, 0), P.l + (k + half) / (2 * half) * pw, h - P.b + 14));
-    g.fillText(T('ax.df'), P.l + pw / 2, h - 2);
+    g.fillText(T('ax.df'), P.l + pw / 2, h - 4);
     g.textAlign = 'right';
     PG.ticks(0, ch.seconds, 4).forEach(t => g.fillText(PG.num(t, 0), P.l - 6, P.t + ph - t / ch.seconds * ph + 4));
     g.save(); g.translate(11, P.t + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = 'center'; g.fillText(T('ax.t'), 0, 0); g.restore();
@@ -566,12 +570,14 @@
     if (document.getElementById('sim-style')) return;
     document.head.append(PG.h('style', { id: 'sim-style' }, [
       '.sim-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; margin-top: 14px; }',
+      '.sim-pair > .nl, .sim-pair > .nr { container-type: inline-size; }',
       '.sim-pair > .hl { grid-area: 1 / 1; } .sim-pair > .hr { grid-area: 1 / 2; } .sim-pair > .cl { grid-area: 2 / 1; } .sim-pair > .cr { grid-area: 2 / 2; }',
       '.sim-pair > .nl { grid-area: 3 / 1; } .sim-pair > .nr { grid-area: 3 / 2; } .sim-pair > .hl, .sim-pair > .hr { align-self: end; margin-bottom: 6px; }',
       '@media (max-width: 720px) { .sim-pair { grid-template-columns: 1fr; } .sim-pair > .hr { grid-area: 4 / 1; margin-top: 14px; } .sim-pair > .cr { grid-area: 5 / 1; } .sim-pair > .nr { grid-area: 6 / 1; } }',
       '.sim-wrap { position: relative; }',
       'canvas.sim-ion { display: block; width: 100%; height: 300px; cursor: crosshair; }',
       'canvas.sim-chan { display: block; width: 100%; height: 200px; }',
+      '.sim-taps { overflow-x: auto; } .sim-taps svg { min-width: 640px; }',
       '.sim-tip { position: absolute; pointer-events: none; display: none; z-index: 2; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 4px 8px; font: 12px "IBM Plex Mono", monospace; white-space: nowrap; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .45); }',
       '.sim-badge { display: inline-block; font: 10px "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap; vertical-align: 1px; }',
       '.sim-badge.ok { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }',
@@ -625,6 +631,7 @@
     const cutSvg = PG.svg(440, 248, T('cut.cap')), profSvg = PG.svg(440, 226, T('prof.cap')), cn0Svg = PG.svg(440, 248, T('cn0.cap'));
     const corrSvg = PG.svg(440, 252, T('corr.cap')), tapsSvg = PG.svg(900, 126, T('taps.x'));
     const cutCap = PG.h('p', { class: 'cap' }), profCap = PG.h('p', { class: 'cap' }), cn0Cap = PG.h('p', { class: 'cap' }), chanCap = PG.h('p', { class: 'cap' });
+    const chanLook = PG.h('p', { class: 'cap', style: 'margin:10px 0 0' });
     const profKv = PG.h('dl', { class: 'sim-kv' }), verdBox = PG.h('div'), table = PG.h('table');
     const chan = PG.h('canvas', { class: 'sim-chan', role: 'img', 'aria-label': T('aria.chan') });
     const cutLegend = PG.h('div'), winCap = PG.h('p', { class: 'cap', style: 'margin:10px 0 0' });
@@ -671,6 +678,7 @@
       })));
       const ch = s.channel;
       chanCap.textContent = T('chan.cap', { fc: PG.num(ch.fc_mhz, 2), b: PG.num(ch.fs_hz / 1000, 0), s: PG.num(ch.seconds, 0) });
+      chanLook.replaceChildren(PG.h('b', null, T('look')), ' ', T('chan.look', { b: PG.num(ch.fs_hz / 1000, 0), sw: PG.num(ch.fs_hz / (s.rate_hz_s || RATE_HZ_S), 2) }));
       chain(chainBox);
       rightSide();
       drawVerdicts(verdBox); drawCorr(corrSvg); drawTaps(tapsSvg); drawChannel(chan);
@@ -711,7 +719,7 @@
           PG.legend([['box', 'background:var(--faint)', T('corr.ceil')], ['box', 'background:var(--accent)', T('corr.real')], ['box', 'background:var(--comp)', T('corr.next')]]))),
       panel(PG.h('p', { class: 'cap' }, T('verd.cap')), verdBox),
       panel(PG.h('p', { class: 'cap' }, T('state.cap')), PG.h('div', { style: 'overflow-x:auto' }, table)),
-      panel(chanCap, chan, tapsSvg),
+      panel(chanCap, chan, PG.h('div', { class: 'sim-taps' }, tapsSvg), chanLook),
       note.root));
 
     ui = { root, cursor, canvases };
