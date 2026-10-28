@@ -70,9 +70,9 @@ nav.rail a[aria-current="page"] { color: var(--accent); border-color: var(--acce
 main { min-width: 0; }
 .part-no { display: block; margin-bottom: 8px; }
 h1 { font: 600 clamp(1.7rem, 3.6vw, 2.3rem)/1.12 Spectral, Georgia, serif; letter-spacing: -.012em; margin: 0 0 10px; text-wrap: balance; }
-.lede { color: var(--muted); max-width: 70ch; margin: 0 0 24px; }
+.lede { color: var(--muted); margin: 0 0 24px; hyphens: auto; }
+@media (min-width: 600px) { .lede, .wiki section > p, .wiki ol.plain > li, .wiki ul.plain > li, .wiki figcaption { text-align: justify; } }
 h2 { font: 600 1.02rem/1.3 "IBM Plex Sans", sans-serif; margin: 26px 0 10px; }
-p { max-width: 72ch; }
 
 footer.foot { grid-column: 1 / -1; border-top: 1px solid var(--rule); margin-top: 40px; padding-top: 18px; color: var(--faint); font-size: 13px; }
 footer.foot p { max-width: 90ch; margin: 0 0 8px; }
@@ -118,7 +118,7 @@ svg.fig { display: block; width: 100%; height: auto; color: var(--ink); overflow
 .note.caution .lbl { color: var(--warn); }
 .note p { margin: 0; font-size: 14.5px; }
 .note p + p { margin-top: 6px; }
-.panel p, .note p, .simdoc .guide p, ol.calc p { max-width: none; hyphens: auto; }
+.panel p, .note p, .simdoc .guide p, ol.calc p { hyphens: auto; }
 .panel, .note, .simdoc .guide > div, ol.calc, .wiki .eq, .gloss > div { container-type: inline-size; }
 @container (min-width: 440px) { .panel p, .note p, .simdoc .guide p, ol.calc p, .wiki .eq-where, .gloss dd { text-align: justify; } }
 
@@ -183,14 +183,14 @@ tr.bad td { background: var(--warn-soft); }
 .wiki section { margin: 0 0 60px; scroll-margin-top: 16px; }
 .wiki .part-no { display: block; font: 11.5px "IBM Plex Mono", monospace; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
 .wiki h2.part { font: 600 clamp(1.45rem, 2.8vw, 1.85rem)/1.15 Spectral, Georgia, serif; letter-spacing: -.012em; text-wrap: balance; margin: 0 0 8px; }
-.wiki .part-lede { color: var(--muted); max-width: 64ch; margin: 0 0 28px; }
+.wiki .part-lede { color: var(--muted); margin: 0 0 28px; }
 .wiki p.wiki-try { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: -14px 0 28px; }
 .wiki-try span { font: 10.5px "IBM Plex Mono", monospace; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
 .wiki-try a { font-size: 13.5px; text-decoration: none; padding: 3px 10px; border: 1px solid var(--accent); border-radius: 4px; background: var(--accent-soft); }
 .wiki-try a:hover { text-decoration: underline; }
 .wiki h3 { font: 600 1.02rem/1.3 "IBM Plex Sans", sans-serif; margin: 34px 0 10px; text-wrap: balance; }
-.wiki p { max-width: 68ch; margin: 0 0 16px; }
-.wiki ol.plain, .wiki ul.plain { max-width: 68ch; padding-left: 20px; margin: 0 0 16px; }
+.wiki p { margin: 0 0 16px; hyphens: auto; }
+.wiki ol.plain, .wiki ul.plain { padding-left: 20px; margin: 0 0 16px; hyphens: auto; }
 .wiki ol.plain li, .wiki ul.plain li { margin-bottom: 8px; }
 .wiki code, .wiki .mono { font-size: .875em; }
 .wiki code { background: var(--raised); border: 1px solid var(--rule); border-radius: 3px; padding: .08em .34em; }
@@ -200,7 +200,7 @@ tr.bad td { background: var(--warn-soft); }
 .wiki .eq { margin: 20px 0; padding: 16px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; overflow-x: auto; }
 .wiki .eq-line { font-family: Spectral, Georgia, serif; font-size: 1.12rem; line-height: 1.7; white-space: nowrap; }
 .wiki .eq-line + .eq-line { margin-top: 8px; }
-.wiki .eq-where { margin: 12px 0 0; font-size: 13px; color: var(--muted); max-width: none; hyphens: auto; }
+.wiki .eq-where { margin: 12px 0 0; font-size: 13px; color: var(--muted); hyphens: auto; }
 
 .wiki .tablewrap { margin: 20px 0; }
 .wiki table { font-size: 14px; }
@@ -215,13 +215,11 @@ tr.bad td { background: var(--warn-soft); }
 .wiki figure { margin: 26px 0; }
 .wiki figure svg { display: block; width: 100%; height: auto; color: var(--ink); }
 .wiki .figframe { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 18px 12px; overflow-x: auto; }
-.wiki figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; max-width: 66ch; line-height: 1.5; }
+.wiki figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.5; hyphens: auto; }
 .wiki .note { margin: 22px 0; padding: 14px 18px; }
-.wiki .note p { max-width: none; }
 .wiki .note p + p { margin-top: 10px; }
 .wiki .note .lbl { margin-bottom: 6px; }
 .wiki-foot { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; color: var(--faint); }
-.wiki-foot p { max-width: 90ch; }
 
 /* The simulator's description (js/wiki/simdoc.js): the wiki's styles, plus what the page adds. */
 .simdoc .wiki-toc ol { counter-reset: part; }
@@ -252,7 +250,7 @@ tr.bad td { background: var(--warn-soft); }
 .simdoc .guide p:last-child { margin-bottom: 0; }
 .simdoc .guide .look { color: var(--muted); }
 .simdoc .guide .look b { color: var(--ink); }
-.simdoc pre { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; overflow-x: auto; font: 13px/1.6 "IBM Plex Mono", monospace; margin: 12px 0 16px; max-width: 86ch; }
+.simdoc pre { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; overflow-x: auto; font: 13px/1.6 "IBM Plex Mono", monospace; margin: 12px 0 16px; }
 .simdoc pre .c { color: var(--faint); }
 
 /* --------------------------------------------------------------- glossary */
@@ -266,12 +264,12 @@ abbr.gl:hover, abbr.gl:focus-visible, abbr.gl[aria-describedby] { color: var(--a
   box-shadow: 0 8px 28px -10px rgba(0, 0, 0, .45); padding: 10px 14px; font-size: 13.5px; line-height: 1.5;
 }
 .gl-pop b { display: block; font-weight: 600; margin-bottom: 3px; }
-.gl-pop p { margin: 0 0 6px; color: var(--muted); max-width: none; }
+.gl-pop p { margin: 0 0 6px; color: var(--muted); }
 .gl-pop .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 12px "IBM Plex Mono", monospace; }
 .gloss { display: grid; gap: 10px; margin: 0; }
 .gloss > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; scroll-margin-top: 16px; }
 .gloss dt { font-weight: 600; }
-.gloss dd { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; max-width: none; hyphens: auto; }
+.gloss dd { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; hyphens: auto; }
 .gloss dd a { font: 12px "IBM Plex Mono", monospace; white-space: nowrap; }
 
 .err { color: var(--warn); font-size: 13px; }
