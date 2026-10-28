@@ -8,9 +8,9 @@
   PG.i18n({
     ru: {
       'sim.nav': 'Имитатор канала', 'sim.part': 'Дополнение · Имитатор КВ-канала',
-      'sim.title': 'Имитатор КВ-канала: реальный сеанс и его копии',
+      'sim.title': 'Имитатор КВ-канала: реальный сеанс и синтезированные по нему сеансы',
       'sim.short': 'Состояние канала, прочитанное с реального сеанса, синтетические сеансы по нему и проверки, которые сравнивают одно с другим: МНЧ, уровень, ширина следа, корреляция ионограмм.',
-      'sim.lede': 'Имитатор читает с ионограммы состояние канала — моды с их ДЧХ, уровнем C/N₀, доплеровским расширением и разбросом задержки — и по нему синтезирует новые сеансы. Синтетика проходит через тот же тракт обработки muf, что и настоящие записи, поэтому её можно сравнивать с оригиналом напрямую. Если состояние полное, реальный сеанс должен выглядеть как ещё одна копия; насколько он от этого отстоит, показывают вердикты уровня 2.',
+      'sim.lede': 'Имитатор читает с ионограммы состояние канала — моды с их ДЧХ, полосой, уровнем C/N₀ и рассеянием по задержке там, где его удаётся измерить, — и по нему синтезирует новые сеансы. Доплеровский спектр и закон замираний по ионограмме мощности не измерить: они берутся априори (МСЭ-R F.1487) и в таблице состояния так и помечены. Синтезированные сеансы проходят тот же тракт обработки muf, что и настоящие записи, поэтому их можно сравнивать с реальным сеансом напрямую. Если состояние полное, реальный сеанс должен выглядеть как ещё один синтезированный; насколько он от этого отстоит, показывают вердикты уровня 2.',
       'sim.session': 'Сеанс', 'sim.load': 'Загрузить данные (JSON)', 'sim.back': 'Вернуться к встроенным данным',
       'sim.src': 'данные: {c}, {d}, сеансов: {n}', 'sim.src.file': ' · файл {f}',
       'sim.err': 'Не удалось прочитать файл: {e}', 'sim.err.shape': 'это не данные пульта имитатора',
@@ -19,52 +19,53 @@
       'sim.none.2': 'Сборка — в ionograms-handler: python docs/ui/console.py СЕАНС … --json sim.json, где СЕАНС — запись .lfs или продукт .h5 с окном эха. Файл console.html, собранный там же, тоже подойдёт.',
       'sim.s1': 'Реальный сеанс', 'sim.s2': 'Состояние', 'sim.s3': 'Синтетика', 'sim.s4': 'Восстановление · уровень 1', 'sim.s5': 'Реализм · уровень 2',
       'sim.s1.s': '{c} · МНЧ {m} МГц', 'sim.s2.v': '{n} {w}', 'sim.s2.s': 'измерено {a}, априори {b}',
-      'sim.s3.v': '{n} {w}', 'sim.s3.s': 'зёрна 0–{k}; тот же свип, окно и тракт muf',
+      'sim.s3.v': '{n} {w}', 'sim.s3.s': 'реализации 0–{k}; тот же свип, окно и тракт muf',
       'sim.s4.s': '{m}: СКО задержки, найдена в {f} из {n}; смещение C/N₀ {b} дБ',
       'sim.s5.v': '{k} из {n}', 'sim.s5.s': 'вне разброса; r по ±0,2 МГц {r} при потолке {c}',
       'sim.w.mode': ['мода', 'моды', 'мод'], 'sim.w.snd': ['сеанс', 'сеанса', 'сеансов'],
-      'sim.cap.ion': 'Слева реальный сеанс, справа — копия состояния, следующий реальный сеанс или их разность. Щелчок по ионограмме выбирает частоту для срезов ниже; стрелки ← → сдвигают её на строку, с Shift — на десять.',
+      'sim.cap.ion': 'Слева реальный сеанс, справа — синтезированный сеанс, следующий реальный сеанс или их разность. Щелчок по ионограмме выбирает частоту для ПЗМ ниже; стрелки ← → сдвигают её на строку, с Shift — на десять.',
+      'sim.win': 'Окно БПФ {t} с: подканал {b} кГц развёртки на столбец, отсчёт задержки {u} мкс ({km} км); окна без перекрытия.',
       'sim.l.mode': 'Мода', 'sim.l.left': 'Слева', 'sim.l.right': 'Справа', 'sim.l.map': 'Карта',
-      'sim.real': 'реальный', 'sim.copy': 'копия {k}', 'sim.next': 'следующий, +{m} мин', 'sim.diff': 'разность',
+      'sim.real': 'реальный', 'sim.copy': 'синтез {k}', 'sim.next': 'следующий, +{m} мин', 'sim.diff': 'разность',
       'sim.m.rows': 'построчно', 'sim.m.smooth': '±0,2 МГц',
       'sim.ov.trace': 'кривые состояния', 'sim.ov.mask': 'ячейки корреляции, ±5 отсчётов',
-      'sim.note.real': '{f} · {t}', 'sim.note.copy': 'одна из {n} копий: они отличаются только замираниями и шумом',
-      'sim.note.next': 'тот же канал через {m} мин · {f}', 'sim.note.diff': 'реальный минус копия 1, дБ, шкала ±15; где оба ниже 3 дБ, не закрашено',
+      'sim.note.real': '{f} · {t}', 'sim.note.copy': 'один из {n} синтезированных сеансов: они отличаются только реализациями замираний и шума',
+      'sim.note.next': 'тот же канал через {m} мин · {f}', 'sim.note.diff': 'реальный минус синтез 1, дБ, шкала ±15; где оба ниже 3 дБ, не закрашено',
       'sim.ax.f': 'частота, МГц', 'sim.ax.r': 'дальность, км', 'sim.ax.df': 'смещение, кГц', 'sim.ax.t': 'время, с',
-      'sim.cut.cap': 'Срез на {f} МГц: мощность поперёк дальности. Полоса — ±2 отсчёта, по которым считается C/N₀ моды {m}.',
+      'sim.cut.cap': 'Мгновенный ПЗМ на {f} МГц: профиль мощности по задержке (дальности) в одном окне БПФ. Полоса — ±2 отсчёта, по которым считается C/N₀ моды {m}.',
       'sim.cut.noise': 'шум, −2,8 дБ', 'sim.cut.band': '±2 отсчёта',
-      'sim.prof.cap': 'Средний профиль следа {m} по чистым сильным строкам, от раннего края к позднему, пик — 1. Профиль шире точечного эха означает, что у моды есть разброс задержки.',
+      'sim.prof.cap': 'Средний профиль следа {m} по чистым сильным строкам, от раннего края к позднему, пик — 1. Профиль шире точечного эха означает, что у моды есть рассеяние по задержке.',
       'sim.prof.x': 'отсчёты от следа, 1 отсчёт ≈ {u} мкс', 'sim.prof.few': 'мало чистых строк',
       'sim.prof.w': 'ширина над точечным эхом', 'sim.prof.in': 'внутри строки', 'sim.prof.c': 'разброс центров строк',
       'sim.prof.r1': 'связь соседних строк', 'sim.prof.yes': 'рассеяние: центры независимы', 'sim.prof.no': 'когерентная структура, не рассеяние',
-      'sim.prof.ds': 'разброс задержки в состоянии', 'sim.prof.copies': 'копии {v} ± {s}',
+      'sim.prof.ds': 'рассеяние по задержке в состоянии', 'sim.prof.copies': 'синтезированные {v} ± {s}',
       'sim.cn0.cap': 'C/N₀ моды {m} вдоль её полосы. Отдельные строки дрожат от замираний; в состояние идёт среднее по ±0,2 МГц. Щелчок выбирает частоту.',
-      'sim.cn0.rows': 'строки', 'sim.cn0.real': 'реальный, среднее', 'sim.cn0.copy': 'копия 1, среднее', 'sim.cn0.y': 'C/N₀, дБ·Гц',
-      'sim.verd.cap': 'Где реальное значение лежит среди копий, в единицах их σ. Внутри ±3σ реальный сеанс неотличим от ещё одной копии; для корреляции дефект — только отклонение вниз.',
+      'sim.cn0.rows': 'строки', 'sim.cn0.real': 'реальный, среднее', 'sim.cn0.copy': 'синтез 1, среднее', 'sim.cn0.y': 'C/N₀, дБ·Гц',
+      'sim.verd.cap': 'Где реальное значение лежит среди синтезированных сеансов, в единицах их σ. Внутри ±3σ реальный сеанс неотличим от ещё одного синтезированного; для корреляции дефект — только отклонение вниз.',
       'sim.v.muf': 'МНЧ', 'sim.v.level': 'разброс уровня', 'sim.v.width': 'ширина следа', 'sim.v.rows': 'r построчно', 'sim.v.smooth': 'r по ±0,2 МГц',
-      'sim.v.all': 'все моды', 'sim.v.nodata': 'не измерено', 'sim.v.few': 'копий: {n}, нужно 12',
-      'sim.corr.cap': 'Коэффициент Пирсона по дБ в ±5 отсчётах вокруг следов. Потолок — копии между собой; мера естественной изменчивости — следующий реальный сеанс.',
-      'sim.corr.ceil': 'потолок: копии между собой', 'sim.corr.real': 'реальный ↔ копии', 'sim.corr.next': 'реальный ↔ следующий',
+      'sim.v.all': 'все моды', 'sim.v.nodata': 'не измерено', 'sim.v.few': 'синтезированных: {n}, нужно 12',
+      'sim.corr.cap': 'Коэффициент Пирсона по дБ в ±5 отсчётах вокруг следов. Потолок — синтезированные сеансы между собой; мера естественной изменчивости — следующий реальный сеанс.',
+      'sim.corr.ceil': 'потолок: синтезированные между собой', 'sim.corr.real': 'реальный ↔ синтезированные', 'sim.corr.next': 'реальный ↔ следующий',
       'sim.state.cap': 'Каждое значение помечено происхождением: измерено по сеансу, взято априори или задано моделью.',
       'sim.th.mode': 'мода', 'sim.th.band': 'полоса, МГц', 'sim.th.delay': 'задержка, мкс', 'sim.th.cn0': 'C/N₀ макс.',
-      'sim.th.dopp': 'доплер', 'sim.th.ds': 'разброс задержки', 'sim.th.ox': 'o/x',
+      'sim.th.dopp': 'доплеровский спектр', 'sim.th.ds': 'рассеяние по задержке', 'sim.th.ox': 'o/x',
       'sim.o.measured': 'измерено', 'sim.o.prior': 'априори', 'sim.o.model': 'модель',
       'sim.rec': 'восстановлена с СКО {v} мкс', 'sim.tw': 'ширина следа {v} мкс', 'sim.nil': 'нет',
-      'sim.chan.cap': '|H(f, t)| на {fc} МГц: что увидит сигнал в полосе {b} кГц за {s} с. Ниже — пути канала, задержка отсчитана от первого.',
+      'sim.chan.cap': '|H(f, t)| на {fc} МГц — нестационарная передаточная функция, рассчитанная по состоянию канала, а не измеренная: что увидел бы модем в полосе {b} кГц за {s} с. Несущая взята для примера, на 3/4 диапазона самой широкой моды. Частотный рисунок задают ДЧХ, уровни и задержки мод из данных, временной — априорные замирания. Ниже — лучи канала, задержка отсчитана от первого.',
       'sim.taps.x': 'задержка от первого пути, мкс',
       'sim.aria.ion': 'Ионограмма: частота по горизонтали, дальность по вертикали, мощность цветом.',
       'sim.aria.chan': 'Передаточная функция канала: смещение частоты по горизонтали, время по вертикали.',
       'sim.n.lbl': 'Что важно помнить',
       'sim.n.1': 'Страница ничего не считает сама: все числа взяты из muf.sim.check, а ионограммы переданы в данных с шагом 0,14 дБ.',
-      'sim.n.2': 'По ионограмме мощности не измерить доплеровский сдвиг, закон замираний и расщепление o/x. В состоянии это априорные значения (ITU-R F.1487), и в таблице они так и помечены.',
-      'sim.n.3': 'Все копии синтезированы из одного и того же гладкого состояния, поэтому друг на друга они похожи сильнее, чем на оригинал с его тонкой структурой следа. Корреляцию стоит читать рядом со столбцом «реальный ↔ следующий»: он показывает, насколько меняется сам канал за одно повторение.',
-      'sim.n.4': 'Если сопровождение следа разбило один след на две моды с одной полосой и почти одной задержкой, в состоянии оказываются два равных пути вместо одного, и C/N₀ копии выходит примерно на 3 дБ выше.',
+      'sim.n.2': 'По ионограмме мощности не измерить доплеровский сдвиг и расширение, закон замираний и расщепление o/x. В состоянии это априорные значения (МСЭ-R F.1487), и в таблице они так и помечены. Всё, кроме сдвига, можно измерить по фазе записи — окну эха или .lfs (muf sim fast).',
+      'sim.n.3': 'Синтезированные сеансы строятся по сглаженному состоянию: ДЧХ хранится в узлах через 0,1 МГц, C/N₀ — средним по ±0,2 МГц. Тонкой структуры реального следа — блуждания от строки к строке, пятен, второго луча — в состоянии нет, и все синтезированные сеансы лишены её одинаково. Поэтому друг на друга они похожи сильнее, чем на реальный сеанс, и их взаимная корреляция — потолок, недостижимый для реального сеанса. Корреляцию «реальный ↔ синтезированные» стоит читать рядом со столбцом «реальный ↔ следующий»: он показывает, насколько меняется сам канал за одно повторение.',
+      'sim.n.4': 'Если сопровождение следа разбило один след на две моды с одной полосой и почти одной задержкой, в состоянии оказываются два равных пути вместо одного, и C/N₀ синтезированного сеанса выходит примерно на 3 дБ выше.',
     },
     en: {
       'sim.nav': 'Channel simulator', 'sim.part': 'Supplement · HF channel simulator',
-      'sim.title': 'HF channel simulator: a real sounding and its copies',
+      'sim.title': 'HF channel simulator: a real sounding and soundings synthesised from it',
       'sim.short': 'The channel state read off a real sounding, synthetic soundings made from it, and the checks that compare the two: MUF, level, trace width, ionogram correlation.',
-      'sim.lede': 'The simulator reads a channel state off an ionogram — modes with their delay curves, C/N₀, Doppler spread and delay spread — and makes new soundings from it. They go through the same muf processing as real recordings, so they compare with the original directly. If the state is complete, the real sounding should pass for one more copy; the level-2 verdicts show how far it is from that.',
+      'sim.lede': 'The simulator reads a channel state off an ionogram — modes with their delay curves, bands, C/N₀ and, where it can be measured, delay spread — and makes new soundings from it. A power ionogram cannot measure the Doppler spectrum or the fading law: they are priors (ITU-R F.1487), and the state table marks them so. The synthetic soundings go through the same muf processing as real recordings, so they compare with the real one directly. If the state is complete, the real sounding should pass for one more synthetic one; the level-2 verdicts show how far it is from that.',
       'sim.session': 'Sounding', 'sim.load': 'Load data (JSON)', 'sim.back': 'Back to the bundled data',
       'sim.src': 'data: {c}, {d}, {n} soundings', 'sim.src.file': ' · file {f}',
       'sim.err': 'Could not read the file: {e}', 'sim.err.shape': 'not simulator console data',
@@ -77,42 +78,43 @@
       'sim.s4.s': '{m}: delay RMS, found in {f} of {n}; C/N₀ bias {b} dB',
       'sim.s5.v': '{k} of {n}', 'sim.s5.s': 'outside; r over ±0.2 MHz {r} against a ceiling of {c}',
       'sim.w.mode': ['mode', 'modes'], 'sim.w.snd': ['sounding', 'soundings'],
-      'sim.cap.ion': 'Left, the real sounding; right, a copy of the state, the next real sounding, or the difference. Click an ionogram to pick the frequency for the cuts below; ← → move it a row, ten with Shift.',
+      'sim.cap.ion': 'Left, the real sounding; right, a synthetic sounding, the next real sounding, or the difference. Click an ionogram to pick the frequency for the profiles below; ← → move it a row, ten with Shift.',
+      'sim.win': 'FFT window {t} s: a {b} kHz subchannel of sweep per column, a {u} µs ({km} km) delay bin; windows without overlap.',
       'sim.l.mode': 'Mode', 'sim.l.left': 'Left', 'sim.l.right': 'Right', 'sim.l.map': 'Map',
-      'sim.real': 'real', 'sim.copy': 'copy {k}', 'sim.next': 'next, +{m} min', 'sim.diff': 'difference',
+      'sim.real': 'real', 'sim.copy': 'synthetic {k}', 'sim.next': 'next, +{m} min', 'sim.diff': 'difference',
       'sim.m.rows': 'row by row', 'sim.m.smooth': '±0.2 MHz',
       'sim.ov.trace': 'the state’s curves', 'sim.ov.mask': 'correlation cells, ±5 bins',
-      'sim.note.real': '{f} · {t}', 'sim.note.copy': 'one of {n} copies; they differ only by fading and noise',
-      'sim.note.next': 'the same channel {m} min on · {f}', 'sim.note.diff': 'real minus copy 1, dB, ±15; blank where both are below 3 dB',
+      'sim.note.real': '{f} · {t}', 'sim.note.copy': 'one of {n} synthetic soundings; they differ only in their realisations of fading and noise',
+      'sim.note.next': 'the same channel {m} min on · {f}', 'sim.note.diff': 'real minus synthetic 1, dB, ±15; blank where both are below 3 dB',
       'sim.ax.f': 'frequency, MHz', 'sim.ax.r': 'range, km', 'sim.ax.df': 'offset, kHz', 'sim.ax.t': 'time, s',
-      'sim.cut.cap': 'Cut at {f} MHz: power across range. The band is the ±2 bins {m}’s C/N₀ is summed over.',
+      'sim.cut.cap': 'Instantaneous delay power profile at {f} MHz: power across delay (range) in one FFT window. The band is the ±2 bins {m}’s C/N₀ is summed over.',
       'sim.cut.noise': 'noise, −2.8 dB', 'sim.cut.band': '±2 bins',
       'sim.prof.cap': 'Mean profile across {m}’s trace over clean strong rows, early edge to late, peak 1. A profile wider than a point echo means the mode has a delay spread.',
       'sim.prof.x': 'bins from the trace, 1 bin ≈ {u} µs', 'sim.prof.few': 'too few clean rows',
       'sim.prof.w': 'width over a point echo', 'sim.prof.in': 'within a row', 'sim.prof.c': 'scatter of row centres',
       'sim.prof.r1': 'next-row correlation', 'sim.prof.yes': 'scatter: centres independent', 'sim.prof.no': 'coherent structure, not scatter',
-      'sim.prof.ds': 'delay spread in the state', 'sim.prof.copies': 'copies {v} ± {s}',
+      'sim.prof.ds': 'delay spread in the state', 'sim.prof.copies': 'synthetic {v} ± {s}',
       'sim.cn0.cap': 'C/N₀ of {m} along its band. Single rows fade; the state keeps the ±0.2 MHz mean. Click to pick a frequency.',
-      'sim.cn0.rows': 'rows', 'sim.cn0.real': 'real, mean', 'sim.cn0.copy': 'copy 1, mean', 'sim.cn0.y': 'C/N₀, dB·Hz',
-      'sim.verd.cap': 'Where the real value lies among the copies, in their σ. Within ±3σ the real sounding passes for one more copy; for a correlation only a shortfall is a defect.',
+      'sim.cn0.rows': 'rows', 'sim.cn0.real': 'real, mean', 'sim.cn0.copy': 'synthetic 1, mean', 'sim.cn0.y': 'C/N₀, dB·Hz',
+      'sim.verd.cap': 'Where the real value lies among the synthetic soundings, in their σ. Within ±3σ the real sounding passes for one more synthetic one; for a correlation only a shortfall is a defect.',
       'sim.v.muf': 'MUF', 'sim.v.level': 'level scatter', 'sim.v.width': 'trace width', 'sim.v.rows': 'r row by row', 'sim.v.smooth': 'r over ±0.2 MHz',
-      'sim.v.all': 'all modes', 'sim.v.nodata': 'not measured', 'sim.v.few': 'copies: {n}, 12 needed',
-      'sim.corr.cap': 'Pearson’s r of dB within ±5 bins of the traces. The ceiling is the copies among themselves; the yardstick of natural change, the next real sounding.',
-      'sim.corr.ceil': 'ceiling: copies among themselves', 'sim.corr.real': 'real ↔ copies', 'sim.corr.next': 'real ↔ next',
+      'sim.v.all': 'all modes', 'sim.v.nodata': 'not measured', 'sim.v.few': 'synthetic: {n}, 12 needed',
+      'sim.corr.cap': 'Pearson’s r of dB within ±5 bins of the traces. The ceiling is the synthetic soundings among themselves; the yardstick of natural change, the next real sounding.',
+      'sim.corr.ceil': 'ceiling: synthetic among themselves', 'sim.corr.real': 'real ↔ synthetic', 'sim.corr.next': 'real ↔ next',
       'sim.state.cap': 'Every value carries where it came from: measured off the sounding, a prior, or set by a model.',
       'sim.th.mode': 'mode', 'sim.th.band': 'band, MHz', 'sim.th.delay': 'delay, µs', 'sim.th.cn0': 'C/N₀ max',
-      'sim.th.dopp': 'Doppler', 'sim.th.ds': 'delay spread', 'sim.th.ox': 'o/x',
+      'sim.th.dopp': 'Doppler spectrum', 'sim.th.ds': 'delay spread', 'sim.th.ox': 'o/x',
       'sim.o.measured': 'measured', 'sim.o.prior': 'prior', 'sim.o.model': 'model',
       'sim.rec': 'recovered to {v} µs RMS', 'sim.tw': 'trace width {v} µs', 'sim.nil': 'none',
-      'sim.chan.cap': '|H(f, t)| at {fc} MHz: what a signal sees over {b} kHz and {s} s. Below, the channel’s paths, delay counted from the first.',
+      'sim.chan.cap': '|H(f, t)| at {fc} MHz is the time-variant transfer function computed from the channel state, not measured: what a modem would see over {b} kHz and {s} s. The carrier is an example, three quarters up the widest mode’s band. The pattern across frequency comes from the modes’ curves, levels and delays in the data, the pattern in time from the prior fading. Below, the channel’s paths, delay counted from the first.',
       'sim.taps.x': 'delay after the first path, µs',
       'sim.aria.ion': 'Ionogram: frequency across, range up, power as colour.',
       'sim.aria.chan': 'Channel transfer function: frequency offset across, time up.',
       'sim.n.lbl': 'Keep in mind',
       'sim.n.1': 'The page computes nothing itself: every number comes from muf.sim.check, and the ionograms come in the data in steps of 0.14 dB.',
-      'sim.n.2': 'A power ionogram cannot measure the Doppler shift, the fading law or the o/x split. In the state these are priors (ITU-R F.1487), and the table marks them so.',
-      'sim.n.3': 'Every copy is made from the same smooth state, so the copies are more alike than any is like the original with its fine trace structure. Read the correlation beside “real ↔ next”: that is how much the channel itself changes over one repetition.',
-      'sim.n.4': 'Where the tracker splits one trace into two modes over one band at nearly one delay, the state holds two equal paths for one, and the copy’s C/N₀ comes out about 3 dB high.',
+      'sim.n.2': 'A power ionogram cannot measure the Doppler shift or spread, the fading law or the o/x split. In the state these are priors (ITU-R F.1487), and the table marks them so. All but the shift can be measured off the recording’s phase, an echo window or an .lfs (muf sim fast).',
+      'sim.n.3': 'The synthetic soundings come from a smoothed state: the delay curve on knots 0.1 MHz apart, C/N₀ as a ±0.2 MHz mean. The real trace’s fine structure (its wandering from row to row, its spots, a second ray) is not in the state, and every synthetic sounding lacks it alike. So they are more like each other than like the real sounding, and their mutual correlation is a ceiling the real sounding cannot reach. Read “real ↔ synthetic” beside “real ↔ next”: that is how much the channel itself changes over one repetition.',
+      'sim.n.4': 'Where the tracker splits one trace into two modes over one band at nearly one delay, the state holds two equal paths for one, and the synthetic sounding’s C/N₀ comes out about 3 dB high.',
     },
   });
 
@@ -125,6 +127,7 @@
   const CUT_HALF = 2.5;        // bins each side summed into C/N0
   const MASK_HALF = 5.5;       // bins each side the correlation reads
   const Z_MAX = 9, Z_IN = 3;   // the verdict axis, and its "inside" band
+  const RATE_HZ_S = 100e3;     // the sweep rate, where the data does not carry its own
   const PAD = { l: 58, r: 8, t: 6, b: 32 };
   const FONT = '11px "IBM Plex Mono", ui-monospace, monospace';
 
@@ -150,20 +153,7 @@
   const hhmm = s => s.utc.slice(11, 16);
   const nice = v => (v === null || v === undefined) ? null : v;
 
-  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
-  function lut(stops) {
-    const out = new Uint8ClampedArray(256 * 3);
-    for (let i = 0; i < 256; i++) {
-      const x = i / 255;
-      let k = 0;
-      while (k < stops.length - 2 && x > stops[k + 1][0]) k++;
-      const [x0, c0] = stops[k], [x1, c1] = stops[k + 1], u = PG.clamp((x - x0) / (x1 - x0), 0, 1);
-      for (let j = 0; j < 3; j++) out[i * 3 + j] = c0[j] + u * (c1[j] - c0[j]);
-    }
-    return out;
-  }
-  const VIRIDIS = lut(['#440154', '#482878', '#3e4989', '#31688e', '#26828e', '#1f9e89', '#35b779', '#6ece58', '#fde725']
-    .map((c, i, a) => [i / (a.length - 1), hex(c)]));
+  const hex = PG.hex, lut = PG.lut, VIRIDIS = PG.VIRIDIS;
   const DIVERGE = lut([[0, hex('#2166ac')], [0.25, hex('#67a9cf')], [0.5, hex('#f2f0eb')], [0.75, hex('#ef8a62')], [1, hex('#b2182b')]]);
 
   function decode(b64) {
@@ -637,7 +627,7 @@
     const cutCap = PG.h('p', { class: 'cap' }), profCap = PG.h('p', { class: 'cap' }), cn0Cap = PG.h('p', { class: 'cap' }), chanCap = PG.h('p', { class: 'cap' });
     const profKv = PG.h('dl', { class: 'sim-kv' }), verdBox = PG.h('div'), table = PG.h('table');
     const chan = PG.h('canvas', { class: 'sim-chan', role: 'img', 'aria-label': T('aria.chan') });
-    const cutLegend = PG.h('div');
+    const cutLegend = PG.h('div'), winCap = PG.h('p', { class: 'cap', style: 'margin:10px 0 0' });
     const note = PG.note();
     note.set('', T('n.lbl'), T('n.1'), T('n.2'), T('n.3'), T('n.4'));
 
@@ -674,6 +664,8 @@
       if (st.mode >= s.modes.length) st.mode = 0;
       if (st.row === null) { const md = s.modes[st.mode]; st.row = rowOf(md.f_lo + 0.6 * (md.f_hi - md.f_lo)); }
       L.note.textContent = T('note.real', { f: s.source, t: s.utc });
+      const stepHz = s.freq.step * 1e6, binUs = s.bin_km / (s.km_per_us || 0.3);
+      winCap.textContent = T('win', { t: PG.num(stepHz / (s.rate_hz_s || RATE_HZ_S), 3), b: PG.num(stepHz / 1000, 2), u: PG.num(binUs, 1), km: PG.num(s.bin_km, 2) });
       modes.replaceChildren(field(T('l.mode'), PG.seg(s.modes.map((m, k) => ({ value: k, label: [dot(k), m.name] })), st.mode, v => {
         st.mode = v; const m = S().modes[v]; if (freqAt(st.row) < m.f_lo || freqAt(st.row) > m.f_hi) st.row = rowOf(m.f_lo + 0.6 * (m.f_hi - m.f_lo)); modePanels();
       })));
@@ -709,7 +701,7 @@
           PG.h('div', { class: 'hl' }, field(T('l.left'), PG.seg([{ value: 'real', label: T('real') }], 'real', () => {}))),
           PG.h('div', { class: 'hr' }, right),
           PG.h('div', { class: 'cl' }, L.wrap), PG.h('div', { class: 'cr' }, Rt.wrap),
-          PG.h('div', { class: 'nl' }, L.note), PG.h('div', { class: 'nr' }, Rt.note))),
+          PG.h('div', { class: 'nl' }, L.note), PG.h('div', { class: 'nr' }, Rt.note)), winCap),
       PG.h('div', { class: 'two', style: 'margin-bottom:16px' },
         panel(cutCap, cutSvg, cutLegend),
         panel(cn0Cap, cn0Svg, PG.legend([['dot', 'background:var(--faint)', T('cn0.rows')], ['line', 'border-color:var(--ink)', T('cn0.real')], ['dash', 'border-color:var(--accent)', T('cn0.copy')]]))),
