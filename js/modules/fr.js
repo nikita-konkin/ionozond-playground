@@ -340,7 +340,7 @@
     g.restore();
     g.fillStyle = css('--muted'); g.strokeStyle = css('--rule'); g.font = FONT; g.textAlign = 'center';
     PG.ticks(G.f0, G.f1, 6).forEach(f => g.fillText(PG.num(f, 1), G.x(f), h - PAD.b + 14));
-    g.fillText(T('ax.f'), PAD.l + G.pw / 2, h - 2);
+    g.fillText(T('ax.f'), PAD.l + G.pw / 2, h - 4);
     g.textAlign = 'right';
     PG.ticks(m.lo, m.hi, 5).forEach(us => g.fillText(PG.num(us, 0), PAD.l - 6, G.y(us) + 4));
     g.save(); g.translate(12, PAD.t + G.ph / 2); g.rotate(-Math.PI / 2); g.textAlign = 'center'; g.fillText(T('ax.us'), 0, 0); g.restore();

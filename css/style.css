@@ -118,6 +118,9 @@ svg.fig { display: block; width: 100%; height: auto; color: var(--ink); overflow
 .note.caution .lbl { color: var(--warn); }
 .note p { margin: 0; font-size: 14.5px; }
 .note p + p { margin-top: 6px; }
+.panel p, .note p, .simdoc .guide p, ol.calc p { max-width: none; hyphens: auto; }
+.panel, .note, .simdoc .guide > div, ol.calc, .wiki .eq, .gloss > div { container-type: inline-size; }
+@container (min-width: 440px) { .panel p, .note p, .simdoc .guide p, ol.calc p, .wiki .eq-where, .gloss dd { text-align: justify; } }
 
 details.calc { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; margin: 0 0 16px; }
 details.calc > summary { cursor: pointer; padding: 10px 18px; font: 12.5px "IBM Plex Mono", monospace; color: var(--accent); }
@@ -197,7 +200,7 @@ tr.bad td { background: var(--warn-soft); }
 .wiki .eq { margin: 20px 0; padding: 16px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; overflow-x: auto; }
 .wiki .eq-line { font-family: Spectral, Georgia, serif; font-size: 1.12rem; line-height: 1.7; white-space: nowrap; }
 .wiki .eq-line + .eq-line { margin-top: 8px; }
-.wiki .eq-where { margin: 12px 0 0; font-size: 13px; color: var(--muted); max-width: 62ch; }
+.wiki .eq-where { margin: 12px 0 0; font-size: 13px; color: var(--muted); max-width: none; hyphens: auto; }
 
 .wiki .tablewrap { margin: 20px 0; }
 .wiki table { font-size: 14px; }
@@ -214,7 +217,7 @@ tr.bad td { background: var(--warn-soft); }
 .wiki .figframe { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 18px 12px; overflow-x: auto; }
 .wiki figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; max-width: 66ch; line-height: 1.5; }
 .wiki .note { margin: 22px 0; padding: 14px 18px; }
-.wiki .note p { max-width: 62ch; }
+.wiki .note p { max-width: none; }
 .wiki .note p + p { margin-top: 10px; }
 .wiki .note .lbl { margin-bottom: 6px; }
 .wiki-foot { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; color: var(--faint); }
@@ -268,7 +271,7 @@ abbr.gl:hover, abbr.gl:focus-visible, abbr.gl[aria-describedby] { color: var(--a
 .gloss { display: grid; gap: 10px; margin: 0; }
 .gloss > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; scroll-margin-top: 16px; }
 .gloss dt { font-weight: 600; }
-.gloss dd { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; max-width: 72ch; }
+.gloss dd { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; max-width: none; hyphens: auto; }
 .gloss dd a { font: 12px "IBM Plex Mono", monospace; white-space: nowrap; }
 
 .err { color: var(--warn); font-size: 13px; }
