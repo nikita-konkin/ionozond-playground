@@ -34,8 +34,9 @@ python3 -m http.server 8000
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime, чем dur отличается от chirptime | 7–9 |
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
-| Имитатор канала | реальный сеанс, состояние канала по нему, синтетические копии и проверки muf.sim.check: ионограммы рядом, срезы, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
+| Имитатор канала | реальный сеанс, состояние канала по нему, синтезированные по нему сеансы и проверки muf.sim.check: ионограммы рядом с окном и подканалом, мгновенные ПЗМ, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
 | Имитатор: описание | три схемы — как получается ионограмма и что из неё читается (импульсная характеристика, АЧХ, ФЧХ), как второй дечирп вдоль следа даёт АЧХ и ФЧХ одной моды, что делает с широкополосным сигналом дисперсия внутри моды; текущая версия muf.sim, модель состояния, синтез, проверки, путеводитель по странице имитатора и итоги сеансов 17 октября; ссылки на части имеют вид `#simdoc/version` | дополнение |
+| ЧХ по подканалам | АЧХ и ФЧХ моды по пику мгновенного ПЗМ в каждом окне реальной записи (окно эха 17 октября): подканал 5–41 кГц, окна без перекрытия (ступенчато) и с перекрытием до окна на каждом отсчёте, развёртка фазы с общей опорой, потерянные обороты ступенчатой ФЧХ, GDD по кривизне фазы и по наклону следа | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
 
@@ -114,6 +115,24 @@ python3 tools/sim_data.py sim.json
 снимки страницы имитатора `sim-*-{ru,en}.jpg` сделаны в светлой теме при ширине
 1100 пикселей.
 
+## Данные ЧХ по подканалам
+
+Раздел «ЧХ по подканалам» считает всё сам, но ему нужна фаза: комплексные отсчёты
+сигнала разностной частоты, а не ионограмма. Их берёт `tools/fr_data.py` из сеансов с
+окном эха, продуктов `.h5` с полем `z` или записей `.lfs` — через `muf.sim.fast` из
+ionograms-handler, поэтому он запускается с этим репозиторием в `PYTHONPATH`:
+
+```bash
+PYTHONPATH=…/ionograms-handler python tools/fr_data.py \
+    …/2026.10.17/lfm_ionogram-NIC1-yoshkar-ola-ch0-000-1792216810.00.h5@18-22 ...
+```
+
+После `@` — участок развёртки в МГц. Отсчёты хранятся на частоте окна эха (888,9 Гц)
+байтами со своим масштабом на сеанс; кривые мод берутся из `js/data/sim.js` того же
+сеанса. Встроенный `js/data/fr.js` — четыре сеанса 17 октября по 4 МГц, 419 кБ;
+страница загружает его при первом открытии раздела. Это реальные записи: решение о
+публикации — то же, что для данных имитатора.
+
 ## Вики
 
 Раздел «Вики» собирается из `ionozond/docs/ionogram-physics.html` (соседний
@@ -148,6 +167,7 @@ js/wiki/simdoc.js   описание имитатора, RU и EN, пишетс�
 img/                рисунки описания имитатора: схемы и снимки страницы
 tools/export_daily.py
 tools/sim_data.py   данные имитатора в js/data/sim.js
+tools/fr_data.py    комплексные отсчёты для ЧХ по подканалам в js/data/fr.js
 tools/validate/     проверки моделей на Python
 tools/wiki/         сборка вики и русский перевод документа
 ```
@@ -180,8 +200,11 @@ with a rep:offset → chirptime converter and how dur differs from chirptime; th
 frequency and time for the oblique path or a vertical sounder; and vertical
 sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
 same ionosphere carried over to the Cyprus path by the secant law. A supplement shows
-the HF channel simulator at work: a real sounding, the channel state read off it, its
-synthetic copies, and muf.sim.check's verdicts on them. Its notes (`#simdoc`) start
+the HF channel simulator at work: a real sounding, the channel state read off it, the
+soundings synthesised from it, and muf.sim.check's verdicts on them. Another (`#fr`) reads a
+mode's frequency response off a real recording, one sample per FFT window at the delay power
+profile's peak, without overlap or with windows down to one per sample, and unwraps its phase
+(`tools/fr_data.py` builds its data, `js/data/fr.js`, loaded on the first visit). Its notes (`#simdoc`) start
 from three boards: how an ionogram is made and read for the impulse response,
 magnitude and phase; the second dechirp that reads one mode's magnitude and phase;
 and what dispersion within a mode does to a wideband signal. They then
