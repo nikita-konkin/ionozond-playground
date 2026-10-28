@@ -37,7 +37,7 @@
       'foot.1': 'Практикум к документу «Oblique Chirp Ionograms» (ionozond/docs/ionogram-physics.html). Численные значения взяты оттуда и из обработки архива трассы Кипр — Йошкар-Ола за 4–9 февраля 2026 г. Там, где на странице модель, а не измерение, это оговорено.',
       'foot.2': 'Ни сервер, ни интернет не нужны: достаточно открыть index.html. Шрифты загружаются из Google Fonts, а без сети браузер возьмёт системные.',
       'home.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели',
-      'home.lede': 'Семь моделей, связанных с трассой Кипр — Йошкар-Ола и программой ionozond. Каждая разбирает одну тему документа: меняйте параметры и сразу смотрите, что получится. Речь идёт о дисперсии групповой задержки и способах её измерить, об ошибке момента старта (chirptime), о длине БПФ, о расписании станций, о суточном ходе неискажённой полосы и, наконец, о вертикальном зондировании той же ионосферы. Отдельная страница показывает имитатор КВ-канала: реальные сеансы рядом с их синтетическими копиями.',
+      'home.lede': 'Семь моделей, связанных с трассой Кипр — Йошкар-Ола и программой ionozond. Каждая разбирает одну тему документа: меняйте параметры и сразу смотрите, что получится. Речь идёт о дисперсии групповой задержки и способах её измерить, об ошибке момента старта (chirptime), о длине БПФ, о расписании станций, о суточном ходе неискажённой полосы и, наконец, о вертикальном зондировании той же ионосферы. Отдельная страница показывает имитатор КВ-канала: реальные сеансы рядом с синтезированными по ним сеансами, другая — частотную характеристику, снятую по подканалам с перекрытием окон.',
       'home.open': 'Открыть', 'foot.build': 'Версия {sha} от {date}',
     },
     en: {
@@ -49,7 +49,7 @@
       'foot.1': 'A companion to “Oblique Chirp Ionograms” (ionozond/docs/ionogram-physics.html). Numbers come from it and from the Cyprus → Yoshkar-Ola archive of 4–9 February 2026; where a page shows a model rather than a measurement, it says so.',
       'foot.2': 'Runs without a server or a network: open index.html. Fonts come from Google Fonts and fall back to system fonts offline.',
       'home.title': 'Oblique chirp sounding: interactive models',
-      'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere. A separate page shows the HF channel simulator: real soundings beside their synthetic copies.',
+      'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere. A separate page shows the HF channel simulator: real soundings beside soundings synthesised from them; another, the frequency response read subchannel by subchannel with overlapping windows.',
       'home.open': 'Open', 'foot.build': 'Version {sha}, {date}',
     },
   });
@@ -182,6 +182,22 @@
     const n = () => { let a = 0; while (!a) a = u(); return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * u()); };
     return { u, n };
   };
+
+  // Colour tables for canvas maps: 256 RGB steps through [position, [r, g, b]] stops.
+  PG.hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  PG.lut = stops => {
+    const out = new Uint8ClampedArray(256 * 3);
+    for (let i = 0; i < 256; i++) {
+      const x = i / 255;
+      let k = 0;
+      while (k < stops.length - 2 && x > stops[k + 1][0]) k++;
+      const [x0, c0] = stops[k], [x1, c1] = stops[k + 1], u = PG.clamp((x - x0) / (x1 - x0), 0, 1);
+      for (let j = 0; j < 3; j++) out[i * 3 + j] = c0[j] + u * (c1[j] - c0[j]);
+    }
+    return out;
+  };
+  PG.VIRIDIS = PG.lut(['#440154', '#482878', '#3e4989', '#31688e', '#26828e', '#1f9e89', '#35b779', '#6ece58', '#fde725']
+    .map((c, i, a) => [i / (a.length - 1), PG.hex(c)]));
 
   /* ------------------------------------------- model shared by the pages */
 
