@@ -13,7 +13,8 @@ ionozond. Интерфейс на русском, переключатель EN 
 Локально достаточно дважды щёлкнуть по `index.html`. Ни сборка, ни сервер не нужны:
 обычные скрипты без модулей, графики рисуются вручную в SVG, внешних библиотек
 нет. Из сети загружаются только шрифты (Google Fonts), без неё браузер возьмёт
-системные.
+системные. Опубликованный сайт считает посещения через GoatCounter одним запросом
+картинки, без cookies; копия, открытая с диска или с localhost, не считается.
 
 Если браузер не доверяет `file://`, запустите локальный сервер:
 
@@ -190,7 +191,9 @@ in the header.
 
 **Locally,** open `index.html` by double-clicking. There is no build step and no server:
 classic scripts, hand-drawn SVG, no external libraries. Only the fonts come from
-the network, and system fonts stand in offline. If a browser is strict about
+the network, and system fonts stand in offline. The published site counts visits
+through GoatCounter with one image request and no cookies; a copy opened from
+disk or localhost is not counted. If a browser is strict about
 `file://`, run `python3 -m http.server 8000` and open http://localhost:8000.
 `?lang=en` picks the language.
 
