@@ -40,6 +40,7 @@ python3 -m http.server 8000
 | ЧХ по подканалам | АЧХ и ФЧХ моды по пику мгновенного ПЗМ в каждом окне реальной записи (окно эха 17 октября): подканал 5–41 кГц, окна без перекрытия (ступенчато) и с перекрытием до окна на каждом отсчёте, развёртка фазы с общей опорой, потерянные обороты ступенчатой ФЧХ, GDD по кривизне фазы и по наклону следа | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
+| Публикации | 17 работ научной школы ПГТУ / МарГТУ; компактные ссылки в моделях и вики ведут к записям в разделе `#references` | — |
 
 ## Откуда взяты числа и где модель
 
@@ -177,6 +178,10 @@ tools/wiki/         сборка вики и русский перевод до�
 `PG.i18n({...})` и `PG.register({ id, mount(root) })`, и подключите его строкой
 `<script>` в `index.html`.
 
+Библиография и привязка ссылок к материалам находятся в `js/modules/references.js`.
+Ссылки вида `#references/dispersion-paths` ведут к конкретной работе. Вики получает
+ссылки при отображении, поэтому пересборка `js/wiki/physics.js` их сохраняет.
+
 ---
 
 # Ionozond · playground
@@ -218,6 +223,11 @@ the document itself, in English and in Russian; parts link as `#wiki/gdd` and so
 and each part links to the pages that model it. A glossary explains the
 abbreviations; in every page's text they are underlined and open the same note on
 hover or tap.
+
+**Publications:** `#references` lists 17 works from the VSUT / MarSTU scientific school.
+Compact numbered citations in the models, wiki and glossary link to individual entries.
+The bibliography and citation mappings live in `js/modules/references.js`; generated
+wiki content stays unchanged when references are added.
 
 **Sources.** The GDD law is the median of 19 033 slopes from 583 sweeps,
 4–9 February 2026. Its b is a `curve_fit` to the medians of 19 f/MUF bins from 0.5

@@ -377,7 +377,11 @@
     const [id, sub] = location.hash.replace('#', '').split('/');
     const m = PG.modules.find(x => x.id === id) || home;
     const target = () => sub && document.getElementById(m.id + '-' + sub);
-    if (!redraw && sub && route.last === m.id && target()) { target().scrollIntoView(); route.sub = sub; return; }
+    if (!redraw && sub && route.last === m.id && target()) {
+      target().scrollIntoView();
+      if (m.onRoute) m.onRoute(sub);
+      route.sub = sub; return;
+    }
     const main = document.getElementById('main');
     main.replaceChildren();
     const isHome = m === home;
@@ -388,10 +392,12 @@
     const body = PG.h('div');
     main.append(body);
     m.mount(body);
+    if (PG.references) PG.references.annotate(main, m.id);
     document.title = (isHome ? '' : PG.t(m.id + '.title') + ' · ') + PG.t('app.eyebrow');
     document.querySelectorAll('nav.rail a').forEach(a => a.setAttribute('aria-current', a.dataset.id === m.id ? 'page' : 'false'));
     if (target()) target().scrollIntoView();
     else if (route.last !== m.id || route.sub) window.scrollTo(0, 0);
+    if (m.onRoute) m.onRoute(sub);
     route.last = m.id; route.sub = sub;
   }
 
