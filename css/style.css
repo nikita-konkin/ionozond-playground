@@ -70,12 +70,11 @@ nav.rail a[aria-current="page"] { color: var(--accent); border-color: var(--acce
 main { min-width: 0; }
 .part-no { display: block; margin-bottom: 8px; }
 h1 { font: 600 clamp(1.7rem, 3.6vw, 2.3rem)/1.12 Spectral, Georgia, serif; letter-spacing: -.012em; margin: 0 0 10px; text-wrap: balance; }
-.lede { color: var(--muted); max-width: 70ch; margin: 0 0 24px; }
+.lede { color: var(--muted); margin: 0 0 24px; }
 h2 { font: 600 1.02rem/1.3 "IBM Plex Sans", sans-serif; margin: 26px 0 10px; }
-p { max-width: 72ch; }
 
 footer.foot { grid-column: 1 / -1; border-top: 1px solid var(--rule); margin-top: 40px; padding-top: 18px; color: var(--faint); font-size: 13px; }
-footer.foot p { max-width: 90ch; margin: 0 0 8px; }
+footer.foot p { margin: 0 0 8px; }
 
 /* ------------------------------------------------------------- components */
 
@@ -211,13 +210,13 @@ tr.bad td { background: var(--warn-soft); }
 .wiki section { margin: 0 0 60px; scroll-margin-top: 16px; }
 .wiki .part-no { display: block; font: 11.5px "IBM Plex Mono", monospace; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
 .wiki h2.part { font: 600 clamp(1.45rem, 2.8vw, 1.85rem)/1.15 Spectral, Georgia, serif; letter-spacing: -.012em; text-wrap: balance; margin: 0 0 8px; }
-.wiki .part-lede { color: var(--muted); max-width: 64ch; margin: 0 0 28px; }
+.wiki .part-lede { color: var(--muted); margin: 0 0 28px; }
 .wiki p.wiki-try { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: -14px 0 28px; }
 .wiki-try span { font: 10.5px "IBM Plex Mono", monospace; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
 .wiki-try a { font-size: 13.5px; text-decoration: none; padding: 3px 10px; border: 1px solid var(--accent); border-radius: 4px; background: var(--accent-soft); }
 .wiki-try a:hover { text-decoration: underline; }
 .wiki h3 { font: 600 1.02rem/1.3 "IBM Plex Sans", sans-serif; margin: 34px 0 10px; text-wrap: balance; }
-.wiki p { max-width: 68ch; margin: 0 0 16px; }
+.wiki p { margin: 0 0 16px; }
 .wiki ol.plain, .wiki ul.plain { max-width: 68ch; padding-left: 20px; margin: 0 0 16px; }
 .wiki ol.plain li, .wiki ul.plain li { margin-bottom: 8px; }
 .wiki code, .wiki .mono { font-size: .875em; }
@@ -249,7 +248,6 @@ tr.bad td { background: var(--warn-soft); }
 .wiki .note p + p { margin-top: 10px; }
 .wiki .note .lbl { margin-bottom: 6px; }
 .wiki-foot { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; color: var(--faint); }
-.wiki-foot p { max-width: 90ch; }
 
 /* The simulator's description (js/wiki/simdoc.js): the wiki's styles, plus what the page adds. */
 .simdoc .wiki-toc ol { counter-reset: part; }
