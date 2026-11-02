@@ -280,6 +280,27 @@ tr.bad td { background: var(--warn-soft); }
 .simdoc .guide .look b { color: var(--ink); }
 .simdoc pre { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; overflow-x: auto; font: 13px/1.6 "IBM Plex Mono", monospace; margin: 12px 0 16px; max-width: 86ch; }
 .simdoc pre .c { color: var(--faint); }
+.simdoc .blocks .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+.simdoc .blocks .legend span { display: inline-flex; align-items: center; gap: 6px; }
+.simdoc .blocks .legend svg { min-width: 0; width: 34px; height: 22px; flex: none; }
+.simdoc .blocks p.lane { margin: 22px 0 6px; font-size: 14px; line-height: 1.45; }
+.simdoc .blocks p.lane b { display: block; font-weight: 600; }
+.simdoc .blocks p.lane span { font-size: 13px; color: var(--muted); }
+.simdoc .blocks svg.flow { min-width: 640px; }
+.blocks svg text { fill: var(--ink); }
+.blocks svg .small, .blocks svg .glabel { fill: var(--muted); }
+.blocks svg .glabel { font-style: italic; }
+.blocks svg .bold { font-weight: 600; }
+.blocks svg .box { fill: var(--surface); stroke: var(--faint); stroke-width: 1.1; }
+.blocks svg .fft { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+.blocks svg .op { fill: var(--surface); stroke: var(--comp); stroke-width: 1.4; }
+.blocks svg .opmark { fill: none; stroke: var(--comp); stroke-width: 1.8; }
+.blocks svg .opsym { fill: var(--comp); font-weight: 600; }
+.blocks svg .conj { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.4; }
+.blocks svg .data { fill: var(--raised); stroke: var(--muted); stroke-width: 1.1; }
+.blocks svg .grp { fill: none; stroke: var(--faint); stroke-width: 1; stroke-dasharray: 4 3; }
+.blocks svg .wire { fill: none; stroke: var(--muted); stroke-width: 1.3; }
+.blocks svg .head { fill: var(--muted); }
 
 /* --------------------------------------------------------------- glossary */
 /* Abbreviations in the text (js/modules/glossary.js), their popup, and the glossary page. */
