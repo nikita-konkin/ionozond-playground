@@ -36,7 +36,7 @@ python3 -m http.server 8000
 | Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
 | Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
 | Имитатор канала | реальный сеанс, состояние канала по нему, синтезированные по нему сеансы и проверки muf.sim.check: ионограммы рядом с окном и подканалом, мгновенные ПЗМ, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
-| Имитатор: описание | три схемы — как получается ионограмма и что из неё читается (импульсная характеристика, АЧХ, ФЧХ), как второй дечирп вдоль следа даёт АЧХ и ФЧХ одной моды, что делает с широкополосным сигналом дисперсия внутри моды; текущая версия muf.sim и её блок-схема (БПФ, ОБПФ, умножения, сопряжения), модель состояния, синтез, проверки, путеводитель по странице имитатора и итоги сеансов 17 октября; ссылки на части имеют вид `#simdoc/version`, на блок-схему — `#simdoc/blocks` | дополнение |
+| Имитатор: описание | шесть учебных схем; актуальный алгоритм muf.sim (`develope`, 3511f93 от 3 ноября): сопровождение следов, распределение мощности, режим 1F в полосе 1 МГц (`#simdoc/band`), прогноз и проверка часов (`#simdoc/forecast`), фиксированный стенд (`#simdoc/bench`), обновлённая блок-схема (`#simdoc/blocks`) и скриншоты интерфейса; результаты 17 октября выделены как архивный пример | дополнение |
 | ЧХ по подканалам | АЧХ и ФЧХ моды по пику мгновенного ПЗМ в каждом окне реальной записи (окно эха 17 октября): подканал 5–41 кГц, окна без перекрытия (ступенчато) и с перекрытием до окна на каждом отсчёте, развёртка фазы с общей опорой, потерянные обороты ступенчатой ФЧХ, GDD по кривизне фазы и по наклону следа | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
 | Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
@@ -114,8 +114,11 @@ python3 tools/sim_data.py sim.json
 `board-*-{ru,en}.png` строятся скриптами `figures/doska_ionogramma.py`,
 `figures/doska_dechirp.py` и `figures/doska_gdd.py` проекта моделирования канала
 (`--lang en` для английской версии) и уменьшаются до 1800 пикселей по ширине;
-снимки страницы имитатора `sim-*-{ru,en}.jpg` сделаны в светлой теме при ширине
-1100 пикселей. Блок-схема `muf.sim` рисуется в SVG модулем `js/modules/simdoc.js`: её
+снимки текущей страницы имитатора `sim-*-{ru,en}.jpg` переснимаются командой
+`python tools/capture_simdoc.py` (нужны Playwright, Chromium и Pillow): светлая тема,
+окно 1365 пикселей, масштаб устройства 1,5, начальный сеанс 06:00.
+Алгоритм описания сверен с `ionograms-handler/develope`, коммит `3511f93`;
+встроенные данные 17 октября остаются архивным примером ранней версии. Блок-схема `muf.sim` рисуется в SVG модулем `js/modules/simdoc.js`: её
 блоки и подписи на двух языках задаёт массив `LANES`, а цвета берутся из палитры темы.
 
 ## Данные ЧХ по подканалам
@@ -217,7 +220,9 @@ profile's peak, without overlap or with windows down to one per sample, and unwr
 from three boards: how an ionogram is made and read for the impulse response,
 magnitude and phase; the second dechirp that reads one mode's magnitude and phase;
 and what dispersion within a mode does to a wideband signal. They then
-describe the current muf.sim version with its block diagram (`#simdoc/blocks`, drawn in SVG
+describe muf.sim at `develope` commit `3511f93` (3 November 2026), including the
+1F band measurement (`#simdoc/band`), forecasting and clock checks
+(`#simdoc/forecast`), the frozen benchmark (`#simdoc/bench`), and its block diagram (`#simdoc/blocks`, drawn in SVG
 by `js/modules/simdoc.js` from its `LANES`), its model and checks, and the page beside it;
 the text is in `js/wiki/simdoc.js`, the figures in `img/`, the boards built by
 `figures/doska_*.py` in the channel-modelling project. The wiki holds
