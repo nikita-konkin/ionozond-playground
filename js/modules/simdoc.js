@@ -239,7 +239,7 @@
         { nodes: [
           { k: 'd', t: 't = n / f_s' },
           { k: 'b', t: 'f(t) =\nf₀ + k·t' },
-          { k: 'b', t: ['τ_m(f(t)) на сетке\nчерез 64 отсчёта', 'τ_m(f(t)) on a\n64-sample grid'] },
+          { k: 'b', t: ['τ_m(f(t)) на сетке\nчерез 64 отсчёта;\n1F: лучи слоя', 'τ_m(f(t)) on a\n64-sample grid;\n1F: the layer’s rays'] },
           { k: 'x', side: ['−k'] },
           { k: 'b', t: ['∫ dt (cumsum / f_s)\nфаза биений φ_m', '∫ dt (cumsum / f_s)\nbeat phase φ_m'] }] },
         { nodes: [
