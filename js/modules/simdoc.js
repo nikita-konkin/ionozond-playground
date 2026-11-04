@@ -68,7 +68,7 @@
           { k: 'b', t: ['центры отрезков\nс весом мощности', 'runs → power-\nweighted centres'] },
           { k: 'b', t: ['следы\nбез пересечений', 'tracks that\nnever cross'] },
           { k: 'b', t: ['число скачков;\nнижний и верхний луч', 'hop labels;\nlow and high rays'] },
-          { k: 'b', t: ['квадратичный сплайн\nτ_m(f), ≤ 1 экстремум', 'quadratic spline\nτ_m(f), ≤ 1 turn'] }] },
+          { k: 'b', t: ['сплайн τ_m(f), ≤ 1 экстр.;\nв live: 1F по слою', 'spline τ_m(f), ≤ 1 turn;\nlive: 1F from a layer'] }] },
         { par: ['для каждой моды m', 'for every mode m'], nodes: [
           { k: 'b', t: 'd/df → GDD\nd²/df² → TOD' },
           { k: 'b', t: ['P − шум по ±2 отсчётам,\nпоровну между модами\n→ C/N₀(f)', 'P − noise over ±2 bins,\nshared among modes\n→ C/N₀(f)'] },
