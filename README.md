@@ -215,7 +215,9 @@ same ionosphere carried over to the Cyprus path by the secant law. A supplement 
 the HF channel simulator at work: a real sounding, the channel state read off it, the
 soundings synthesised from it, and muf.sim.check's verdicts on them. Another (`#fr`) reads a
 mode's frequency response off a real recording, one sample per FFT window at the delay power
-profile's peak, without overlap or with windows down to one per sample, and unwraps its phase
+profile's peak, without overlap or with windows down to one per sample, and unwraps its phase;
+its subchannels run from 5 to 102 kHz, its peak-search gate can be shifted, resized or held at one
+delay, and the sounding's ionogram above it shows the stretch and the MUF, for frequency as a share of the MUF
 (`tools/fr_data.py` builds its data, `js/data/fr.js`, loaded on the first visit). Its notes (`#simdoc`) start
 from three boards: how an ionogram is made and read for the impulse response,
 magnitude and phase; the second dechirp that reads one mode's magnitude and phase;
