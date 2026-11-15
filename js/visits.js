@@ -7,7 +7,7 @@
   if (location.protocol === 'file:' || navigator.webdriver || /^(localhost|127\.|\[::1\])/.test(location.hostname)) return;
   let referrer = document.referrer;
   const count = () => {
-    new Image().src = 'https://konkin-nikita.goatcounter.com/count?p=' + encodeURIComponent(location.pathname + location.hash) +
+    new Image().src = 'https://volgatech-itrc.goatcounter.com/count?p=' + encodeURIComponent(location.pathname + location.hash) +
       '&t=' + encodeURIComponent(document.title) + '&r=' + encodeURIComponent(referrer) +
       '&rnd=' + Math.random().toString(36).slice(2);
     referrer = '';
