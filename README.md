@@ -28,30 +28,19 @@ python3 -m http.server 8000
 
 | Раздел | Что показывает | Часть документа |
 |---|---|---|
-| Дисперсия на ионограмме | ДЧХ мод 1F и 2F по медианному закону GDD, полоса сигнала, B_max, импульс после трассы, тот же предел через фазу на краях полосы и B_max вдоль всей ДЧХ | 11 |
-| Как измерять GDD | наклон задержки и кривизна фазы в окне 1 МГц, 300 реализаций, усреднение по сеансам | 11 |
 | Ошибка chirptime | куда уходит эхо при ошибках Δt и Δk: окно ионограммы, перескок через край интервала однозначности, нули дециматора | 9 |
 | Длина БПФ и ячейка | форма ячейки k·N/f_ПЧ × f_ПЧ/(k·N), перенос следа на сетку, фильтр мелких объектов 9 × 3, спектр одного столбца у «носа» ДЧХ: когда нижний и верхний лучи разделяются | 5–6 |
 | Расписание станций | планировщик ionozond, пропуски станций, пересчёт rep:offset в chirptime, чем dur отличается от chirptime | 7–9 |
-| Сутки | суточный ход МНЧ, карта B_max по частоте и времени для наклонной трассы и для вертикального зондирования, загрузка суток из архива | 11 |
-| Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, GDD и B_max вблизи критических частот, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
+| Сутки | суточный ход МНЧ на трассе Кипр — Йошкар-Ола, загрузка суток из архива | 13 |
+| Вертикальное зондирование | ионограмма h′(f) по профилю E + F2, та же ионосфера на трассе Кипр — Йошкар-Ола по закону секанса | дополнение |
 | Имитатор канала | реальный сеанс, состояние канала по нему, синтезированные по нему сеансы и проверки muf.sim.check: ионограммы рядом с окном и подканалом, мгновенные ПЗМ, профиль следа, C/N₀ вдоль моды, вердикты уровня 2, корреляция с потолком и со следующим сеансом, \|H(f, t)\| на одной несущей | дополнение |
-| Имитатор: описание | шесть учебных схем; актуальный алгоритм muf.sim (`develope`, 89fbd25 от 4 ноября): сопровождение следов, 1F по подобранному слою (`#simdoc/layer`), распределение мощности, режим 1F в полосе 1 МГц (`#simdoc/band`), прогноз и проверка часов (`#simdoc/forecast`), фиксированный стенд (`#simdoc/bench`), обновлённая блок-схема (`#simdoc/blocks`) и скриншоты интерфейса; результаты 17 октября выделены как архивный пример | дополнение |
-| ЧХ по подканалам | АЧХ и ФЧХ моды по пику мгновенного ПЗМ в каждом окне реальной записи (окно эха 17 октября): подканал 5–41 кГц, окна без перекрытия (ступенчато) и с перекрытием до окна на каждом отсчёте, развёртка фазы с общей опорой, потерянные обороты ступенчатой ФЧХ, GDD по кривизне фазы и по наклону следа | дополнение |
+| Имитатор: описание | пять учебных схем; актуальный алгоритм muf.sim (`develope`, 89fbd25 от 4 ноября): сопровождение следов, 1F по подобранному слою (`#simdoc/layer`), распределение мощности, прогноз и проверка часов (`#simdoc/forecast`), фиксированный стенд (`#simdoc/bench`), обновлённая блок-схема (`#simdoc/blocks`) и скриншоты интерфейса; результаты 17 октября выделены как архивный пример | дополнение |
 | Глоссарий | сокращения практикума с пояснениями; в тексте всех страниц они подчёркнуты пунктиром и открывают пояснение по наведению или нажатию | — |
-| Вики: ЛЧМ-ионограммы | полный текст документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/gdd`, под частями — ссылки на соответствующие модели | 0–15 |
+| Вики: ЛЧМ-ионограммы | разделы документа на английском и в русском переводе; ссылки на части имеют вид `#wiki/edges`, под частями — ссылки на соответствующие модели | 0–10, 13–14 |
 | Публикации | 17 работ научной школы ПГТУ / МарГТУ; компактные ссылки в моделях и вики ведут к записям в разделе `#references` | — |
 
 ## Откуда взяты числа и где модель
 
-- Закон GDD = 7,5·(1/√(1 − f/МНЧ) − 1) мкс/МГц — медиана 19 033 оценок наклона
-  по 583 сеансам за 4–9 февраля 2026 г. (`lfs_tools/dispersion_stats.py` в проекте
-  моделирования канала). Коэффициент b подогнан функцией `curve_fit` к медианам
-  19 интервалов f/МНЧ от 0,5 до 0,975 с весами по числу оценок: b = 7,52, R² = 0,975;
-  без весов или с началом подгонки на 0,6–0,8 МНЧ получается 7,4–7,6. Это параметр
-  модели трассы Кипр — Йошкар-Ола, а не универсальная постоянная. Межквартильный разброс — около ±50 %.
-- Ошибки методов измерения откалиброваны по полной БПФ-обработке синтетических
-  записей (доплеровское расширение 0,37 Гц, ОСШ 18 дБ на 0,1 с).
 - Дециматор, окно ионограммы, планировщик и пересчёт rep:offset взяты из
   документа и исходных текстов ionozond (`python/lfp_products.py`,
   `docs/reverse-engineering.md`).
@@ -62,19 +51,14 @@ python3 -m http.server 8000
 
 ## Проверка моделей
 
-`tools/validate/` — независимые проверки на Python (нужен numpy):
+`tools/validate/` — независимые проверки на Python. Для расчётов нужен NumPy, для проверки сайта — Playwright с Chromium. Если ionozond расположен в другом каталоге, передайте путь к его папке python скрипту check_cells.py.
 
 | Скрипт | Что проверяет | Результат |
 |---|---|---|
-| `check_basics.py` | закон GDD против измеренных медиан; мода 2F; наклонная дальность и окно ионограммы ionozond; дециматор, смоделированный на частоте дискретизации 25 МГц | от 0,61 до 0,96 МНЧ закон лежит внутри межквартильного размаха; при 0,99 МНЧ он вдвое круче медианы, поэтому вблизи МНЧ страницы используют медиану 36,5 мкс/МГц; дециматор совпадает с формулой с точностью 0,2 дБ |
-| `check_pulse.py` | что делает с импульсом произведение GDD·B² | при 1 импульс почти не меняется (−0,06 дБ), при 5 теряет 1,5 дБ и расширяется в 1,6 раза; отсюда пороги 1 и 5 и оценка B_max как осторожной границы |
+| `check_basics.py` | геометрия многоскачковых мод, наклонная дальность и окно ионограммы ionozond; дециматор, смоделированный на частоте дискретизации 25 МГц | дециматор совпадает с формулой с точностью 0,2 дБ |
 | `check_cells.py` | раздел о ячейках против полной обработки: синтетическая запись, БПФ и функция `delete_small_objects` из ionozond | картина та же: при 500 кГц/с БПФ на 16 384 точки стирает след, на 4096 — сохраняет |
-| `check_vertical.py` | h′(f) против аналитической формулы для одного слоя; наклонная проекция профиля против закона | h′ с точностью 0,02 км; дневной слой F2 со слабым слоем E воспроизводит медианы от 0,6 до 0,96 МНЧ с точностью 2–3 мкс/МГц |
-
-Модель раздела «Как измерять GDD» сверена с полной обработкой синтетики
-(`lfs_tools`) во всех четырёх вариантах — 0,01 и 0,37 Гц, столбцы 0,1 и 0,41 с —
-с расхождением не более 15 %. Закон GDD измерен при МНЧ 18–32 МГц; ночью страницы
-продолжают его пропорционально 1/МНЧ и предупреждают об этом.
+| `check_vertical.py` | h′(f) по аналитической формуле для одного слоя и наклонная проекция по закону секанса | h′ с точностью 0,02 км до 0,99 foF2; вывод МНЧ, M и задержек проекции |
+| `check_site.py` | все страницы на русском и английском | страницы отображаются без ошибок скриптов и пропущенных переводов, все внутренние ссылки работают |
 
 ## Настоящие сутки из архива
 
@@ -112,7 +96,7 @@ python3 tools/sim_data.py sim.json
 Описание имитатора (раздел «Имитатор: описание») написано вручную и лежит в
 `js/wiki/simdoc.js`, по тексту на язык. Рисунки к нему — в `img/`: схемы
 `board-*-{ru,en}.png` строятся скриптами `figures/doska_ionogramma.py`,
-`figures/doska_dechirp.py` и `figures/doska_gdd.py` проекта моделирования канала
+`figures/doska_dechirp.py` и другими скриптами `figures/doska_*.py` проекта моделирования канала
 (`--lang en` для английской версии) и уменьшаются до 1800 пикселей по ширине;
 снимки текущей страницы имитатора `sim-*-{ru,en}.jpg` переснимаются командой
 `python tools/capture_simdoc.py` (нужны Playwright, Chromium и Pillow): светлая тема,
@@ -121,30 +105,12 @@ python3 tools/sim_data.py sim.json
 встроенные данные 17 октября остаются архивным примером ранней версии. Блок-схема `muf.sim` рисуется в SVG модулем `js/modules/simdoc.js`: её
 блоки и подписи на двух языках задаёт массив `LANES`, а цвета берутся из палитры темы.
 
-## Данные ЧХ по подканалам
-
-Раздел «ЧХ по подканалам» считает всё сам, но ему нужна фаза: комплексные отсчёты
-сигнала разностной частоты, а не ионограмма. Их берёт `tools/fr_data.py` из сеансов с
-окном эха, продуктов `.h5` с полем `z` или записей `.lfs` — через `muf.sim.fast` из
-ionograms-handler, поэтому он запускается с этим репозиторием в `PYTHONPATH`:
-
-```bash
-PYTHONPATH=…/ionograms-handler python tools/fr_data.py \
-    …/2026.10.17/lfm_ionogram-NIC1-yoshkar-ola-ch0-000-1792216810.00.h5@18-22 ...
-```
-
-После `@` — участок развёртки в МГц. Отсчёты хранятся на частоте окна эха (888,9 Гц)
-байтами со своим масштабом на сеанс; кривые мод берутся из `js/data/sim.js` того же
-сеанса. Встроенный `js/data/fr.js` — четыре сеанса 17 октября по 4 МГц, 419 кБ;
-страница загружает его при первом открытии раздела. Это реальные записи: решение о
-публикации — то же, что для данных имитатора.
-
 ## Вики
 
 Раздел «Вики» собирается из `ionozond/docs/ionogram-physics.html` (соседний
 репозиторий) скриптом `tools/wiki/build_wiki.py` в `js/wiki/physics.js`. Скрипт делит
-документ на текстовые блоки по позициям в исходнике, поэтому разметка и рисунки
-переносятся без изменений, а в русскую версию подставляется перевод каждого блока из
+оставленные части документа на текстовые блоки по позициям в исходнике, сохраняя
+разметку и рисунки. В русскую версию подставляется перевод каждого блока из
 `tools/wiki/physics.ru.json` (ключ — английский текст блока).
 
 ```bash
@@ -173,7 +139,6 @@ js/wiki/simdoc.js   описание имитатора, RU и EN, пишетс�
 img/                рисунки описания имитатора: схемы и снимки страницы
 tools/export_daily.py
 tools/sim_data.py   данные имитатора в js/data/sim.js
-tools/fr_data.py    комплексные отсчёты для ЧХ по подканалам в js/data/fr.js
 tools/validate/     проверки моделей на Python
 tools/wiki/         сборка вики и русский перевод документа
 ```
@@ -206,52 +171,39 @@ disk or localhost is not counted. If a browser is strict about
 `file://`, run `python3 -m http.server 8000` and open http://localhost:8000.
 `?lang=en` picks the language.
 
-**Sections:** dispersion on the ionogram, with the same limit read as edge phase; measuring GDD (delay slope against
-phase fit); chirptime error; FFT length and cell shape, with the spectrum of one column at the nose; the station schedule
-with a rep:offset → chirptime converter and how dur differs from chirptime; the day, with a B_max map over
-frequency and time for the oblique path or a vertical sounder; and vertical
-sounding: an h′(f) ionogram from an E + F2 profile, its dispersion, and the
-same ionosphere carried over to the Cyprus path by the secant law. A supplement shows
-the HF channel simulator at work: a real sounding, the channel state read off it, the
-soundings synthesised from it, and muf.sim.check's verdicts on them. Another (`#fr`) reads a
-mode's frequency response off a real recording, one sample per FFT window at the delay power
-profile's peak, without overlap or with windows down to one per sample, and unwraps its phase;
-its subchannels run from 5 to 102 kHz, its peak-search gate can be shifted, resized or held at one
-delay, and the sounding's ionogram above it shows the stretch and the MUF, for frequency as a share of the MUF
-(`tools/fr_data.py` builds its data, `js/data/fr.js`, loaded on the first visit). Its notes (`#simdoc`) start
-from three boards: how an ionogram is made and read for the impulse response,
-magnitude and phase; the second dechirp that reads one mode's magnitude and phase;
-and what dispersion within a mode does to a wideband signal. They then
-describe muf.sim at `develope` commit `89fbd25` (4 November 2026), including the
-1F band measurement (`#simdoc/band`), forecasting and clock checks
-(`#simdoc/forecast`), the frozen benchmark (`#simdoc/bench`), and its block diagram (`#simdoc/blocks`, drawn in SVG
-by `js/modules/simdoc.js` from its `LANES`), its model and checks, and the page beside it;
-the text is in `js/wiki/simdoc.js`, the figures in `img/`, the boards built by
-`figures/doska_*.py` in the channel-modelling project. The wiki holds
-the document itself, in English and in Russian; parts link as `#wiki/gdd` and so on,
-and each part links to the pages that model it. A glossary explains the
-abbreviations; in every page's text they are underlined and open the same note on
-hover or tap.
+**Sections:** chirptime error, FFT length and cell shape (with the spectrum of one
+column at the nose), the station schedule (with a rep:offset → chirptime converter
+and an explanation of dur), the daily MUF course for a model day or a day from the
+archive, and vertical sounding. The vertical page shows the h′(f) ionogram from an
+E + F2 profile and projects it onto the Cyprus path by the secant law.
+
+The HF channel simulator shows a real sounding, the channel state read from it,
+the soundings synthesised from it, and muf.sim.check's verdicts. Its notes (`#simdoc`)
+include five boards on the ionogram, the second dechirp, the slow and fast parts
+of the state, and the channel at one carrier. They describe muf.sim at `develope`
+commit `89fbd25` (4 November 2026), including forecasting and clock checks
+(`#simdoc/forecast`), the frozen benchmark (`#simdoc/bench`), and the block diagram
+(`#simdoc/blocks`, drawn in SVG by `js/modules/simdoc.js` from its `LANES`).
+The text is in `js/wiki/simdoc.js`, the figures in `img/`, and the boards are built
+by `figures/doska_*.py` in the channel-modelling project.
+
+The wiki presents the selected parts of the document in English and Russian.
+Parts link as `#wiki/edges` and link to the relevant models. The glossary explains
+abbreviations in place on hover or tap.
 
 **Publications:** `#references` lists 17 works from the VSUT / MarSTU scientific school.
 Compact numbered citations in the models, wiki and glossary link to individual entries.
 The bibliography and citation mappings live in `js/modules/references.js`; generated
 wiki content stays unchanged when references are added.
 
-**Sources.** The GDD law is the median of 19 033 slopes from 583 sweeps,
-4–9 February 2026. Its b is a `curve_fit` to the medians of 19 f/MUF bins from 0.5
-to 0.975, weighted by the number of slopes: 7.52, R² = 0.975, and 7.4–7.6 without
-the weights or starting at 0.6–0.8 MUF. It is a parameter of this path, not a
-universal constant. The measurement errors are calibrated against full FFT
-processing of synthetic captures. The decimator, panel window, scheduler and
-timing conversion follow the document and the ionozond sources. The model day,
-trace shapes and the 8 dB threshold in the cell section are schematic, and each
-page says where it is showing a model.
+**Sources.** The decimator, panel window, scheduler and timing conversion follow
+the document and the ionozond sources. The model day, trace shapes and the 8 dB
+threshold in the cell section are schematic.
 
 **The wiki** is built from `ionozond/docs/ionogram-physics.html` by
 `python3 tools/wiki/build_wiki.py`, which writes `js/wiki/physics.js`. It cuts the
-document into text blocks by source position, so markup and figures carry over
-byte for byte, and fills the Russian page from `tools/wiki/physics.ru.json`, keyed
+retained parts into text blocks by source position, preserving markup and figures,
+and fills the Russian page from `tools/wiki/physics.ru.json`, keyed
 by each block's English. Blocks the document has changed stay in English and are
 counted; `--missing` lists them as JSON to translate. Corrections and the playground's own
 notes are exact find/replace pairs, each with its reason, in `tools/wiki/physics.fix.json`,
@@ -267,9 +219,13 @@ or bundled with `python3 tools/sim_data.py sim.json`, which checks it and writes
 `js/data/sim.js`. These are ionograms of real soundings: decide whether they may be
 published before deploying them. Without `js/data/sim.js` the page asks for a file.
 
-**Validation.** `tools/validate/` holds independent Python checks: the GDD law
-against the measured medians, the decimator simulated at 25 MS/s, what GDD·B²
-does to a pulse, the cell page against full FFT processing through the console's
-own speckle filter, and the vertical model against the closed form and, via the
-secant law, against the measured oblique medians. A daytime F2 with a weak E
-layer reproduces those medians from 0.6 to 0.96 MUF to within 2–3 µs/MHz.
+**Validation.** `tools/validate/` holds independent Python checks. The model checks
+use NumPy, and the site check uses Playwright with Chromium. Pass the path to
+ionozond’s python directory to check_cells.py if the checkout is elsewhere.
+
+| Script | What it checks |
+|---|---|
+| `check_basics.py` | Multi-hop geometry, slant range, the ionozond panel window and the decimator at 25 MS/s. |
+| `check_cells.py` | The cell model against full FFT processing with the console's speckle filter. |
+| `check_vertical.py` | h′(f) against the analytic formula and the oblique projection by the secant law. |
+| `check_site.py` | Every page renders in both languages without script errors or missing translations. Every internal link resolves. |

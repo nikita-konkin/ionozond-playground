@@ -63,7 +63,7 @@
       'cells.c.v.sep': 'видны раздельно',
       'cells.c.v.mrg': 'сливаются в один пик',
       'cells.c.v.dop': "При доплеровском расширении {s} и длительности записи {T} ширина спектра составляет {v} отсчёта; пики уширяются.",
-      'cells.c.model': 'Модель. ДЧХ 1F та же, что на странице о дисперсии, при МНЧ 29,8 МГц. Верхний луч там нарисован для ориентира, поэтому разнос лучей здесь передаёт характер явления, а не точные задержки. X-мода — та же ДЧХ, сдвинутая вверх по частоте на 0,7 МГц (половина гирочастоты, как в документе); показан только её нижний луч. Амплитуды лучей условные: 1; 0,7 и 0,6. Мощности лучей складываются без учёта фаз. Внутри столбца задержка каждого луча усредняется по ширине столбца, доплеровское расширение берётся с ползунка вверху страницы. Порог и фильтр мелких объектов здесь не применяются: это спектр до них.',
+      'cells.c.model': 'Модель. Модельная ДЧХ 1F имеет МНЧ 29,8 МГц. Верхний луч построен приближённо, поэтому разнос лучей передаёт характер явления. X-мода — та же ДЧХ, сдвинутая вверх по частоте на 0,7 МГц (половина гирочастоты, как в документе); показан только её нижний луч. Амплитуды лучей условные: 1; 0,7 и 0,6. Мощности лучей складываются без учёта фаз. Внутри столбца задержка каждого луча усредняется по ширине столбца, доплеровское расширение берётся с ползунка вверху страницы. Порог и фильтр мелких объектов здесь не применяются: это спектр до них.',
     },
     en: {
       'cells.nav': 'FFT length and cell shape',
@@ -124,7 +124,7 @@
       'cells.c.v.sep': 'seen apart',
       'cells.c.v.mrg': 'merged into one peak',
       'cells.c.v.dop': 'A Doppler spread of {s} over a {T} capture covers {v} bins, and the peaks widen.',
-      'cells.c.model': 'Model. The 1F trace is the one on the dispersion page, with an MUF of 29.8 MHz. Its upper ray is drawn there for orientation, so the spacing of the rays here shows how the effect goes, not exact delays. The X mode is the same trace moved up by 0.7 MHz (half the gyrofrequency, as the document gives it), lower ray only. The ray amplitudes are nominal: 1, 0.7 and 0.6. Ray powers add without phase. Within a column each ray’s delay is averaged across the column width, and the Doppler spread is the one set by the slider at the top of the page. No threshold or speckle filter here: this is the spectrum before them.',
+      'cells.c.model': 'Model. The model 1F trace has an MUF of 29.8 MHz. The approximate upper ray illustrates how the ray spacing changes. The X mode is the same trace moved up by 0.7 MHz (half the gyrofrequency, as the document gives it), lower ray only. The ray amplitudes are nominal: 1, 0.7 and 0.6. Ray powers add without phase. Within a column each ray’s delay is averaged across the column width, and the Doppler spread is the one set by the slider at the top of the page. No threshold or speckle filter here: this is the spectrum before them.',
     },
   });
 
@@ -218,7 +218,7 @@
 
   /* --------------------------------------------- one column, opened up */
 
-  // The nose of the 1F trace by day: the dispersion page's model at MUF 29.8 MHz, the X mode as the
+  // The nose of the 1F trace by day: the model at MUF 29.8 MHz, the X mode as the
   // same trace moved up by half the gyrofrequency. Amplitudes are nominal.
   const M_ = PG.model, NOSE = { M: 29.8, fX: 0.7, f0: 27, f1: 30.8, t0: 9040, t1: 9400 };
   const RAYS = [

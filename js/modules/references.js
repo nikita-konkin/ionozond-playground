@@ -115,14 +115,11 @@
       'references.cite': 'Источник {n}: {title}',
       'references.home': 'Научная основа методов — работы школы ПГТУ в Йошкар-Оле.',
       'references.method': 'Метод ЛЧМ-зондирования',
-      'references.gdd': 'Дисперсия и полоса когерентности',
-      'references.measure': 'Измерение дисперсии',
       'references.cells': 'Сжатие сигнала и разрешение',
       'references.daily': 'По теме: прогнозирование рабочих частот',
       'references.vi': 'Вертикальное и наклонное зондирование',
       'references.sdr': 'Цифровые ионозонды',
       'references.modes': 'Обнаружение мод и обработка ионограмм',
-      'references.dispersionLabel': 'Дисперсия канала',
       'references.noise': 'Диагностика каналов и помехи',
       'references.simulator': 'Имитаторы ионосферных КВ-радиоканалов',
     },
@@ -138,14 +135,11 @@
       'references.cite': 'Reference {n}: {title}',
       'references.home': 'The methods draw on research from the VSUT scientific school in Yoshkar-Ola.',
       'references.method': 'Chirp sounding method',
-      'references.gdd': 'Dispersion and coherent bandwidth',
-      'references.measure': 'Measuring dispersion',
       'references.cells': 'Signal compression and resolution',
       'references.daily': 'Related research: working-frequency prediction',
       'references.vi': 'Vertical and oblique sounding',
       'references.sdr': 'Digital ionosondes',
       'references.modes': 'Mode detection and ionogram processing',
-      'references.dispersionLabel': 'Channel dispersion',
       'references.noise': 'Channel diagnostics and interference',
       'references.simulator': 'Ionospheric HF channel simulators',
     },
@@ -168,15 +162,13 @@
   }
 
   const PAGES = {
-    gdd: ['gdd', ['dispersion-chirp', 'dispersion-paths', 'coherent-bandwidth']],
-    measure: ['measure', ['dispersion-paths', 'phase-response', 'coherent-bandwidth']],
     timing: ['method', ['chirp-review', 'sdr-processing']],
     cells: ['cells', ['chirp-review', 'sdr-processing']],
     schedule: ['sdr', ['usrp-ionosonde', 'multifrequency']],
     daily: ['daily', ['muf-forecast']],
     sim: ['simulator', ['gnuradio-simulator', 'channel-models']],
     simdoc: ['simulator', ['gnuradio-simulator', 'channel-models']],
-    vi: ['vi', ['chirp-review', 'multidimensional', 'dispersion-paths']],
+    vi: ['vi', ['chirp-review', 'multidimensional']],
   };
   const WIKI = {
     chain: ['sdr', ['sdr-processing', 'usrp-ionosonde', 'multifrequency']],
@@ -187,10 +179,7 @@
     dechirp: ['cells', ['chirp-review', 'sdr-processing']],
     axes: ['cells', ['chirp-review', 'sdr-processing']],
     anatomy: ['modes', ['ionogram-modes', 'channel-sensor']],
-    gdd: ['gdd', ['dispersion-paths', 'phase-response', 'coherent-bandwidth']],
-    causes: ['dispersionLabel', ['dispersion-chirp', 'wave-packets', 'dispersion-types']],
     stripes: ['modes', ['ionogram-modes', 'passive-sounding']],
-    limits: ['dispersionLabel', ['intramode', 'wave-packets', 'dispersion-types']],
   };
 
   PG.references = {
@@ -200,13 +189,6 @@
           PG.t('references.home'), ' ', PG.h('a', { href: '#references' }, PG.t('references.nav'))));
       }
       if (PAGES[page]) root.querySelector(':scope > .lede').after(sourceLine(...PAGES[page]));
-      if (page === 'gdd') {
-        // Cite the concepts in headings, rather than attributing this playground's numerical
-        // error estimates, fitted coefficient or pulse thresholds to a published experiment.
-        const heading = [...root.querySelectorAll('h2')].find(h => h.textContent === PG.t('gdd.c.h'));
-        if (heading) heading.append(cite(['intramode']));
-        root.querySelector('#gdd-phase').append(cite(['phase-response', 'chirp-pulses']));
-      }
       if (page === 'wiki') {
         for (const [id, refs] of Object.entries(WIKI)) {
           const section = root.querySelector('#wiki-' + id);
@@ -215,7 +197,7 @@
         }
       }
       if (page === 'glossary') {
-        for (const [term, ids] of Object.entries({ gdd: ['dispersion-paths', 'coherent-bandwidth'],
+        for (const [term, ids] of Object.entries({ gdd: ['dispersion-paths'],
           chirp: ['chirp-review'], trace: ['multidimensional'], snr: ['channel-sensor'] })) {
           const definition = root.querySelector('#glossary-' + term + ' dd');
           if (definition) definition.append(cite(ids));

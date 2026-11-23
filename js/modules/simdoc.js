@@ -1,4 +1,4 @@
-/* The simulator's description (js/wiki/simdoc.js): the six boards it rests on, the current version
+/* The simulator's description (js/wiki/simdoc.js): the five boards it rests on, the current version
    of muf.sim with its block diagram, and how the page beside it reads. Written by hand, in Russian and English. */
 (function () {
   'use strict';
@@ -7,14 +7,14 @@
     ru: {
       'simdoc.nav': 'Имитатор: описание', 'simdoc.part': 'Дополнение · Имитатор КВ-канала',
       'simdoc.title': 'Имитатор КВ-канала: как он устроен и что показывает',
-      'simdoc.lede': "Как из ЛЧМ-сигнала формируется ионограмма, какие параметры можно по ней определить и как по ним моделируются новые сеансы зондирования. В разделе описаны устройство и текущая версия имитатора, методы проверки новый режим 1F в полосе 1 МГц, прогноз во времени и воспроизводимый стенд проверки. Встроенные сеансы за 17 октября приведены как архивный пример.",
-      'simdoc.short': "Шесть схем поясняют формирование ионограммы, второе сжатие, внутримодовую дисперсию, медленные и быстрые изменения канала. Далее приведены модель имитатора, измерение рабочей полосы, прогноз, стенд проверки и текущий интерфейс сравнения сеансов.",
+      'simdoc.lede': "Как из ЛЧМ-сигнала формируется ионограмма, какие параметры можно по ней определить и как по ним моделируются новые сеансы зондирования. В разделе описаны устройство и текущая версия имитатора, методы проверки, прогноз во времени и воспроизводимый стенд. Встроенные сеансы за 17 октября приведены как архивный пример.",
+      'simdoc.short': "Пять схем поясняют формирование ионограммы, второе сжатие, медленную и быструю части состояния и моделирование канала на одной несущей. Далее приведены модель имитатора, прогноз, стенд проверки и интерфейс сравнения сеансов.",
     },
     en: {
       'simdoc.nav': 'Simulator: notes', 'simdoc.part': 'Supplement · HF channel simulator',
       'simdoc.title': 'The HF channel simulator: how it works and what it shows',
-      'simdoc.lede': 'How a chirp becomes an ionogram and what is read from it, how a channel state is built from a sounding, how new soundings are synthesised from the state and how they are checked. Also here: the simulator’s current version, a guide to the Channel simulator page, the new 1F band measurement, forecasts over time and a frozen benchmark. Embedded 17 October results are retained as an archival example.',
-      'simdoc.short': 'Six boards (the ionogram with the channel’s functions, the second dechirp, dispersion within a mode, the slow and fast parts of the state, and the channel at one carrier), the simulator’s current version, the band measurement, forecasting, benchmark and current comparison interface.',
+      'simdoc.lede': 'How a chirp becomes an ionogram and what is read from it, how a channel state is built from a sounding, how new soundings are synthesised from the state and how they are checked. Also here: the simulator’s current version, a guide to the Channel simulator page, forecasts over time and a frozen benchmark. Embedded 17 October results are retained as an archival example.',
+      'simdoc.short': 'Five boards cover the ionogram, the second dechirp, the slow and fast parts of the state, and the channel at one carrier. The notes also cover the simulator’s current version, forecasting, the benchmark and the comparison interface.',
     },
   });
 
@@ -93,108 +93,6 @@
           { k: 'b', t: ['пара o/x:\nрасщепление, x/o дБ', 'o/x pair fit:\nsplit, x/o dB'] },
           { k: 'd', t: ['доплеровские\nполя состояния', 'Doppler fields\nof the state'] }] },
       ] },
-    {
-  "title": [
-    "1в · Одна мода в рабочей полосе",
-    "1c · One mode in a working band"
-  ],
-  "sub": [
-    "<code>muf.sim.band</code>: 1F, 1 МГц около 0,75 МНЧ; отдельный режим",
-    "<code>muf.sim.band</code>: 1F, 1 MHz at 0.75 MUF; a separate mode"
-  ],
-  "rows": [
-    {
-      "nodes": [
-        {
-          "k": "d",
-          "t": [
-            "самый ранний нижний луч;\nполоса целиком",
-            "earliest low ray;\nwhole band covered"
-          ]
-        },
-        {
-          "k": "x",
-          "side": [
-            "exp(j2π∫b₁ dt)",
-            "( )*"
-          ]
-        },
-        {
-          "k": "b",
-          "t": [
-            "центр эха;\nФНЧ",
-            "re-centre echo;\nlow-pass"
-          ]
-        },
-        {
-          "k": "d",
-          "t": "a(t)"
-        }
-      ]
-    },
-    {
-      "par": [
-        "измерение по комплексному сигналу",
-        "measure the complex signal"
-      ],
-      "nodes": [
-        {
-          "k": "b",
-          "t": [
-            "мощность / шум;\nмедианный отступ\n→ C/N₀",
-            "power / noise;\nmedian offset\n→ C/N₀"
-          ]
-        },
-        {
-          "k": "b",
-          "t": [
-            "фаза, лаг 0,1 с;\nквадратичная подгонка\n→ τ, GDD, TOD",
-            "phase, 0.1 s lag;\nquadratic fit\n→ τ, GDD, TOD"
-          ]
-        },
-        {
-          "k": "b",
-          "t": [
-            "структурная функция\n→ замирания",
-            "structure function\n→ fading"
-          ]
-        }
-      ]
-    },
-    {
-      "nodes": [
-        {
-          "k": "d",
-          "t": [
-            "состояние полосы:\nτ, GDD по фазе;\nTOD по ДЧХ",
-            "band state:\nphase τ, GDD;\ntrace TOD"
-          ]
-        },
-        {
-          "k": "b",
-          "t": [
-            "рассеяние по задержке = 0:\nуже входит в замирания",
-            "delay spread = 0:\nalready in fading"
-          ]
-        },
-        {
-          "k": "b",
-          "t": [
-            "12 синтезов\nи повторных измерений",
-            "12 copies\nread back"
-          ]
-        },
-        {
-          "k": "d",
-          "t": [
-            "сравнение с реальным\nпо правилу уровня 2",
-            "real vs copies\nby level 2 rule"
-          ]
-        }
-      ]
-    }
-  ]
-},
     { title: ['2 · Замирания: множитель g<sub>p</sub>(t) одного пути', '2 · Fading gain g<sub>p</sub>(t) of one path'],
       sub: ['<code>muf.sim.fading</code>: гауссово рассеяние по Уоттерсону, ITU-R F.1487, или лоренцев спектр', '<code>muf.sim.fading</code>: Watterson Gaussian scatter, ITU-R F.1487, or a Lorentzian spectrum'],
       rows: [
@@ -302,7 +200,7 @@
           { k: 'd', t: ['ChannelState\nдорожка 1', 'ChannelState\nlane 1'] },
           { k: 'b', t: 'state.at(f₀)' },
           { k: 'b', t: ['link.present:\nC/N₀ ≥ 25 дБГц,\n≤ 20 дБ ниже сильнейшей', 'link.present:\nC/N₀ ≥ 25 dBHz,\n≤ 20 dB under strongest'] },
-          { k: 'd', t: ['рассеяние по задержке,\nполоса и время когерентности,\nОСШ в 3 кГц', 'delay spread,\ncoherence band and time,\nSNR in 3 kHz'] }] },
+          { k: 'd', t: ['рассеяние по задержке,\nвремя когерентности,\nОСШ в 3 кГц', 'delay spread,\ncoherence time,\nSNR in 3 kHz'] }] },
       ] },
   ];
 

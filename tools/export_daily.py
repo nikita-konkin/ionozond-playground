@@ -4,11 +4,11 @@
 
 Input is the batch file written by lfs_tools/lfs_batch.py: per sweep an `epoch`
 and an `snr` row of 2500 cells, 10 kHz each, from 7.5 MHz. The MUF of a sweep is
-the top edge of its trace, found the same way as in lfs_tools/dispersion_stats.py:
-the highest cell around which at least 5 of 30 neighbouring cells reach 15 dB.
+the top edge of its trace: the highest cell around which at least 5 of 30
+neighbouring cells reach 15 dB.
 At or above 32.4 MHz that edge is the top of the recording, not the MUF, so the
 value is kept and flagged as censored. The 30-cell window puts the edge about
-0.1 MHz above the last detected cell, as in dispersion_stats.py.
+0.1 MHz above the last detected cell.
 
 One JSON file per UTC day is written to out_dir as muf_YYYY-MM-DD.json:
 

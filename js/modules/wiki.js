@@ -12,15 +12,15 @@
     },
     en: {
       'wiki.nav': 'Wiki: chirp ionograms', 'wiki.part': W.en.part, 'wiki.title': W.en.title, 'wiki.lede': W.en.lede,
-      'wiki.short': 'The reference the models are built on, in full: where the trace comes from, how it lands on the axes, how the receiver shares its time between transmitters, and where all of it can mislead.',
+      'wiki.short': 'The reference the models are built on: where the trace comes from, how it lands on the axes, how the receiver shares its time between transmitters, and where all of it can mislead.',
       'wiki.try': 'In the playground',
     },
   });
 
   // The playground pages that model each part, by section id. They are listed under the part's lede.
   const PAGES = {
-    reflection: ['vi'], geometry: ['vi'], edges: ['gdd', 'daily'], dechirp: ['cells', 'timing'], axes: ['cells'], window: ['schedule'],
-    parallel: ['schedule'], timing: ['timing', 'schedule'], gdd: ['gdd', 'measure', 'daily'], budget: ['timing', 'cells'],
+    reflection: ['vi'], geometry: ['vi'], edges: ['daily'], dechirp: ['cells', 'timing'], axes: ['cells'], window: ['schedule'],
+    parallel: ['schedule'], timing: ['timing', 'schedule'], stripes: ['daily'], budget: ['timing', 'cells'],
   };
 
   // Section links are #wiki/<id>; the router scrolls to the element wiki-<id>.

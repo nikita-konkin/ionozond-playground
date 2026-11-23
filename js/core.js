@@ -31,25 +31,25 @@
   PG.i18n({
     ru: {
       'u.MHz': 'МГц', 'u.kHz': 'кГц', 'u.Hz': 'Гц', 'u.us': 'мкс', 'u.ms': 'мс', 'u.s': 'с', 'u.km': 'км', 'u.dB': 'дБ', 'u.usMHz': 'мкс/МГц',
-      'u.kHzs': 'кГц/с', 'u.bin': 'отсчёта', 'u.h': 'ч', 'app.eyebrow': 'Ionozond · практикум',
+      'u.kHzs': 'кГц/с', 'u.h': 'ч', 'app.eyebrow': 'Ionozond · практикум',
       'app.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели', 'nav.home': 'Обзор', 'nav.label': 'Разделы',
       'theme.label': 'Оформление', 'theme.auto': 'Как в системе', 'theme.light': 'Светлая тема', 'theme.dark': 'Тёмная тема',
       'foot.1': "Интерактивное пособие к справочнику «Ионограммы наклонного ЛЧМ-зондирования» (Oblique Chirp Ionograms). Численные данные приведены по справочнику и результатам обработки записей зондирования на трассе Кипр — Йошкар-Ола за 4–9 февраля 2026 г. В материалах отдельно указано, где представлены результаты измерений, а где — модельные расчёты.",
       'foot.2': "Для работы с локальной копией сайта достаточно открыть index.html: подключение к интернету и запуск сервера не требуются. При отсутствии доступа к Google Fonts используются системные шрифты.",
       'home.title': 'ЛЧМ-зондирование ионосферы: интерактивные модели',
-      'home.lede': "Семь интерактивных моделей поясняют методы зондирования на трассе Кипр — Йошкар-Ола и работу программы ionozond. Меняя параметры, можно исследовать дисперсию групповой задержки, способы её измерения, влияние ошибок синхронизации и длины БПФ, расписание станций, суточные изменения допустимой полосы сигнала и вертикальное зондирование той же ионосферы. В дополнительных разделах представлены имитатор КВ-канала с сопоставлением реальных и синтезированных сеансов и расчёт частотной характеристики по подканалам с перекрывающимися окнами.",
+      'home.lede': "Пять интерактивных моделей поясняют методы зондирования на трассе Кипр — Йошкар-Ола и работу программы ionozond. Они показывают влияние ошибок синхронизации и длины БПФ, расписание станций, суточный ход МНЧ и вертикальное зондирование той же ионосферы. В отдельном разделе об имитаторе КВ-канала можно сравнить реальные и синтезированные сеансы.",
       'home.open': 'Открыть', 'foot.build': 'Версия {sha} от {date}',
     },
     en: {
       'u.MHz': 'MHz', 'u.kHz': 'kHz', 'u.Hz': 'Hz', 'u.us': 'µs', 'u.ms': 'ms', 'u.s': 's', 'u.km': 'km', 'u.dB': 'dB',
-      'u.usMHz': 'µs/MHz', 'u.kHzs': 'kHz/s', 'u.bin': 'bin', 'u.h': 'h',
+      'u.usMHz': 'µs/MHz', 'u.kHzs': 'kHz/s', 'u.h': 'h',
       'app.eyebrow': 'Ionozond · playground', 'app.title': 'Oblique chirp sounding: interactive models',
       'nav.home': 'Overview', 'nav.label': 'Sections',
       'theme.label': 'Theme', 'theme.auto': 'Match the system', 'theme.light': 'Light theme', 'theme.dark': 'Dark theme',
       'foot.1': 'A companion to “Oblique Chirp Ionograms” (ionozond/docs/ionogram-physics.html). Numbers come from it and from the Cyprus → Yoshkar-Ola archive of 4–9 February 2026; where a page shows a model rather than a measurement, it says so.',
       'foot.2': 'Runs without a server or a network: open index.html. Fonts come from Google Fonts and fall back to system fonts offline.',
       'home.title': 'Oblique chirp sounding: interactive models',
-      'home.lede': 'Seven models for the Cyprus → Yoshkar-Ola path and the ionozond console. Each takes one topic from the document and lets you turn the knobs: group-delay dispersion, chirptime errors, FFT length, the station schedule, the bandwidth the path carries through the day, and vertical sounding of the same ionosphere. A separate page shows the HF channel simulator: real soundings beside soundings synthesised from them; another, the frequency response read subchannel by subchannel with overlapping windows.',
+      'home.lede': 'Five interactive models explore chirptime errors, FFT length, the station schedule, the daily MUF course and vertical sounding for the Cyprus → Yoshkar-Ola path and the ionozond console. The HF channel simulator page shows real soundings alongside soundings synthesised from them.',
       'home.open': 'Open', 'foot.build': 'Version {sha}, {date}',
     },
   });
@@ -201,22 +201,11 @@
 
   /* ------------------------------------------- model shared by the pages */
 
-  // Median dispersion law of the lower 1F ray, fitted to 583 Cyprus sweeps with MUF 18–32.4 MHz
-  // (ionogram-physics.html, Part 11): GDD = b·(1/√(1 − f/MUF) − 1). Below an MUF of 18 MHz it is
-  // extrapolated as ∝ 1/MUF, which is how a profile scaled in frequency behaves at fixed f/MUF
-  // (PG.vi.oblique); that part is not measured.
   PG.model = {
-    b: 7.5, MUF_MIN: 18, X_MED: 0.971, tau1F: 8950, tau2F: 9400, r2F: 0.70, BIN_US: 24.4, COL_MHZ: 0.041, KM_PER_MS: 299.792,
+    b: 7.5, MUF_MIN: 18, tau1F: 8950,
     scale(M) { return M < this.MUF_MIN ? this.MUF_MIN / M : 1; },
     tauL(f, M, t0) { const x = Math.min(f / M, 1); return (t0 ?? this.tau1F) + this.scale(M) * this.b * M * (2 * (1 - Math.sqrt(1 - x)) - x); },
-    gdd(f, M) { return this.scale(M) * this.b * (1 / Math.sqrt(1 - Math.min(f / M, 0.999999)) - 1); },
-    // Held at the measured median near the nose (36.5 µs/MHz at 0.99 MUF) instead of diverging:
-    // the fit reaches that value at 0.971 MUF.
-    gddMed(f, M) { return this.gdd(Math.min(f, this.X_MED * M), M); },
     tauU(f, M) { return this.tauL(M, M) + this.scale(M) * 2 * this.b * M * 1.6 * Math.sqrt(Math.max(0, 1 - f / M)); },
-    bmax(g) { const a = Math.abs(g); return a > 0.06 ? 1000 / Math.sqrt(a) : Infinity; },   // kHz, for GDD in µs/MHz
-    // Measured lower-ray GDD at f/MUF, µs/MHz, from the same 583 sweeps: [x, median, q25, q75].
-    MEDIANS: [[0.61, 2.9, -0.7, 5.7], [0.71, 6.3, 3.2, 9.6], [0.81, 9.2, 5.0, 14.5], [0.86, 13.5, 8.6, 20.1], [0.91, 17.2, 10.2, 27.4], [0.96, 32.7, 16.4, 51.2], [0.99, 36.5, 15.3, 57.4]],
   };
 
   /* ------------------------------------------------ vertical incidence */
@@ -266,95 +255,30 @@
       return h[0] + s + 2 * (hr - h[i - 1]) / sa;
     },
     tau(f, P) { return 2 * this.hv(f, P) / C_KM_MS; },                 // ms
-    gdd(f, P, df) {                                                      // µs/MHz
-      df = df || 0.01;
-      return 1000 * 2 / C_KM_MS * (this.hv(f + df, P) - this.hv(f - df, P)) / (2 * df);
-    },
     // X trace, roughly: it reflects where f_N² = f(f − f_H), so read the O trace there.
     hvX(f, P, fH) { return f > fH ? this.hv(Math.sqrt(f * (f - fH)), P) : NaN; },
     // The same ionosphere seen over an oblique path: secant law and Martyn's equivalent path with a
     // curved-earth mirror at h'. Rays that would need a negative elevation are dropped.
     oblique(P, D) {
-      const R = 6371, th = (D || 2634) / (2 * R), fo = P.fmax, fvs = [];
+      const R = 6371, th = (D || 2634) / (2 * R), fo = P.p.foF2, fvs = [];
       for (let i = 1; i <= 500; i++) fvs.push(0.3 + (fo - 0.3) * i / 501);
       for (let i = 0; i <= 900; i++) fvs.push(fo * (1 - 0.5 * Math.pow(10, -5 * i / 900)));
       fvs.sort((a, b) => a - b);
-      const out = { fv: [], f: [], tau: [], k: -1, muf: NaN };
+      const out = { f: [], tau: [], k: -1, muf: NaN };
       for (const fv of fvs) {
+        if (fv <= P.p.foE) continue;
         const hv = this.hv(fv, P);
         if (!isFinite(hv)) continue;
         const AB = Math.sqrt(R * R + (R + hv) ** 2 - 2 * R * (R + hv) * Math.cos(th));
         const phi = Math.asin(Math.min(1, R * Math.sin(th) / AB));
         if (Math.PI / 2 - th - phi < 0) continue;                   // elevation below the horizon
         const f = fv / Math.cos(phi);
-        out.fv.push(fv); out.f.push(f); out.tau.push(2 * AB / C_KM_MS);
+        out.f.push(f); out.tau.push(2 * AB / C_KM_MS);
         if (!(f <= out.muf)) { out.muf = f; out.k = out.f.length - 1; }
       }
       return out;
     },
   };
-
-  // A Hann-shaped band of B kHz centred on fc (MHz), sent through the phase that the delay curve
-  // tau(f) [µs] implies: φ(f) = −2π∫(τ − τc) df. Frequencies above fmax, or where tau is undefined,
-  // do not pass. Returns the envelope against the same band without dispersion.
-  PG.pulse = (tau, fc, B, fmax) => {
-    const K = 257, flo = fc - B / 2000, df = B / 1000 / (K - 1), t0 = tau(fc), c = (K - 1) / 2;
-    const f = [], w = [], rel = [], I = [0];
-    for (let k = 0; k < K; k++) {
-      const v = flo + k * df, tv = v <= fmax ? tau(v) : NaN, ok = isFinite(tv);
-      f.push(v); w.push(ok ? 0.5 - 0.5 * Math.cos(2 * Math.PI * k / (K - 1)) : 0); rel.push(ok ? tv - t0 : 0);
-    }
-    for (let k = 1; k < K; k++) I.push(I[k - 1] + 0.5 * (rel[k] + rel[k - 1]) * df);
-    const ph = I.map(v => -2 * Math.PI * (v - I[c]));
-    let lo = Infinity, hi = -Infinity;
-    rel.forEach((v, k) => { if (w[k]) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
-    const spread = isFinite(hi - lo) ? hi - lo : 0, Bm = B / 1000, H = Math.max(2.5 / Bm, 0.8 * spread + 2.2 / Bm);
-    const NT = 401, t = [], h = [], r = [];
-    for (let i = 0; i < NT; i++) {
-      const tt = -H + 2 * H * i / (NT - 1);
-      t.push(tt);
-      let hr = 0, hi2 = 0, rr = 0, ri = 0;
-      for (let k = 0; k < K; k++) {
-        if (!w[k]) continue;
-        const a = 2 * Math.PI * (f[k] - fc) * tt;
-        hr += w[k] * Math.cos(a + ph[k]); hi2 += w[k] * Math.sin(a + ph[k]);
-        rr += w[k] * Math.cos(a); ri += w[k] * Math.sin(a);
-      }
-      h.push(Math.hypot(hr, hi2)); r.push(Math.hypot(rr, ri));
-    }
-    const rm = Math.max(...r) || 1;
-    const width = a => { let s = 0, s1 = 0, s2 = 0; a.forEach((v, i) => { const p = v * v; s += p; s1 += p * t[i]; s2 += p * t[i] * t[i]; }); return Math.sqrt(Math.max(s2 / s - (s1 / s) ** 2, 0)); };
-    return { t, h: h.map(v => v / rm), r: r.map(v => v / rm), H, peak: Math.max(...h) / rm, grow: width(h) / width(r) };
-  };
-  // Draws PG.pulse output. The reference goes on top, thin and dashed, so it stays visible when the
-  // two envelopes coincide; drawn underneath, the thick curve would hide it whenever GDD is small.
-  // o.comp adds a second envelope (after a compensator); o.labels = false leaves the legend and the
-  // peak/width figures to the page, for when it shows them in HTML below the plot.
-  PG.drawPulse = (svg, Pp, o = {}) => {
-    svg.replaceChildren();
-    const lab = v => Math.abs(v) >= 10 ? PG.num(Math.abs(v), 0) : PG.num(Math.abs(v), 1);
-    const P = PG.plot(svg, { x0: 40, x1: 344, y0: 14, y1: 212, xd: [-Pp.H, Pp.H], yd: [0, 1.08], xt: [-Pp.H, 0, Pp.H], yt: [0, 0.5, 1],
-      xf: v => (v > 0 ? '+' : v < 0 ? '−' : '') + lab(v), yf: v => PG.num(v, v % 1 ? 1 : 0), xl: PG.t('gdd.x.t') });
-    const { fx, fy, g } = P, line = (Q, a) => PG.path(Q.t.map((v, i) => [fx(v), fy(a[i])]));
-    PG.el(g, 'path', { d: line(Pp, Pp.h), fill: 'none', style: 'stroke:var(--accent)', 'stroke-width': 2.4 });
-    if (o.comp) PG.el(g, 'path', { d: line(o.comp, o.comp.h), fill: 'none', style: 'stroke:var(--comp)', 'stroke-width': 2.4 });
-    // A halo in the panel colour under each dash keeps it readable against the curves in either theme.
-    PG.el(g, 'path', { d: line(Pp, Pp.r), fill: 'none', style: 'stroke:var(--surface)', 'stroke-width': 3.6, 'stroke-dasharray': '5 4' });
-    PG.el(g, 'path', { d: line(Pp, Pp.r), fill: 'none', style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
-    if (o.labels === false) return;
-    PG.el(svg, 'line', { x1: 46, x2: 66, y1: 24, y2: 24, style: 'stroke:var(--ink)', 'stroke-width': 1.3, 'stroke-dasharray': '5 4' });
-    PG.text(svg, 71, 28, PG.t('gdd.p.ref'));
-    PG.text(svg, 338, 28, PG.t(o.peakKey || 'gdd.p.peak', { v: PG.num(20 * Math.log10(Pp.peak), 1) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-    PG.text(svg, 338, 42, PG.t('gdd.p.w', { v: PG.num(Pp.grow, 2) }), { 'text-anchor': 'end', style: 'fill:var(--accent)' });
-  };
-  // Pulse damage against the dispersion number GDD·B². Simulated for a Hann band: at 1 the peak drops
-  // 0.06 dB and the pulse widens 3 %, at 5 it drops 1.5 dB and widens 1.6×.
-  PG.dispKind = n => n < 1 ? 'flat' : n < 5 ? 'mild' : 'bad';
-
-  PG.fmtBW = khz => !isFinite(khz) ? '> 4 ' + PG.U('MHz')
-    : khz >= 1000 ? PG.num(khz / 1000, 2) + ' ' + PG.U('MHz')
-    : (khz < 10 ? PG.num(khz, 1) : PG.num(khz, 0)) + ' ' + PG.U('kHz');
-  PG.fmtUs = v => (Math.abs(v) < 0.1 ? PG.num(v, 3) : Math.abs(v) < 10 ? PG.num(v, 2) : PG.num(v, 1)) + ' ' + PG.U('us');
 
   /* ------------------------------------------------------------- shell */
 
