@@ -89,6 +89,16 @@
       title: 'Мониторинг показателей качества модемов когнитивной КВ связи на основе пассивного зондирования радиоканалов с дискретной частотно-временной дисперсией',
       venue: 'Йошкар-Ола: ПГТУ. Монография. ISBN 978-5-8158-2216-0.',
       url: 'https://lib.dm-centre.ru/lib/gpntb/?e_kls=%D0%98%D0%9E%D0%9D%D0%9E%D0%A1%D0%A4%D0%95%D0%A0%D0%9D%D0%AB%D0%95+%D0%9A%D0%90%D0%9D%D0%90%D0%9B%D0%AB&e_viewdb=ESVODT' },
+    { id: 'gnuradio-simulator', group: 'channels', year: 2024,
+      authors: 'Рябова Н. В., Станкевич С. С., Чернов А. А.',
+      title: 'Имитатор ионосферной КВ-радиолинии на основе технологии GNU Radio и клиент-серверной методологии управления',
+      venue: 'Вестник ПГТУ. Серия «Радиотехнические и инфокоммуникационные системы». № 3(63). С. 82–92.',
+      url: 'https://doi.org/10.25686/2306-2819.2024.3.82' },
+    { id: 'channel-models', group: 'channels', year: 2025,
+      authors: 'Рябова Н. В., Бастракова М. И., Павлов В. В., Станкевич С. С.',
+      title: 'Имитационное моделирование ионосферных КВ-радиоканалов. Часть 1. Физические и канальные модели',
+      venue: 'Вестник ПГТУ. Серия «Радиотехнические и инфокоммуникационные системы». № 2(66). С. 21–40.',
+      url: 'https://doi.org/10.25686/2306-2819.2025.2.21' },
   ];
   const byId = new Map(SOURCES.map((s, i) => [s.id, { ...s, number: i + 1 }]));
 
@@ -101,7 +111,7 @@
       'references.scope': 'Публикации раскрывают научную основу методов. Измерения февраля 2026 года, параметры моделей и настройки программы описаны отдельно в материалах практикума. Названия работ приведены на языке публикации; ссылка в названии открывает источник.',
       'references.sounding': 'Зондирование и обработка ионограмм',
       'references.dispersion': 'Дисперсия и полоса когерентности',
-      'references.channels': 'Прогнозирование и доступность каналов',
+      'references.channels': 'Прогнозирование, моделирование и доступность каналов',
       'references.cite': 'Источник {n}: {title}',
       'references.home': 'Научная основа методов — работы школы ПГТУ в Йошкар-Оле.',
       'references.method': 'Метод ЛЧМ-зондирования',
@@ -114,6 +124,7 @@
       'references.modes': 'Обнаружение мод и обработка ионограмм',
       'references.dispersionLabel': 'Дисперсия канала',
       'references.noise': 'Диагностика каналов и помехи',
+      'references.simulator': 'Имитаторы ионосферных КВ-радиоканалов',
     },
     en: {
       'references.nav': 'Publications', 'references.part': 'Research',
@@ -123,7 +134,7 @@
       'references.scope': 'These publications explain the methods behind the playground. The February 2026 measurements, model parameters and software settings are documented separately in the materials. Titles retain their publication language; each title links to its source.',
       'references.sounding': 'Sounding and ionogram processing',
       'references.dispersion': 'Dispersion and coherent bandwidth',
-      'references.channels': 'Forecasting and channel availability',
+      'references.channels': 'Forecasting, simulation and channel availability',
       'references.cite': 'Reference {n}: {title}',
       'references.home': 'The methods draw on research from the VSUT scientific school in Yoshkar-Ola.',
       'references.method': 'Chirp sounding method',
@@ -136,6 +147,7 @@
       'references.modes': 'Mode detection and ionogram processing',
       'references.dispersionLabel': 'Channel dispersion',
       'references.noise': 'Channel diagnostics and interference',
+      'references.simulator': 'Ionospheric HF channel simulators',
     },
   });
 
@@ -162,6 +174,8 @@
     cells: ['cells', ['chirp-review', 'sdr-processing']],
     schedule: ['sdr', ['usrp-ionosonde', 'multifrequency']],
     daily: ['daily', ['muf-forecast']],
+    sim: ['simulator', ['gnuradio-simulator', 'channel-models']],
+    simdoc: ['simulator', ['gnuradio-simulator', 'channel-models']],
     vi: ['vi', ['chirp-review', 'multidimensional', 'dispersion-paths']],
   };
   const WIKI = {
