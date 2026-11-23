@@ -29,8 +29,7 @@ OUT = ROOT / 'js' / 'wiki' / 'physics.js'
 INLINE = {'a', 'b', 'i', 'em', 'strong', 'var', 'sub', 'sup', 'code', 'span', 'br', 'small', 'kbd', 'abbr', 'tspan', 's', 'u', 'q', 'mark', 'wbr'}
 VOID = {'br', 'wbr', 'img', 'meta', 'link', 'hr', 'input', 'col', 'area', 'base', 'source', 'track', 'embed', 'param'}
 ATTRS = ('aria-label', 'title', 'alt')
-# Pages next to the document in ionozond/docs that the playground has its own version of.
-LINKS = {'gdd-playground.html': '#gdd', 'gdd-demo.html': '#measure'}
+EXCLUDED = 'gdd|causes|limits'
 
 
 class Cut(html.parser.HTMLParser):
@@ -98,6 +97,13 @@ def key(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 
+def exclude_parts(text):
+    text = re.sub(rf'(?im)^(?:[ \t]*<!-- [= ]+(?:{EXCLUDED}) [= ]*-->\n)?'
+                  rf'[ \t]*<section id="(?:{EXCLUDED})">[\s\S]*?</section>[ \t]*\n?', '', text)
+    text = re.sub(rf'(?m)^[ \t]*<li><a href="#(?:{EXCLUDED})">[^<]*</a></li>[ \t]*\n', '', text)
+    return re.sub(r'(<footer>\s*<p>.*?)\s+Part 11 was added .*?(</p>)', r'\1\2', text, flags=re.S)
+
+
 def build(src, ru):
     text = src.read_text(encoding='utf-8')
     for f in (json.loads(FIX.read_text(encoding='utf-8')) if FIX.exists() else []):
@@ -105,6 +111,7 @@ def build(src, ru):
         if n != 1:
             raise SystemExit(f'physics.fix.json: found {n} times, expected once: {f["find"][:70]}')
         text = text.replace(f['find'], f['replace'])
+    text = exclude_parts(text)
     begin = text.index('<header class="masthead">')
     cut = Cut(text, begin)
     cut.feed(text)
@@ -133,8 +140,6 @@ def build(src, ru):
         body = body.replace('<nav class="rail"', '<nav class="wiki-toc"').replace('<footer>', '<footer class="wiki-foot">')
         for i in ids:
             body = body.replace(f'<section id="{i}">', f'<section id="wiki-{i}">').replace(f'href="#{i}"', f'href="#wiki/{i}"')
-        for a, b in LINKS.items():
-            body = body.replace(f'href="{a}"', f'href="{b}"')
         return dict(part=g(r'<p class="eyebrow">(.*?)</p>'), title=g(r'<h1>(.*?)</h1>'), lede=g(r'<p class="standfirst">(.*?)</p>'), body=body)
 
     en, _ = page(None)

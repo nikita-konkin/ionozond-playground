@@ -3,10 +3,5 @@
   "why": "The note after the resolution trade: what one column's spectrum looks like.",
   "find": "and stay bit-for-bit identical at any setting.</p>\n",
   "replace": "and stay bit-for-bit identical at any setting.</p>\n\n  <div class=\"note\">\n    <span class=\"lbl\">One column, opened up</span>\n    <p>A column is one spectrum: its bins are f<sub>IF</sub>/N = 1/T apart in beat frequency and Δτ = 1/(k·T) apart in delay, and the column spans Δf = k·T of sweep. So Δf·Δτ = 1 at any length, 41 kHz × 24.4 µs at the standard settings. A Hann window spreads each echo over four bins between nulls, so two echoes in one column show as two peaks only when they are about two bins apart or more, with a dip of about 3 dB between them. Near the nose the lower and upper rays converge, and splitting them takes a longer FFT; but a longer capture also lets a Doppler spread σ cover σ·T bins. The playground's <a href=\"#cells/column\">FFT-length page</a> draws one column's spectrum at the nose.</p>\n  </div>\n"
- },
- {
-  "why": "The note after the phase conversion: B_max is the π/4 edge-phase condition.",
-  "find": "Say which one you mean.</p>\n  </div>\n",
-  "replace": "Say which one you mean.</p>\n  </div>\n\n  <div class=\"note\">\n    <span class=\"lbl\">The same limit, read as phase</span>\n    <p>Across a band the phase departs from a straight line by φ ≈ −π·GDD·(<var>f</var> − <var>f</var><sub>c</sub>)², so the band's edges at ±<var>B</var>/2 sit π·GDD·<var>B</var>²/4 off it. At <var>B</var><sub>max</sub>, where GDD·<var>B</var>² = 1, that is exactly π/4, or 45°: a spread equal to the resolution and π/4 of quadratic phase at the edges are one condition. A straight-line compensator subtracts this parabola, and its only parameter is the trace's slope. A 3 kHz HF channel or a 48 kHz wideband one lies far below <var>B</var><sub>max</sub> everywhere on the measured trace; dispersion limits only bands of hundreds of kilohertz. The playground's <a href=\"#gdd/phase\">GDD page</a> draws the phase across a band and <var>B</var><sub>max</sub> along the whole trace.</p>\n  </div>\n"
  }
 ]

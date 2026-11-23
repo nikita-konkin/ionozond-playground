@@ -6,7 +6,7 @@
 
   // k: id; ru/en: the forms that appear in each language's text; wiki: the document part it belongs to.
   const TERMS = [
-    { k: 'gdd', ru: ['GDD'], en: ['GDD'], wiki: 'gdd' },
+    { k: 'gdd', ru: ['GDD'], en: ['GDD'], wiki: 'anatomy' },
     { k: 'muf', ru: ['МНЧ', 'MUF'], en: ['MUF'], wiki: 'edges' },
     { k: 'luf', ru: ['ННЧ', 'LUF'], en: ['LUF'], wiki: 'edges' },
     { k: 'trace', ru: ['ДЧХ'], en: [], wiki: 'anatomy' },
@@ -24,7 +24,7 @@
     { k: 'ntp', ru: ['NTP'], en: ['NTP'], wiki: 'budget' },
   ];
   const PARTS = { chain: 0, reflection: 1, geometry: 2, hops: 3, edges: 4, dechirp: 5, axes: 6, window: 7, parallel: 8, timing: 9,
-    anatomy: 10, gdd: 11, causes: 12, stripes: 13, budget: 14, limits: 15 };
+    anatomy: 10, stripes: 13, budget: 14 };
   const N = ' ';
 
   PG.i18n({
@@ -34,7 +34,7 @@
       'glossary.short': 'Сокращения практикума с краткими пояснениями: GDD, МНЧ, БПФ, ЛЧМ и другие. Те же пояснения открываются прямо в тексте.',
       'gl.wiki': 'Вики, часть {n}', 'gl.all': 'Глоссарий',
       'gl.gdd.t': 'GDD — дисперсия групповой задержки',
-      'gl.gdd.d': "Производная групповой задержки по частоте, dτ/df, то есть наклон ДЧХ в мкс/МГц. Характеризует дисперсионные искажения сигнала. Допустимая полоса без существенных искажений оценивается как 1/√|GDD|.",
+      'gl.gdd.d': "Производная групповой задержки по частоте, dτ/df, то есть наклон ДЧХ в мкс/МГц.",
       'gl.muf.t': 'МНЧ — максимальная наблюдаемая частота',
       'gl.muf.d': "Наибольшая частота, на которой при зондировании данной трассы наблюдается отражённый сигнал. Вблизи неё групповая задержка резко возрастает, нижний и верхний лучи смыкаются, а затем след обрывается.",
       'gl.luf.t': 'ННЧ — наименьшая наблюдаемая частота',
@@ -72,7 +72,7 @@
       'glossary.short': 'The playground’s abbreviations, briefly explained: GDD, MUF, FFT, chirp and more. The same notes open in place in the text.',
       'gl.wiki': 'Wiki, part {n}', 'gl.all': 'Glossary',
       'gl.gdd.t': 'GDD — group-delay dispersion',
-      'gl.gdd.d': 'How fast the delay grows with frequency, dτ/df: the slope of the trace, in µs/MHz. It limits the bandwidth a path carries undistorted to about 1/√GDD.',
+      'gl.gdd.d': 'How fast the delay grows with frequency, dτ/df: the slope of the trace, in µs/MHz.',
       'gl.muf.t': 'MUF — maximum usable frequency',
       'gl.muf.d': 'The highest frequency the ionosphere returns over this path. Near it the delay rises steeply into the nose, and above it the trace ends.',
       'gl.luf.t': 'LUF — lowest usable frequency',

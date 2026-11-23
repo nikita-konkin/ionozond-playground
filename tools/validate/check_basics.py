@@ -1,32 +1,12 @@
-"""Independent checks of the shared model: GDD law vs measured medians, 2F geometry, the console's
-ray distance and panel window, and the boxcar decimator simulated at 25 MS/s.
+"""Independent checks of multi-hop geometry, the console's ray distance and panel window, and the
+boxcar decimator simulated at 25 MS/s.
 
     python3 tools/validate/check_basics.py
 """
 import math
 import numpy as np
 
-b = 7.5
-gdd = lambda x: b * (1 / np.sqrt(1 - x) - 1)
-tauL = lambda f, M, t0=8950: t0 + b * M * (2 * (1 - np.sqrt(1 - np.minimum(f / M, 1))) - f / M)
-
-print("== 1. GDD law against the measured medians (doc Part 11 table)")
-med = {0.61: (2.9, -0.7, 5.7), 0.71: (6.3, 3.2, 9.6), 0.81: (9.2, 5.0, 14.5), 0.86: (13.5, 8.6, 20.1),
-       0.91: (17.2, 10.2, 27.4), 0.96: (32.7, 16.4, 51.2), 0.99: (36.5, 15.3, 57.4)}
-for x, (m, lo, hi) in med.items():
-    g = gdd(x)
-    print(f"  x={x:.2f}  fit {g:6.1f}  median {m:5.1f}  IQR {lo:5.1f}..{hi:5.1f}  {'inside IQR' if lo <= g <= hi else 'OUTSIDE IQR'}")
-x_cap = 1 - (b / (36.5 + b)) ** 2
-print(f"  fit reaches the 0.99 median (36.5) at x = {x_cap:.3f}")
-
-print("== 2. tauL is the integral of the law")
-M = 26.0
-for f in (10, 18, 22.1, 25):
-    h = 1e-4
-    num = (tauL(f + h, M) - tauL(f - h, M)) / (2 * h)
-    print(f"  f={f:5.1f}: dtau/df {num:8.3f}  law {gdd(f / M):8.3f}")
-
-print("== 3. 2F spacing and 2F/1F MUF ratio, mirror geometry")
+print("== 1. 2F spacing and 2F/1F MUF ratio, mirror geometry")
 D = 2634.0
 flat = lambda n, h: 2 * n * math.hypot(D / (2 * n), h) / 299.792458
 for h in (250, 300):
@@ -39,9 +19,8 @@ def secphi(Dhop, h):
 for h in (250, 300, 350):
     s1, _ = secphi(D, h); s2, _ = secphi(D / 2, h)
     print(f"  h'={h}: sec(phi) 1F {s1:.2f}, 2F {s2:.2f}, MUF2/MUF1 {s2 / s1:.2f}")
-print("  model (js/core.js) uses tau2F - tau1F = 450 us and r2F = 0.70")
 
-print("== 4. Console ray distance and panel window")
+print("== 2. Console ray distance and panel window")
 Re = 6378.137
 def earth(la1, lo1, la2, lo2):
     la1, lo1, la2, lo2 = map(math.radians, (la1, lo1, la2, lo2))
@@ -55,7 +34,7 @@ for name, tx in (("Cyprus (35, 34) as in schedule.ini", (35, 34)), ("Sodankyla 6
     d = earth(*tx, *rx)
     print(f"  {name:40s} ground {d:7.1f} km  ray {ray(d):7.1f}  window {ray(d) - 180:7.1f}..{ray(d) + 1500:7.1f} km")
 
-print("== 5. Boxcar decimator, simulated at 25 MS/s")
+print("== 3. Boxcar decimator, simulated at 25 MS/s")
 fs, N = 25e6, 625
 Hf = lambda f: abs(math.sin(math.pi * f * N / fs) / (N * math.sin(math.pi * f / fs))) if f else 1.0
 n = N * 4096
